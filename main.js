@@ -60,8 +60,29 @@ const initializeApp = () => {
     agregarOperacion()
   })
 
+  setDato("categorias", todasCategorias);
+  setDato("operaciones", todasOperaciones);
+  renderCategoriasOpciones(todasCategorias);
+  renderCategoriasTabla(todasCategorias);
+
+  $("#agregar-categoria").addEventListener("click", (e) => {
+    e.preventDefault();
+    enviarNuevoDato("categorias", guardarCategoriaDato);
+    const categoriasActuales = obtenerDato("categorias");
+    renderCategoriasOptciones(categoriasActuales);
+    renderCategoriasTabla(categoriasActuales);
+  });
+
   //setearOperaciones("operaciones", todasOperaciones)
   //renderOperaciones(todasOperaciones)
+
+  //$("#btn-editar-operacion").addEventListener("click", (e) =>{
+   // e.preventDefault()
+   // editarOpeacion()
+   //hide("#vista-editar-operacion")
+   //show("#tabla-operaciones")
+   //renderOperaciones(obtenerOperaciones("operaciones "))
+  //})
 
 }
 
@@ -72,25 +93,88 @@ const initializeApp = () => {
 const categoriasPorDefault = [
   {
     id: randomId(),
-    name: "Comida",
+    nombre: "Comida",
   },
   {
     id: randomId(),
-    name: "Transporte",
+    nombre: "Transporte",
   },
   {
     id: randomId(),
-    name: "Salud",
+    nombre: "Salud",
   },
   {
     id: randomId(),
-    name: "Educación",
+    nombre: "Educación",
   },
   {
     id: randomId(),
-    name: "Entretenimiento",
+    nombre: "Entretenimiento",
   },
 ];
+
+const renderCategoriasOpciones = (categorias) => {
+  limpiarContenedor("#categorias-filtro");
+  for (const { nombre, id } of categorias) {
+    $("#categorias-filtro").innerHTML += `
+            <option value="${id}">${nombre}</option>
+        `;
+    $("#categorias-filtro").innerHTML += ` 
+            <option value="${id}">${nombre}</option>
+        `;
+  }
+};
+
+
+const renderCategoriasTabla = (categorias) => {
+  limpiarContenedor("#categorias-tabla");
+  $("#categorias-tabla").classList.add("w-full");
+
+  let tableHTML = `<table class="w-full">`;
+
+  for (const { nombre, id } of categorias) {
+    tableHTML += `
+            <tr class="w-full">
+                <td class="w-1/2 pr-4">${nombre}</td>
+                <td class="w-1/2 flex justify-end">
+                    <button class="px-1 py-0.5 bg-red-500 text-white text-xs rounded mr-2" id="eliminar-categoria-${id}">Eliminar</button>
+                    <button class="px-1 py-0.5 bg-yellow-500 text-white text-xs rounded" id="editar-categoria-${id}">Editar</button>
+                </td>
+            </tr>
+        `;
+  }
+
+  tableHTML += `</table>`;
+
+  $("#categorias-tabla").innerHTML = tableHTML;
+};
+
+
+const enviarNuevoDato = (key, callback) => {
+  const datoActual = obtenerDato(key);
+  const nuevoDato = callback();
+  datoActual.push(nuevoDato);
+  setDato(key, datoActual);
+};
+
+
+
+/*const initializeApp = () => {
+  setData("categories", allCategories);
+  //setData("operations", allOperations);
+  renderCategoriesOptions(allCategories);
+  renderCategoriesTable(allCategories);
+
+  $("#add-category").addEventListener("click", (e) => {
+    e.preventDefault();
+    sendNewData("categories", saveCategoryData);
+    const currentCategories = getData("categories");
+    renderCategoriesOptions(currentCategories);
+    renderCategoriesTable(currentCategories);
+  });
+};
+initializeApp();
+*/
 
 /* SECCION BOTON OPERACIONES QUE NO LOGRO RESOLVER
 
@@ -111,7 +195,7 @@ const renderOperaciones = (operaciones) =>{
     <td>${categoria}</td>
     <td>${fecha}</td>
     <td>
-    <button class="text-sm text-green-500">Editar</button>
+    <button class="text-sm text-green-500" onclick="editarOperacion('${id}')">Editar</button>
     <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')">Eliminar</button>
     </td>
     `
@@ -126,9 +210,9 @@ const renderOperaciones = (operaciones) =>{
 
 
 //funcion para guardar datos del formulario de boton nueva operacion
-const guardarNuevaOperacion = () => {
+const guardarNuevaOperacion = (operacionId) => {
     return {
-        id: randomId(),
+        id: operacionId ? operacionId :  randomId(),
         descripcion: $("#descripcion-form").value,
         monto: $("#monto-form").valueAsNumber,
         tipo: $("#tipo-form").value,
@@ -148,11 +232,43 @@ const agregarOperacion = () => {
   setearOperaciones("operaciones", actualOperacion)
 }
 
+//FUNCION ELIMINAR OPERACIONES
+
 const eliminarOperacion = (id) => {
   const actualOperacion = obtenerOperaciones("operaciones").filter(operacion => operacion.id !== id)
   setearOperaciones("operaciones", actualOperacion)
   renderOperaciones(actualOperacion)
 }
+
+//FUNCION EDITAR OPERACIONES
+
+const operacionEditar =() => {
+  const operacionId = $("#btn-editar-operacion").getAttribute("data-id")
+  const operacionesEditadas = obtenerOperaciones("operaciones").map(operacion => {
+    if (operacion.id === operacionId) {
+      return guardarNuevaOperacion(operacion.id)
+    }
+    return operacion
+
+  })
+  setearOperaciones("operaciones", operacionesEditadas) 
+}
+
+const editarOperacionForm =(id) =>{
+  hide("#home")
+  show("#vista-editar-operacion")
+  $("#btn-editar-operacion").setAttribute("data-id", id)
+  const operacionSeleccionada = obtenerOperaciones("operaciones").find(operacion => operacion.id === id)
+  $("#descripcion-form").value = operacionSeleccionada.descripcion-form
+  $("#monto-form").valueAsNumber= operacionSeleccionada.monto-form
+  $("#tipo-form").value= operacionSeleccionada.tipo-form
+  $("#categoria-form").value= operacionSeleccionada.categoria-form
+  $("#fecha-form").value= operacionSeleccionada.fecha-form
+  
+}
+
+
+
 */
 
 

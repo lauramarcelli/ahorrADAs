@@ -67,7 +67,7 @@
                 
                     <div>
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Categoría</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="">                           
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categorias-filtro">                           
                         </select>
                     </div>
                     <div>
@@ -143,8 +143,49 @@
                             <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="fecha-form">
                         </div>
                         <div class="text-right">
-                            <button id="btn-eliminar-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
+                            <button id="btn-eliminar-operacion" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
                             <button id="btn-agregar-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </section>
+
+            <!--Boton Editar-->
+
+            <section id="vista-editar-operacion"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
+                <div class="lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
+                    <h2 class="text-4xl text-[#4a4a4a7] font-bold mb-16 m-4 pt-8 pl-2">Editar Operacion</h2>
+                    <form id="form-operaciones">
+                        <div>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Descripción</p>
+                            <textarea id="descripcion-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="categoria" id="descripcion-form" cols="1" rows="1"></textarea><br>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Monto</p>
+                            <input type="number" id="monto-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min="12"value="0">
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="tipo-form">
+                                <option value="vacio"></option>
+                                <option value="gasto">Gasto</option>
+                                <option value="ganancia">Ganancia</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Categoría</p>
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categoria-form">
+                                
+                            </select>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Fecha</p>
+                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="fecha-form">
+                        </div>
+                        <div class="text-right">
+                            <button id="btn-eliminar-operacion" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
+                            <button id="btn-editar-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Editar</button>
                         </div>
                     </form>
                 </div>
@@ -189,13 +230,10 @@
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
                         <textarea class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="categoria" id="" cols="1" rows="1"></textarea><br>
-                        <button class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>  
+                        <button id="agregar-categoria" class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>  
                     </div>
-                    <div id="vacio" class="hidden flex justify-between md:flex-row">
-                        <p class="ml-6 mb-6 p-1 rounded-lg bg-[#d8b4fe] text-sm text-[#7e22ce]"></p> 
-                        <div>
-                            <a href="" class="p-2 text-sm text-[#4a4a4a] hover:text-[#7e22ce]">Editar</a>
-                            <a href="" class="p-2 mr-6 text-sm text-[#4a4a4a] hover:text-[#7e22ce]">Eliminar</a>
+                    <div id="categorias-tabla" class="hidden flex justify-between md:flex-row">
+                        
                         </div>                                       
                     </div>
                 </div>
