@@ -19,72 +19,7 @@ const randomId = () => self.crypto.randomUUID();
 
 
 
-const initializeApp = () => {
-  $("#btn-nueva-operacion").addEventListener("click", () => {
-      show ("#vista-operacion")
-      hide ("#home")
-      hide("#reportes-vista")
-      hide("#categorias-vista")
-  })
 
-  $("#mostrar-categorias").addEventListener("click", () => {
-      show ("#categorias-vista")
-      hide ("#home")
-      hide("#reportes-vista")
-      hide("#vista-operacion")
-  })
-
-  $("#mostrar-balance").addEventListener("click", () =>{
-      show("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
-      hide ("#reportes-vista")
-  })
-
-  $("#mostrar-reportes").addEventListener("click", () =>{
-      show("#reportes-vista")
-      hide("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
-  })
-
-  $("#titulo-ahorradas").addEventListener("click", () =>{
-      show("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
-      hide ("#reportes-vista")
-  })
-
-  $("#btn-agregar-operacion").addEventListener("click", (e) => {
-    e.preventDefault()
-    agregarOperacion()
-  })
-
-  setDato("categorias", todasCategorias);
-  setDato("operaciones", todasOperaciones);
-  renderCategoriasOpciones(todasCategorias);
-  renderCategoriasTabla(todasCategorias);
-
-  $("#agregar-categoria").addEventListener("click", (e) => {
-    e.preventDefault();
-    enviarNuevoDato("categorias", guardarCategoriaDato);
-    const categoriasActuales = obtenerDato("categorias");
-    renderCategoriasOptciones(categoriasActuales);
-    renderCategoriasTabla(categoriasActuales);
-  });
-
-  //setearOperaciones("operaciones", todasOperaciones)
-  //renderOperaciones(todasOperaciones)
-
-  //$("#btn-editar-operacion").addEventListener("click", (e) =>{
-   // e.preventDefault()
-   // editarOpeacion()
-   //hide("#vista-editar-operacion")
-   //show("#tabla-operaciones")
-   //renderOperaciones(obtenerOperaciones("operaciones "))
-  //})
-
-}
 
 
 
@@ -112,6 +47,8 @@ const categoriasPorDefault = [
     nombre: "Entretenimiento",
   },
 ];
+
+const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
 
 const renderCategoriasOpciones = (categorias) => {
   limpiarContenedor("#categorias-filtro");
@@ -159,29 +96,14 @@ const enviarNuevoDato = (key, callback) => {
 
 
 
-/*const initializeApp = () => {
-  setData("categories", allCategories);
-  //setData("operations", allOperations);
-  renderCategoriesOptions(allCategories);
-  renderCategoriesTable(allCategories);
 
-  $("#add-category").addEventListener("click", (e) => {
-    e.preventDefault();
-    sendNewData("categories", saveCategoryData);
-    const currentCategories = getData("categories");
-    renderCategoriesOptions(currentCategories);
-    renderCategoriesTable(currentCategories);
-  });
-};
-initializeApp();
-*/
 
 /* SECCION BOTON OPERACIONES QUE NO LOGRO RESOLVER
 
-const obtenerOperaciones = (key) => JSON.parse(localStorage.obtenerItem(key))//para obtener cualquier dato del localstorage
-const setearOperaciones = (key, array) => localStorage.setItem(key, JSON.stringify(array))
+const obtenerDato = (key) => JSON.parse(localStorage.obtenerItem(key))//para obtener cualquier dato del localstorage
+const setearDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
-const todasOperaciones = obtenerOperaciones("operaciones") || []
+const todasOperaciones = obtenerDato("operaciones") || []
 
 const renderOperaciones = (operaciones) =>{
   limpiarContenedor("#tabla-operaciones")
@@ -211,32 +133,36 @@ const renderOperaciones = (operaciones) =>{
 
 //funcion para guardar datos del formulario de boton nueva operacion
 const guardarNuevaOperacion = (operacionId) => {
+    const categoriaId = $("categorias").options[$("categorias").selectedIndex ].getAttribute("data-id")
     return {
         id: operacionId ? operacionId :  randomId(),
         descripcion: $("#descripcion-form").value,
         monto: $("#monto-form").valueAsNumber,
         tipo: $("#tipo-form").value,
-        categoria: $("#categoria-form").value,
+        categoria: categoriaId,
         fecha: $("#fecha-form").value,
     }
     
+}
+
+
 }
 
 //FUNCION QUE ME TRAE PROBLEMAS PORQUE NO ME FUNCIONAN LOS BOTONES - FUNCION PARA INICIAR CON ARRAY VACIO
 
 
 const agregarOperacion = () => {
-  const actualOperacion = obtenerOperaciones("operaciones")
+  const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
   actualOperacion.push(nuevaOperacion)
-  setearOperaciones("operaciones", actualOperacion)
+  setearDato("operaciones", actualOperacion)
 }
 
 //FUNCION ELIMINAR OPERACIONES
 
 const eliminarOperacion = (id) => {
-  const actualOperacion = obtenerOperaciones("operaciones").filter(operacion => operacion.id !== id)
-  setearOperaciones("operaciones", actualOperacion)
+  const actualOperacion = obtenerDato("operaciones").filter(operacion => operacion.id !== id)
+  setearDato("operaciones", actualOperacion)
   renderOperaciones(actualOperacion)
 }
 
@@ -244,21 +170,21 @@ const eliminarOperacion = (id) => {
 
 const operacionEditar =() => {
   const operacionId = $("#btn-editar-operacion").getAttribute("data-id")
-  const operacionesEditadas = obtenerOperaciones("operaciones").map(operacion => {
+  const operacionesEditadas = obtenerDato("operaciones").map(operacion => {
     if (operacion.id === operacionId) {
       return guardarNuevaOperacion(operacion.id)
     }
     return operacion
 
   })
-  setearOperaciones("operaciones", operacionesEditadas) 
+  setearDato("operaciones", operacionesEditadas) 
 }
 
 const editarOperacionForm =(id) =>{
   hide("#home")
   show("#vista-editar-operacion")
   $("#btn-editar-operacion").setAttribute("data-id", id)
-  const operacionSeleccionada = obtenerOperaciones("operaciones").find(operacion => operacion.id === id)
+  const operacionSeleccionada = obtenerDato("operaciones").find(operacion => operacion.id === id)
   $("#descripcion-form").value = operacionSeleccionada.descripcion-form
   $("#monto-form").valueAsNumber= operacionSeleccionada.monto-form
   $("#tipo-form").value= operacionSeleccionada.tipo-form
@@ -271,7 +197,74 @@ const editarOperacionForm =(id) =>{
 
 */
 
+const initializeApp = () => {
+  setDato("categorias", todasCategorias);
+  //setDato("operaciones", todasOperaciones);
+  renderCategoriasOpciones(todasCategorias);
+  renderCategoriasTabla(todasCategorias);
+ 
+  $("#btn-nueva-operacion").addEventListener("click", () => {
+      show ("#vista-operacion")
+      hide ("#home")
+      hide("#reportes-vista")
+      hide("#categorias-vista")
+  })
 
+  $("#mostrar-categorias").addEventListener("click", () => {
+      show ("#categorias-vista")
+      hide ("#home")
+      hide("#reportes-vista")
+      hide("#vista-operacion")
+  })
+
+  $("#mostrar-balance").addEventListener("click", () =>{
+      show("#home")
+      hide("#categorias-vista")
+      hide("#vista-operacion")
+      hide ("#reportes-vista")
+  })
+
+  $("#mostrar-reportes").addEventListener("click", () =>{
+      show("#reportes-vista")
+      hide("#home")
+      hide("#categorias-vista")
+      hide("#vista-operacion")
+  })
+
+  $("#titulo-ahorradas").addEventListener("click", () =>{
+      show("#home")
+      hide("#categorias-vista")
+      hide("#vista-operacion")
+      hide ("#reportes-vista")
+  })
+
+  $("#btn-agregar-operacion").addEventListener("click", (e) => {
+    e.preventDefault()
+    agregarOperacion()
+  })
+
+  
+
+  $("#agregar-categoria").addEventListener("click", (e) => {
+    e.preventDefault();
+    enviarNuevoDato("categorias", guardarCategoriaDato);
+    const categoriasActuales = obtenerDato("categorias");
+    renderCategoriasOptciones(categoriasActuales);
+    renderCategoriasTabla(categoriasActuales);
+  });
+
+  //setearDato("operaciones", todasOperaciones)
+  //renderOperaciones(todasOperaciones)
+
+  //$("#btn-editar-operacion").addEventListener("click", (e) =>{
+   // e.preventDefault()
+   // editarOpeacion()
+   //hide("#vista-editar-operacion")
+   //show("#tabla-operaciones")
+   //renderOperaciones(obtenerDato("operaciones "))
+  //})
+
+}
 
 
   window.addEventListener("load", initializeApp)
