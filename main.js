@@ -18,7 +18,11 @@ const randomId = () => self.crypto.randomUUID();
 //Localstorage Handlers
 
 
-
+const obtenerDato = (key) => {
+  const item = localStorage.getItem(key);
+  return item !== null ? JSON.parse(item) : [];
+};
+const setearDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 
 
@@ -56,10 +60,7 @@ const renderCategoriasOpciones = (categorias) => {
     $("#categorias-filtro").innerHTML += `
             <option value="${id}">${nombre}</option>
         `;
-    $("#categorias-filtro").innerHTML += ` 
-            <option value="${id}">${nombre}</option>
-        `;
-  }
+    }
 };
 
 
@@ -87,8 +88,13 @@ const renderCategoriasTabla = (categorias) => {
 };
 
 
+
+
 const enviarNuevoDato = (key, callback) => {
-  const datoActual = obtenerDato(key);
+  let datoActual = obtenerDato(key);
+  if (!datoActual) {
+    datoActual = [];
+  }
   const nuevoDato = callback();
   datoActual.push(nuevoDato);
   setDato(key, datoActual);
@@ -98,12 +104,11 @@ const enviarNuevoDato = (key, callback) => {
 
 
 
-/* SECCION BOTON OPERACIONES QUE NO LOGRO RESOLVER
+/* SECCION BOTON OPERACIONES QUE NO LOGRO RESOLVER*/
 
-const obtenerDato = (key) => JSON.parse(localStorage.obtenerItem(key))//para obtener cualquier dato del localstorage
-const setearDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
-const todasOperaciones = obtenerDato("operaciones") || []
+
+/*const todasOperaciones = obtenerDato("operaciones") || []
 
 const renderOperaciones = (operaciones) =>{
   limpiarContenedor("#tabla-operaciones")
@@ -198,21 +203,21 @@ const editarOperacionForm =(id) =>{
 */
 
 const initializeApp = () => {
-  setDato("categorias", todasCategorias);
+  //setDato("categorias", todasCategorias);
   //setDato("operaciones", todasOperaciones);
-  renderCategoriasOpciones(todasCategorias);
-  renderCategoriasTabla(todasCategorias);
+  //renderCategoriasOpciones(todasCategorias);
+  //renderCategoriasTabla(todasCategorias);
  
   $("#btn-nueva-operacion").addEventListener("click", () => {
-      show ("#vista-operacion")
-      hide ("#home")
+      show("#vista-operacion")
+      hide("#home")
       hide("#reportes-vista")
       hide("#categorias-vista")
   })
 
   $("#mostrar-categorias").addEventListener("click", () => {
-      show ("#categorias-vista")
-      hide ("#home")
+      show("#categorias-vista")
+      hide("#home")
       hide("#reportes-vista")
       hide("#vista-operacion")
   })
@@ -221,7 +226,7 @@ const initializeApp = () => {
       show("#home")
       hide("#categorias-vista")
       hide("#vista-operacion")
-      hide ("#reportes-vista")
+      hide("#reportes-vista")
   })
 
   $("#mostrar-reportes").addEventListener("click", () =>{
@@ -235,7 +240,7 @@ const initializeApp = () => {
       show("#home")
       hide("#categorias-vista")
       hide("#vista-operacion")
-      hide ("#reportes-vista")
+      hide("#reportes-vista")
   })
 
   $("#btn-agregar-operacion").addEventListener("click", (e) => {
@@ -245,13 +250,13 @@ const initializeApp = () => {
 
   
 
-  $("#agregar-categoria").addEventListener("click", (e) => {
+  /*$("#agregar-categoria").addEventListener("click", (e) => {
     e.preventDefault();
     enviarNuevoDato("categorias", guardarCategoriaDato);
     const categoriasActuales = obtenerDato("categorias");
-    renderCategoriasOptciones(categoriasActuales);
+    renderCategoriasOpciones(categoriasActuales);
     renderCategoriasTabla(categoriasActuales);
-  });
+  });*/
 
   //setearDato("operaciones", todasOperaciones)
   //renderOperaciones(todasOperaciones)
