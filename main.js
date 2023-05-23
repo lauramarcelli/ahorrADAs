@@ -205,8 +205,8 @@ const editarOperacionForm =(id) =>{
 const initializeApp = () => {
   setDato("categorias", todasCategorias);
   //setDato("operaciones", todasOperaciones);
-  //renderCategoriasOpciones(todasCategorias);
-  //renderCategoriasTabla(todasCategorias);
+  renderCategoriasOpciones(todasCategorias);
+  renderCategoriasTabla(todasCategorias);
  
   $("#btn-nueva-operacion").addEventListener("click", () => {
       show("#vista-operacion")
@@ -250,13 +250,13 @@ const initializeApp = () => {
 
   
 
-  /*$("#agregar-categoria").addEventListener("click", (e) => {
+  $("#agregar-categoria").addEventListener("click", (e) => {
     e.preventDefault();
     enviarNuevoDato("categorias", guardarCategoriaDato);
     const categoriasActuales = obtenerDato("categorias");
     renderCategoriasOpciones(categoriasActuales);
     renderCategoriasTabla(categoriasActuales);
-  });*/
+  });
 
   //setearDato("operaciones", todasOperaciones)
   //renderOperaciones(todasOperaciones)
