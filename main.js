@@ -22,7 +22,7 @@ const obtenerDato = (key) => {
   const item = localStorage.getItem(key);
   return item !== null ? JSON.parse(item) : [];
 };
-const setearDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
+const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 
 
@@ -203,7 +203,7 @@ const editarOperacionForm =(id) =>{
 */
 
 const initializeApp = () => {
-  //setDato("categorias", todasCategorias);
+  setDato("categorias", todasCategorias);
   //setDato("operaciones", todasOperaciones);
   //renderCategoriasOpciones(todasCategorias);
   //renderCategoriasTabla(todasCategorias);
