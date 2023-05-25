@@ -76,6 +76,7 @@ const renderCategoriasTabla = (categorias) => {
   let tableHTML = `<table class="w-full">`;  
 
   for (const { nombre, id } of categorias) {
+
     tableHTML += `
             <tr class="w-full">
                 <td class="w-1/2 pr-4">${nombre}</td>
@@ -222,6 +223,7 @@ const initializeApp = () => {
 
   $("#mostrar-categorias").addEventListener("click", () => {
       show("#categorias-vista")
+      show("#categorias-tabla")
       hide("#home")
       hide("#reportes-vista")
       hide("#vista-operacion")
@@ -282,6 +284,8 @@ $("#mostrar-filtros").addEventListener("click", () =>{
     const categoriasActuales = obtenerDato("categorias");
     renderCategoriasOpciones(categoriasActuales);
     renderCategoriasTabla(categoriasActuales);
+    show("#categorias-tabla")
+   
   });
 
   //setDato("operaciones", todasOperaciones)
