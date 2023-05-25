@@ -18,10 +18,7 @@ const randomId = () => self.crypto.randomUUID();
 //Localstorage Handlers
 
 
-const obtenerDato = (key) => {
-  const item = localStorage.getItem(key);
-  return item !== null ? JSON.parse(item) : [];
-};
+const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
 const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 
@@ -54,12 +51,20 @@ const categoriasPorDefault = [
 
 const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
 
+const guardarCategoriaDato =() => {
+  const nombre = $("#categoria-input").value;
+  return {
+    id: randomId(),
+    nombre,
+  }
+};
+
 const renderCategoriasOpciones = (categorias) => {
   limpiarContenedor("#categorias-filtro");
   for (const { nombre, id } of categorias) {
     $("#categorias-filtro").innerHTML += `
             <option value="${id}">${nombre}</option>
-        `;
+        `
     }
 };
 
@@ -68,7 +73,7 @@ const renderCategoriasTabla = (categorias) => {
   limpiarContenedor("#categorias-tabla");
   $("#categorias-tabla").classList.add("w-full");
 
-  let tableHTML = `<table class="w-full">`;
+  let tableHTML = `<table class="w-full">`;  
 
   for (const { nombre, id } of categorias) {
     tableHTML += `
@@ -104,7 +109,7 @@ const enviarNuevoDato = (key, callback) => {
 
 
 
-/* SECCION BOTON OPERACIONES QUE NO LOGRO RESOLVER*/
+/* SECCION OPERACIONES QUE NO LOGRO RESOLVER*/
 
 
 
@@ -115,19 +120,20 @@ const renderOperaciones = (operaciones) =>{
   if (operaciones.length){
     hide ("#reportes-vista")
     for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
-    $("#tabla-operaciones").innerHTML += `
-    <td>${descripcion}</td>
-    <td>${monto}</td>
-    <td>${tipo}</td>
-    <td>${categoria}</td>
-    <td>${fecha}</td>
-    <td>
-    <button class="text-sm text-green-500" onclick="editarOperacion('${id}')">Editar</button>
-    <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')">Eliminar</button>
-    </td>
+      const categoriaSeleccionada = obtenerDato("catgorias").find(cat => cat.id === categoria)
+      $("#tabla-operaciones").innerHTML += `
+      <td>${descripcion}</td>
+      <td>${monto}</td>
+      <td>${tipo}</td>
+      <td>${categoriaSeleccionada.nombre}</td>
+      <td>${fecha}</td>
+      <td>
+        <button class="text-sm text-green-500" onclick="editarOperacion('${id}')">Editar</button>
+        <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')">Eliminar</button>
+      </td>
     `
   }
-  }else{
+  } else {
     show ("#reportes-vista")
 
   }
@@ -151,7 +157,7 @@ const guardarNuevaOperacion = (operacionId) => {
 }
 
 
-}
+
 
 //FUNCION QUE ME TRAE PROBLEMAS PORQUE NO ME FUNCIONAN LOS BOTONES - FUNCION PARA INICIAR CON ARRAY VACIO
 
@@ -160,18 +166,18 @@ const agregarOperacion = () => {
   const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
   actualOperacion.push(nuevaOperacion)
-  setearDato("operaciones", actualOperacion)
+  setDato("operaciones", actualOperacion)
 }
 
-//FUNCION ELIMINAR OPERACIONES
+
 
 const eliminarOperacion = (id) => {
   const actualOperacion = obtenerDato("operaciones").filter(operacion => operacion.id !== id)
-  setearDato("operaciones", actualOperacion)
+  setDato("operaciones", actualOperacion)
   renderOperaciones(actualOperacion)
 }
 
-//FUNCION EDITAR OPERACIONES
+
 
 const operacionEditar =() => {
   const operacionId = $("#btn-editar-operacion").getAttribute("data-id")
@@ -182,7 +188,7 @@ const operacionEditar =() => {
     return operacion
 
   })
-  setearDato("operaciones", operacionesEditadas) 
+  setDato("operaciones", operacionesEditadas) 
 }
 
 const editarOperacionForm =(id) =>{
@@ -198,16 +204,15 @@ const editarOperacionForm =(id) =>{
   
 }
 
-
-
 */
+
 
 const initializeApp = () => {
   setDato("categorias", todasCategorias);
   //setDato("operaciones", todasOperaciones);
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
- 
+
   $("#btn-nueva-operacion").addEventListener("click", () => {
       show("#vista-operacion")
       hide("#home")
@@ -243,6 +248,27 @@ const initializeApp = () => {
       hide("#reportes-vista")
   })
 
+  $("#ocultar-filtros").addEventListener("click", () =>{
+    show("#mostrar-filtros")
+    hide("#menu-tipo")
+    hide("#menu-categorias")
+    hide("#menu-desde")
+    hide("#menu-ordenarpor")
+    hide("#ocultar-filtros")
+    
+})
+
+$("#mostrar-filtros").addEventListener("click", () =>{
+  show("#ocultar-filtros")
+  show("#menu-tipo")
+  show("#menu-categorias")
+  show("#menu-desde")
+  show("#menu-ordenarpor")
+  hide("#mostrar-filtros")
+  
+})
+
+
   $("#btn-agregar-operacion").addEventListener("click", (e) => {
     e.preventDefault()
     agregarOperacion()
@@ -258,16 +284,16 @@ const initializeApp = () => {
     renderCategoriasTabla(categoriasActuales);
   });
 
-  //setearDato("operaciones", todasOperaciones)
-  //renderOperaciones(todasOperaciones)
+  //setDato("operaciones", todasOperaciones)
+ // renderOperaciones(todasOperaciones)
 
-  //$("#btn-editar-operacion").addEventListener("click", (e) =>{
-   // e.preventDefault()
-   // editarOpeacion()
-   //hide("#vista-editar-operacion")
-   //show("#tabla-operaciones")
-   //renderOperaciones(obtenerDato("operaciones "))
-  //})
+/* $("#btn-editar-operacion").addEventListener("click", (e) =>{
+  e.preventDefault()
+  editarOpeacion()
+  hide("#vista-editar-operacion")
+  show("#tabla-operaciones")
+  renderOperaciones(obtenerDato("operaciones "))
+  })*/
 
 }
 
