@@ -20,7 +20,16 @@ const randomId = () => self.crypto.randomUUID();
 
 const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
 const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
-
+/*editarCategoria: () => {
+  const categoriaId = $("#editar-categoria").getAttribute("id")
+  const categoriasEditadas = obtenerDato("categorias").map(categoria => {
+      if (categoria.id === categoriaId) {
+          return guardarCategoriaDato(user.id)
+      }
+      return categoria
+  })
+  setDato("categorias", categoriasEditadas)
+},*/
 
 
 
@@ -79,10 +88,10 @@ const renderCategoriasTabla = (categorias) => {
 
     tableHTML += `
             <tr class="w-full">
-                <td class="w-1/2 pr-4">${nombre}</td>
+                <td class="w-1/2 pt-4 pb-4 pl-6">${nombre}</td>
                 <td class="w-1/2 flex justify-end">
-                    <button class="px-1 py-0.5 bg-red-500 text-white text-xs rounded mr-2" id="eliminar-categoria-${id}">Eliminar</button>
-                    <button class="px-1 py-0.5 bg-yellow-500 text-white text-xs rounded" id="editar-categoria-${id}">Editar</button>
+                    <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}">Eliminar</button>
+                    <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}">Editar</button>
                 </td>
             </tr>
         `;
@@ -91,7 +100,14 @@ const renderCategoriasTabla = (categorias) => {
   tableHTML += `</table>`;
 
   $("#categorias-tabla").innerHTML = tableHTML;
-};
+
+  /*for (const btnEditar of $$("#editar-categoria")) {
+    btnEditar.addEventListener("click", () => {
+        const categoriaId = btnEditar.getAttribute("id")
+        Render.editarCategoriaTabla(categoriaId)
+    })
+}*/
+}
 
 
 
@@ -285,8 +301,7 @@ $("#mostrar-filtros").addEventListener("click", () =>{
     renderCategoriasOpciones(categoriasActuales);
     renderCategoriasTabla(categoriasActuales);
     show("#categorias-tabla")
-   
-  });
+    });
 
   //setDato("operaciones", todasOperaciones)
  // renderOperaciones(todasOperaciones)
