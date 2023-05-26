@@ -1,6 +1,4 @@
 
-
-
 //Selector DOM:
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -20,16 +18,7 @@ const randomId = () => self.crypto.randomUUID();
 
 const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
 const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
-/*editarCategoria: () => {
-  const categoriaId = $("#editar-categoria").getAttribute("id")
-  const categoriasEditadas = obtenerDato("categorias").map(categoria => {
-      if (categoria.id === categoriaId) {
-          return guardarCategoriaDato(user.id)
-      }
-      return categoria
-  })
-  setDato("categorias", categoriasEditadas)
-},*/
+
 
 
 
@@ -101,12 +90,12 @@ const renderCategoriasTabla = (categorias) => {
 
   $("#categorias-tabla").innerHTML = tableHTML;
 
-  /*for (const btnEditar of $$("#editar-categoria")) {
-    btnEditar.addEventListener("click", () => {
-        const categoriaId = btnEditar.getAttribute("id")
-        Render.editarCategoriaTabla(categoriaId)
-    })
-}*/
+  for (const { id } of categorias) {
+    $("#editar-btns" + id).addEventListener("click", () => {
+      editarCategoria(id);
+    });
+  }
+
 }
 
 
@@ -122,8 +111,43 @@ const enviarNuevoDato = (key, callback) => {
   setDato(key, datoActual);
 };
 
+//SECCION PARA EDITAR CATEGORIA
 
+let categoriaEditar = null;
 
+const editarCategoria = (id) => {
+  const categoria = todasCategorias.find((cat) => cat.id === id);
+  if (categoria) {
+    categoriaEditar = id;
+    show("#editarcategorias-vista");
+    hide("#categorias-vista");
+
+    $("#categoriaEditada-input").value = categoria.name;
+  }
+};
+
+const confirmarCategoriaEditada = () => {
+  if (categoriaEditar) {
+    const nuevoNombre = $("#categoriaEditada-input").value;
+    const categoria = todasCategorias.find((cat) => cat.id === categoriaEditar);
+    if (categoria) {
+      categoria.name = nuevoNombre;
+      setDato("categorias", todasCategorias);
+
+      hide("#editarcategorias-vista");
+      show("#categorias-vista");
+      renderCategoriasOpciones(todasCategorias);
+      renderCategoriasTabla(todasCategorias);
+    }
+  }
+};
+
+//CANCELANDO EDICION DE CATEGORIAS
+
+const cancelarEditarCategoria = () => {
+  hide("#editarcategorias-vista");
+  show("#categorias-vista");
+};
 
 
 /* SECCION OPERACIONES QUE NO LOGRO RESOLVER*/
@@ -302,6 +326,12 @@ $("#mostrar-filtros").addEventListener("click", () =>{
     renderCategoriasTabla(categoriasActuales);
     show("#categorias-tabla")
     });
+
+
+  $("#editarcategoria-btn").addEventListener("click", editarCategoria);
+
+  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);  
+  
 
   //setDato("operaciones", todasOperaciones)
  // renderOperaciones(todasOperaciones)
