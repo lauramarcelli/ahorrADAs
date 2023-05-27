@@ -81,7 +81,7 @@ const renderCategoriasTabla = (categorias) => {
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categoriaTabla">
                 <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}">Eliminar</button>
-                    <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}">Editar</button>
+                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}" onclick=editarCategoria("${id}") =>Editar</button>
                 </div>
                     
                 </td>
@@ -93,11 +93,6 @@ const renderCategoriasTabla = (categorias) => {
 
   $("#categorias-tabla").innerHTML = tableHTML;
 
-  for (const { id } of categorias) {
-    $("#btns-categoriaTabla" + id).addEventListener("click", () => {
-      editarCategoria(id);
-    });
-  }
 }
 
 
@@ -115,34 +110,31 @@ const enviarNuevoDato = (key, callback) => {
 
 //SECCION PARA EDITAR CATEGORIA
 
-// Agregar variable para rastrear qué categoría se está editando
+
 let categoriaEditar = null;
 
-const editarCategoria = (id) => {
-  // Encontrar la categoría que se va a editar
+/*const eliminarCategoria = (id) => {
   const categoria = todasCategorias.find((cat) => cat.id === id);
-  if (categoria) {
-    // Guardar el id de la categoría que se va a editar y mostrar la vista de edición
+  if (categoria)
+}*/
+
+const editarCategoria = (id) => {
+  const categoriaEditable = todasCategorias.find((cat) => cat.id === id);
+  if (categoriaEditable) { 
     categoriaEditar = id;
     show("#editarcategorias-vista");
     hide("#categorias-vista");
-
-    // Llenar el input con el nombre de la categoría
-    $("#categoriaEditada-input").value = categoria.name;
+    $("#categoriaEditada-input").value = categoriaEditable.name;
   }
 };
 
 const confirmarCategoriaEditada = () => {
-  // Solo hacer algo si hay una categoría para editar
   if (categoriaEditar) {
-    // Actualizar el nombre de la categoría en allCategories y el almacenamiento local
     const nuevoNombre = $("#categoriaEditada-input").value;
     const categoria = todasCategorias.find((cat) => cat.id === categoriaEditar);
     if (categoria) {
       categoria.name = nuevoNombre;
       setDato("categorias", todasCategorias);
-
-      // Volver a la vista de categorías y actualizar las categorías
       hide("#editarcategorias-vista");
       show("#categorias-vista");
       renderCategoriasOpciones(todasCategorias);
@@ -154,7 +146,6 @@ const confirmarCategoriaEditada = () => {
 //CANCELANDO EDICION DE CATEGORIAS
 
 const cancelarEditarCategoria = () => {
-  // Volver a la vista de categorías sin hacer ninguna modificación
   hide("#editarcategorias-vista");
   show("#categorias-vista");
 };
