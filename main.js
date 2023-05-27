@@ -3,8 +3,8 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
-const hide = (selector) => $(selector).classList.add("hidden");
-const show = (selector) => $(selector).classList.remove("hidden");
+const esconder = (selector) => $(selector).classList.add("hidden");
+const mostrar = (selector) => $(selector).classList.remove("hidden");
 
 //LIMPIAR
 const limpiarContenedor = (selector) => ($(selector).innerHTML = "");
@@ -50,7 +50,7 @@ const categoriasPorDefault = [
 const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
 
 const guardarCategoriaDato =() => {
-  const nombre = $("#categoria-input").value;
+  const nombre = $("#categoriaPorEditar-input").value;
   return {
     id: randomId(),
     nombre,
@@ -114,29 +114,34 @@ const enviarNuevoDato = (key, callback) => {
 let categoriaEditar = null;
 
 /*const eliminarCategoria = (id) => {
-  const categoria = todasCategorias.find((cat) => cat.id === id);
-  if (categoria)
+  const categoriaEliminable = todasCategorias.find((cat) => cat.id === id);
+  if (categoriaEliminable){
+
+  }
 }*/
 
 const editarCategoria = (id) => {
   const categoriaEditable = todasCategorias.find((cat) => cat.id === id);
-  if (categoriaEditable) { 
+  if (categoriaEditable) {   
     categoriaEditar = id;
-    show("#editarcategorias-vista");
-    hide("#categorias-vista");
-    $("#categoriaEditada-input").value = categoriaEditable.name;
+    mostrar("#editarcategorias-vista");
+    esconder("#categorias-vista");
+    $("#categoriaEditada-input").value = categoriaEditable.nombre;
   }
+  console.log (categoriaEditable)
+  
 };
+
 
 const confirmarCategoriaEditada = () => {
   if (categoriaEditar) {
     const nuevoNombre = $("#categoriaEditada-input").value;
     const categoria = todasCategorias.find((cat) => cat.id === categoriaEditar);
     if (categoria) {
-      categoria.name = nuevoNombre;
+      categoria.nombre = nuevoNombre;
       setDato("categorias", todasCategorias);
-      hide("#editarcategorias-vista");
-      show("#categorias-vista");
+      esconder("#editarcategorias-vista");
+      mostrar("#categorias-vista");
       renderCategoriasOpciones(todasCategorias);
       renderCategoriasTabla(todasCategorias);
     }
@@ -146,8 +151,8 @@ const confirmarCategoriaEditada = () => {
 //CANCELANDO EDICION DE CATEGORIAS
 
 const cancelarEditarCategoria = () => {
-  hide("#editarcategorias-vista");
-  show("#categorias-vista");
+  esconder("#editarcategorias-vista");
+  mostrar("#categorias-vista");
 };
 
 
@@ -160,7 +165,7 @@ const cancelarEditarCategoria = () => {
 const renderOperaciones = (operaciones) =>{
   limpiarContenedor("#tabla-operaciones")
   if (operaciones.length){
-    hide ("#reportes-vista")
+    esconder ("#reportes-vista")
     for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
       const categoriaSeleccionada = obtenerDato("catgorias").find(cat => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
@@ -176,7 +181,7 @@ const renderOperaciones = (operaciones) =>{
     `
   }
   } else {
-    show ("#reportes-vista")
+    mostrar ("#reportes-vista")
 
   }
   
@@ -234,8 +239,8 @@ const operacionEditar =() => {
 }
 
 const editarOperacionForm =(id) =>{
-  hide("#home")
-  show("#vista-editar-operacion")
+  esconder("#home")
+  mostrar("#vista-editar-operacion")
   $("#btn-editar-operacion").setAttribute("data-id", id)
   const operacionSeleccionada = obtenerDato("operaciones").find(operacion => operacion.id === id)
   $("#descripcion-form").value = operacionSeleccionada.descripcion-form
@@ -256,58 +261,63 @@ const initializeApp = () => {
   renderCategoriasTabla(todasCategorias);
 
   $("#btn-nueva-operacion").addEventListener("click", () => {
-      show("#vista-operacion")
-      hide("#home")
-      hide("#reportes-vista")
-      hide("#categorias-vista")
+      mostrar("#vista-operacion")
+      esconder("#home")
+      esconder("#reportes-vista")
+      esconder("#categorias-vista")
+      esconder("#editarcategorias-vista")
   })
 
   $("#mostrar-categorias").addEventListener("click", () => {
-      show("#categorias-vista")
-      show("#categorias-tabla")
-      hide("#home")
-      hide("#reportes-vista")
-      hide("#vista-operacion")
+      mostrar("#categorias-vista")
+      mostrar("#categorias-tabla")
+      esconder("#home")
+      esconder("#reportes-vista")
+      esconder("#vista-operacion")
+      esconder("#editarcategorias-vista")
   })
 
   $("#mostrar-balance").addEventListener("click", () =>{
-      show("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
-      hide("#reportes-vista")
+      mostrar("#home")
+      esconder("#categorias-vista")
+      esconder("#vista-operacion")
+      esconder("#reportes-vista")
+      esconder("#editarcategorias-vista")
   })
 
   $("#mostrar-reportes").addEventListener("click", () =>{
-      show("#reportes-vista")
-      hide("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
+      mostrar("#reportes-vista")
+      esconder("#home")
+      esconder("#categorias-vista")
+      esconder("#vista-operacion")
+      esconder("#editarcategorias-vista")
   })
 
   $("#titulo-ahorradas").addEventListener("click", () =>{
-      show("#home")
-      hide("#categorias-vista")
-      hide("#vista-operacion")
-      hide("#reportes-vista")
+      mostrar("#home")
+      esconder("#categorias-vista")
+      esconder("#vista-operacion")
+      esconder("#reportes-vista")
+      esconder("#editarcategorias-vista")
   })
 
   $("#ocultar-filtros").addEventListener("click", () =>{
-    show("#mostrar-filtros")
-    hide("#menu-tipo")
-    hide("#menu-categorias")
-    hide("#menu-desde")
-    hide("#menu-ordenarpor")
-    hide("#ocultar-filtros")
+    mostrar("#mostrar-filtros")
+    esconder("#menu-tipo")
+    esconder("#menu-categorias")
+    esconder("#menu-desde")
+    esconder("#menu-ordenarpor")
+    esconder("#ocultar-filtros")
     
-})
+});
 
 $("#mostrar-filtros").addEventListener("click", () =>{
-  show("#ocultar-filtros")
-  show("#menu-tipo")
-  show("#menu-categorias")
-  show("#menu-desde")
-  show("#menu-ordenarpor")
-  hide("#mostrar-filtros")
+  mostrar("#ocultar-filtros")
+  mostrar("#menu-tipo")
+  mostrar("#menu-categorias")
+  mostrar("#menu-desde")
+  mostrar("#menu-ordenarpor")
+  esconder("#mostrar-filtros")
   
 })
 
@@ -315,7 +325,7 @@ $("#mostrar-filtros").addEventListener("click", () =>{
   $("#btn-agregar-operacion").addEventListener("click", (e) => {
     e.preventDefault()
     agregarOperacion()
-  })
+  });
 
   
 
@@ -325,7 +335,7 @@ $("#mostrar-filtros").addEventListener("click", () =>{
     const categoriasActuales = obtenerDato("categorias");
     renderCategoriasOpciones(categoriasActuales);
     renderCategoriasTabla(categoriasActuales);
-    show("#categorias-tabla")
+    mostrar("#categorias-tabla")
     });
 
 
@@ -334,18 +344,18 @@ $("#mostrar-filtros").addEventListener("click", () =>{
   $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);  
   
 
-  //setDato("operaciones", todasOperaciones)
- // renderOperaciones(todasOperaciones)
+//setDato("operaciones", todasOperaciones)
+// renderOperaciones(todasOperaciones)
 
 /* $("#btn-editar-operacion").addEventListener("click", (e) =>{
   e.preventDefault()
   editarOpeacion()
-  hide("#vista-editar-operacion")
-  show("#tabla-operaciones")
+  esconder("#vista-editar-operacion")
+  mostrar("#tabla-operaciones")
   renderOperaciones(obtenerDato("operaciones "))
   })*/
 
 }
 
 
-  window.addEventListener("load", initializeApp)
+window.addEventListener("load", initializeApp)
