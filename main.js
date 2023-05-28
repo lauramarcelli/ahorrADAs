@@ -113,13 +113,10 @@ const enviarNuevoDato = (key, callback) => {
 
 let categoriaEditar = null;
 
-const eliminarCategoria = (id) =>{
-  const categoria = obtenerDato("categorias").filter(cat => cat.id !== id);
-  categoria.remove();
-  guardarDato("categorias", todasCategorias)
-  renderCategoriasOpciones(todasCategorias);
-  renderCategoriasTabla(todasCategorias);
-};
+
+
+
+
 
 
 
@@ -149,6 +146,14 @@ const confirmarCategoriaEditada = () => {
       renderCategoriasTabla(todasCategorias);
     }
   }
+};
+
+const eliminarCategoria = (id) => {
+  const arrayCat = todasCategorias.findIndex(
+    cat => cat.id === id
+  );
+  todasCategorias.splice(arrayCat, 1);
+  guardarDato();
 };
 
 //CANCELANDO EDICION DE CATEGORIAS
