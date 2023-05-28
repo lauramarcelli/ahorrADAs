@@ -7,17 +7,17 @@ const esconder = (selector) => $(selector).classList.add("hidden");
 const mostrar = (selector) => $(selector).classList.remove("hidden");
 
 //LIMPIAR
-const limpiarContenedor = (selector) => ($(selector).innerHTML = "");
+const limpiarContenedor = (selector) => $(selector).innerHTML = ""
 
 
 //Random Id Generator
-const randomId = () => self.crypto.randomUUID();
+const randomId = () => self.crypto.randomUUID()
 
 //Localstorage Handlers
 
 
 const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
-const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
+const guardarDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 
 
@@ -27,35 +27,29 @@ const setDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 const categoriasPorDefault = [
   {
     id: randomId(),
-    nombre: "Comida",
+    nombre: "Comida"
   },
   {
     id: randomId(),
-    nombre: "Transporte",
+    nombre: "Transporte"
   },
   {
     id: randomId(),
-    nombre: "Salud",
+    nombre: "Salud"
   },
   {
     id: randomId(),
-    nombre: "Educación",
+    nombre: "Educación"
   },
   {
     id: randomId(),
-    nombre: "Entretenimiento",
-  },
-];
+    nombre: "Entretenimiento"
+  }
+]
 
 const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
 
-const guardarCategoriaDato =() => {
-  const nombre = $("#categoriaPorEditar-input").value;
-  return {
-    id: randomId(),
-    nombre,
-  }
-};
+
 
 const renderCategoriasOpciones = (categorias) => {
   limpiarContenedor("#categorias-filtro");
@@ -80,7 +74,7 @@ const renderCategoriasTabla = (categorias) => {
                 <td class="w-1/2 pt-4 pb-4 pl-6">${nombre}</td>
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categoriaTabla">
-                <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}">Eliminar</button>
+                <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}" onclick=eliminarCategoria("${id}") =>Eliminar</button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}" onclick=editarCategoria("${id}") =>Editar</button>
                 </div>
                     
@@ -95,7 +89,13 @@ const renderCategoriasTabla = (categorias) => {
 
 }
 
-
+const guardarCategoriaDato =() => {
+  const nombre = $("#categoriaPorEditar-input").value;
+  return {
+    id: randomId(),
+    nombre,
+  }
+};
 
 
 const enviarNuevoDato = (key, callback) => {
@@ -105,31 +105,34 @@ const enviarNuevoDato = (key, callback) => {
   }
   const nuevoDato = callback();
   datoActual.push(nuevoDato);
-  setDato(key, datoActual);
+  guardarDato(key, datoActual);
 };
 
-//SECCION PARA EDITAR CATEGORIA
+//SECCION PARA EDITAR y ELIMINAR CATEGORIA
 
 
 let categoriaEditar = null;
 
-/*const eliminarCategoria = (id) => {
-  const categoriaEliminable = todasCategorias.find((cat) => cat.id === id);
-  if (categoriaEliminable){
+const eliminarCategoria = (id) =>{
+  const categoria = obtenerDato("categorias").filter(cat => cat.id !== id);
+  categoria.remove();
+  guardarDato("categorias", todasCategorias)
+  renderCategoriasOpciones(todasCategorias);
+  renderCategoriasTabla(todasCategorias);
+};
 
-  }
-}*/
+
 
 const editarCategoria = (id) => {
-  const categoriaEditable = todasCategorias.find((cat) => cat.id === id);
-  if (categoriaEditable) {   
+  const categoria = todasCategorias.find((cat) => cat.id === id);
+  if (categoria) {   
     categoriaEditar = id;
     mostrar("#editarcategorias-vista");
     esconder("#categorias-vista");
-    $("#categoriaEditada-input").value = categoriaEditable.nombre;
+    $("#categoriaEditada-input").value = categoria.nombre;
+    console.log (categoria)
   }
-  console.log (categoriaEditable)
-  
+    
 };
 
 
@@ -139,7 +142,7 @@ const confirmarCategoriaEditada = () => {
     const categoria = todasCategorias.find((cat) => cat.id === categoriaEditar);
     if (categoria) {
       categoria.nombre = nuevoNombre;
-      setDato("categorias", todasCategorias);
+      guardarDato("categorias", todasCategorias);
       esconder("#editarcategorias-vista");
       mostrar("#categorias-vista");
       renderCategoriasOpciones(todasCategorias);
@@ -213,14 +216,14 @@ const agregarOperacion = () => {
   const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
   actualOperacion.push(nuevaOperacion)
-  setDato("operaciones", actualOperacion)
+  guardarDato("operaciones", actualOperacion)
 }
 
 
 
 const eliminarOperacion = (id) => {
   const actualOperacion = obtenerDato("operaciones").filter(operacion => operacion.id !== id)
-  setDato("operaciones", actualOperacion)
+  guardarDato("operaciones", actualOperacion)
   renderOperaciones(actualOperacion)
 }
 
@@ -235,7 +238,7 @@ const operacionEditar =() => {
     return operacion
 
   })
-  setDato("operaciones", operacionesEditadas) 
+  guardarDato("operaciones", operacionesEditadas) 
 }
 
 const editarOperacionForm =(id) =>{
@@ -255,8 +258,8 @@ const editarOperacionForm =(id) =>{
 
 
 const initializeApp = () => {
-  setDato("categorias", todasCategorias);
-  //setDato("operaciones", todasOperaciones);
+  guardarDato("categorias", todasCategorias);
+  //guardarDato("operaciones", todasOperaciones);
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
 
@@ -341,10 +344,12 @@ $("#mostrar-filtros").addEventListener("click", () =>{
 
   $("#editarcategoria-btn").addEventListener("click", editarCategoria);
 
-  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);  
+  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria); 
   
 
-//setDato("operaciones", todasOperaciones)
+  
+
+//guardarDato("operaciones", todasOperaciones)
 // renderOperaciones(todasOperaciones)
 
 /* $("#btn-editar-operacion").addEventListener("click", (e) =>{
