@@ -3,23 +3,20 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
+//Ocultar or Mostrar Funciones
+
 const esconder = (selector) => $(selector).classList.add("hidden");
 const mostrar = (selector) => $(selector).classList.remove("hidden");
-
-//LIMPIAR
 const limpiarContenedor = (selector) => $(selector).innerHTML = ""
 
 
-//Random Id Generator
+//Generador Aleatorio ID
 const randomId = () => self.crypto.randomUUID()
 
-//Localstorage Handlers
-
+//Localstorage Funciones
 
 const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
 const guardarDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
-
-
 
 
 /* SECCION CATEGORIAS*/
@@ -48,6 +45,7 @@ const categoriasPorDefault = [
 ]
 
 const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
+const todasOperaciones = obtenerDato("operaciones") || []
 
 
 
@@ -74,7 +72,7 @@ const renderCategoriasTabla = (categorias) => {
                 <td class="w-1/2 pt-4 pb-4 pl-6">${nombre}</td>
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categoriaTabla">
-                <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}">Eliminar</button>
+                <button onclick="eliminarCategoria('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}" onclick=editarCategoria("${id}") =>Editar</button>
                 </div>
                     
@@ -143,20 +141,14 @@ const confirmarCategoriaEditada = () => {
   }
 };
 
+
 const eliminarCategoria = (id) => {
-  const categoriasActuales = todasCategorias.filter(
-    cat => cat.id !== id);
-    guardarDato("categorias", categoriasActuales);
+  todasCategorias = todasCategorias.filter((cat) => cat.id !== id);
+  guardarDato("categorias", todasCategorias);
+  renderCategoriasTabla(todasCategorias);
+  renderCategoriasOpciones(todasCategorias);
 };
 
-const borrandoCategoria =(id) => {
-  $("#eliminar-categoria-${id}").setAttribute("cat-id", id)
-  $("#eliminar-categoria-${id}").addEventListener("click", () => {
-    const categoriasActuales = $("#eliminar-categoria-${id}").getAttribute("cat-id")
-    eliminarCategoria(categoriasActuales)
-    window.location.reload()
-})
-}
 //CANCELANDO EDICION DE CATEGORIAS
 
 const cancelarEditarCategoria = () => {
@@ -165,18 +157,17 @@ const cancelarEditarCategoria = () => {
 };
 
 
-/* SECCION OPERACIONES QUE NO LOGRO RESOLVER*/
+/*SECCION OPERACIONES*/
 
 
-
-/*const todasOperaciones = obtenerDato("operaciones") || []
 
 const renderOperaciones = (operaciones) =>{
   limpiarContenedor("#tabla-operaciones")
   if (operaciones.length){
-    esconder ("#reportes-vista")
+    esconder("#reportes-vista")
+    esconder("#sin-resultados")
     for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
-      const categoriaSeleccionada = obtenerDato("catgorias").find(cat => cat.id === categoria)
+      const categoriaSeleccionada = obtenerDato("categorias").find(cat => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
       <td>${descripcion}</td>
       <td>${monto}</td>
@@ -184,8 +175,8 @@ const renderOperaciones = (operaciones) =>{
       <td>${categoriaSeleccionada.nombre}</td>
       <td>${fecha}</td>
       <td>
-        <button class="text-sm text-green-500" onclick="editarOperacion('${id}')">Editar</button>
-        <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')">Eliminar</button>
+        <button class="text-sm text-green-500" onclick="editarOperacion('${id}')"=>Editar</button>
+        <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
       </td>
     `
   }
@@ -221,7 +212,7 @@ const guardarNuevaOperacion = (operacionId) => {
 const agregarOperacion = () => {
   const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
-  actualOperacion.push(nuevaOperacion)
+  actualOperacion.push(nuevosDatosOperacion)
   guardarDato("operaciones", actualOperacion)
 }
 
@@ -260,12 +251,12 @@ const editarOperacionForm =(id) =>{
   
 }
 
-*/
+
 
 
 const initializeApp = () => {
   guardarDato("categorias", todasCategorias);
-  //guardarDato("operaciones", todasOperaciones);
+  guardarDato("operaciones", todasOperaciones);
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
 
@@ -355,16 +346,16 @@ $("#mostrar-filtros").addEventListener("click", () =>{
 
   
 
-//guardarDato("operaciones", todasOperaciones)
-// renderOperaciones(todasOperaciones)
+guardarDato("operaciones", todasOperaciones)
+renderOperaciones(todasOperaciones)
 
-/* $("#btn-editar-operacion").addEventListener("click", (e) =>{
+ $("#btn-editar-operacion").addEventListener("click", (e) =>{
   e.preventDefault()
   editarOpeacion()
   esconder("#vista-editar-operacion")
   mostrar("#tabla-operaciones")
   renderOperaciones(obtenerDato("operaciones "))
-  })*/
+  })
 
 }
 
