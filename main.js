@@ -74,7 +74,7 @@ const renderCategoriasTabla = (categorias) => {
                 <td class="w-1/2 pt-4 pb-4 pl-6">${nombre}</td>
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categoriaTabla">
-                <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}" onclick=eliminarCategoria("${id}") =>Eliminar</button>
+                <button class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="eliminar-categoria-${id}">Eliminar</button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}" onclick=editarCategoria("${id}") =>Editar</button>
                 </div>
                     
@@ -114,22 +114,17 @@ const enviarNuevoDato = (key, callback) => {
 let categoriaEditar = null;
 
 
-
-
-
-
-
-
 const editarCategoria = (id) => {
+ 
   const categoria = todasCategorias.find((cat) => cat.id === id);
   if (categoria) {   
     categoriaEditar = id;
     mostrar("#editarcategorias-vista");
     esconder("#categorias-vista");
     $("#categoriaEditada-input").value = categoria.nombre;
-    console.log (categoria)
-  }
     
+  }
+  console.log (categoria)
 };
 
 
@@ -149,13 +144,19 @@ const confirmarCategoriaEditada = () => {
 };
 
 const eliminarCategoria = (id) => {
-  const arrayCat = todasCategorias.findIndex(
-    cat => cat.id === id
-  );
-  todasCategorias.splice(arrayCat, 1);
-  guardarDato();
+  const categoriasActuales = todasCategorias.filter(
+    cat => cat.id !== id);
+    guardarDato("categorias", categoriasActuales);
 };
 
+const borrandoCategoria =(id) => {
+  $("#eliminar-categoria-${id}").setAttribute("cat-id", id)
+  $("#eliminar-categoria-${id}").addEventListener("click", () => {
+    const categoriasActuales = $("#eliminar-categoria-${id}").getAttribute("cat-id")
+    eliminarCategoria(categoriasActuales)
+    window.location.reload()
+})
+}
 //CANCELANDO EDICION DE CATEGORIAS
 
 const cancelarEditarCategoria = () => {
@@ -347,7 +348,7 @@ $("#mostrar-filtros").addEventListener("click", () =>{
     });
 
 
-  $("#editarcategoria-btn").addEventListener("click", editarCategoria);
+  $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
 
   $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria); 
   
