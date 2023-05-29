@@ -190,10 +190,10 @@ const renderOperaciones = (operaciones) => {
       const categoriaSeleccionada = todasCategorias.find((cat) => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
       <td>${descripcion}</td>
-      <td>${monto}</td>
-      <td>${tipo}</td>
       <td>${categoriaSeleccionada}</td>
       <td>${fecha}</td>
+      <td>${monto}</td>
+      <td>${tipo}</td>    
       <td>
         <button class="text-sm text-green-500" onclick="editarOperacion('${id}')"=>Editar</button>
         <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
