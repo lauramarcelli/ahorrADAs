@@ -143,8 +143,8 @@ const confirmarCategoriaEditada = () => {
 
 
 const eliminarCategoria = (id) => {
-  todasCategorias = todasCategorias.filter((cat) => cat.id !== id);
-  guardarDato("categorias", todasCategorias);
+  const actualesCategorias = todasCategorias.filter((cat) => cat.id !== id);
+  guardarDato("categorias", actualesCategorias);
   renderCategoriasTabla(todasCategorias);
   renderCategoriasOpciones(todasCategorias);
 };
