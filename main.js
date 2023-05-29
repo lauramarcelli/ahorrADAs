@@ -1,7 +1,9 @@
 
 //Selector DOM:
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
+
 
 //Ocultar or Mostrar Funciones
 
@@ -11,13 +13,16 @@ const limpiarContenedor = (selector) => $(selector).innerHTML = ""
 
 
 //Generador Aleatorio ID
+
 const randomId = () => self.crypto.randomUUID()
+
 
 //Localstorage Funciones
 
 const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
 const guardarDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
+////////////////////////////////////////////////////////////////////////
 
 /* SECCION CATEGORIAS*/
 
@@ -149,6 +154,7 @@ const eliminarCategoria = (id) => {
   renderCategoriasOpciones(todasCategorias);
 };
 
+
 //CANCELANDO EDICION DE CATEGORIAS
 
 const cancelarEditarCategoria = () => {
@@ -157,21 +163,36 @@ const cancelarEditarCategoria = () => {
 };
 
 
+/////////////////////////////////////////////////////////////////////
+
+
 /*SECCION OPERACIONES*/
 
 
+//funcion para guardar datos del formulario de boton nueva operacion
+const guardarNuevaOperacion = (operacionId) => {
+  return {
+      id: operacionId ? operacionId :  randomId(),
+      descripcion: $("#descripcion-form").value,
+      monto: $("#monto-form").valueAsNumber,
+      tipo: $("#tipo-form").value,
+      categoria: $("#categoria-form").value,
+      fecha: $("#fecha-form").value,
 
-const renderOperaciones = (operaciones) =>{
+  }
+}
+
+const renderOperaciones = (operaciones) => {
   limpiarContenedor("#tabla-operaciones")
   if (operaciones.length){
     esconder("#reportes-vista")
     for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
-      const categoriaSeleccionada = obtenerDato("categorias").find(cat => cat.id === categoria)
+      const categoriaSeleccionada = todasCategorias.find((cat) => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
       <td>${descripcion}</td>
       <td>${monto}</td>
       <td>${tipo}</td>
-      <td>${categoriaSeleccionada.nombre}</td>
+      <td>${categoriaSeleccionada}</td>
       <td>${fecha}</td>
       <td>
         <button class="text-sm text-green-500" onclick="editarOperacion('${id}')"=>Editar</button>
@@ -187,32 +208,16 @@ const renderOperaciones = (operaciones) =>{
 }
 
 
-
-//funcion para guardar datos del formulario de boton nueva operacion
-const guardarNuevaOperacion = (operacionId) => {
-    const categoriaId = $("categorias").options[$("categorias").selectedIndex ].getAttribute("data-id")
-    return {
-        id: operacionId ? operacionId :  randomId(),
-        descripcion: $("#descripcion-form").value,
-        monto: $("#monto-form").valueAsNumber,
-        tipo: $("#tipo-form").value,
-        categoria: categoriaId,
-        fecha: $("#fecha-form").value,
-    }
-    
-}
-
-
-
-
-//FUNCION QUE ME TRAE PROBLEMAS PORQUE NO ME FUNCIONAN LOS BOTONES - FUNCION PARA INICIAR CON ARRAY VACIO
-
-
 const agregarOperacion = () => {
   const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
   actualOperacion.push(nuevosDatosOperacion)
   guardarDato("operaciones", actualOperacion)
+  renderOperaciones(actualOperacion)
+  mostrar("#operaciones-tabla-home")
+  mostrar("#home")
+  esconder("#vista-operacion")
+  esconder("#sin-resultados")
 }
 
 
@@ -258,6 +263,7 @@ const initializeApp = () => {
   guardarDato("operaciones", todasOperaciones);
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
+  renderOperaciones(todasOperaciones)
 
   $("#btn-nueva-operacion").addEventListener("click", () => {
       mostrar("#vista-operacion")
@@ -340,13 +346,16 @@ $("#mostrar-filtros").addEventListener("click", () =>{
 
   $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
 
-  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria); 
+  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);
+  
+  $("#btn-agregar-operacion").addEventListener("click", agregarOperacion)
   
 
   
 
-guardarDato("operaciones", todasOperaciones)
-renderOperaciones(todasOperaciones)
+ 
+
+ 
 
  $("#btn-editar-operacion").addEventListener("click", (e) =>{
   e.preventDefault()

@@ -96,8 +96,8 @@
                         <button id="btn-nueva-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]">+ Nueva Operacion</button>
                     </div>
                     <div>
-                        <div>
-                            <div id="sin-resultados">
+                        <div id="sin-resultados">
+                            <div >
                                 <img src="assets/money-management.png" class="mx-auto p-20"alt="">
                             </div>
                             <div>
@@ -107,6 +107,29 @@
                                 <p class="text-[#4a4a4a] font-normal text-center text-base mt-3 mb-20">Cambia los filtros o agrega operaciones</p>
                             </div>
                         </div>
+                        <!--Seccion Operaciones-->
+
+            <section id="operaciones-tabla-home" class="hidden lg:w-3/6 bg-white rounded-md">
+                
+                <div>
+                    <div>
+                        <table class="min-w-full text-left text-sm font-light ml-6">
+                            <thead class="border-b font-medium dark:border-neutral-500">
+                            <tr>
+                                <th class="px-6 py-4">Descripción</th>
+                                <th class="px-6 py-4">Categoría</th>
+                                <th class="px-6 py-4">Fecha</th>
+                                <th class="px-6 py-4">Monto</th>
+                                <th class="px-6 py-4">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tabla-operaciones">
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>               
+        </section>
                     </div>               
             </div>
             </section>
@@ -176,7 +199,7 @@
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Categoría</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categoria-form">
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categoria-select">
                                 
                             </select>
                         </div>
@@ -195,32 +218,7 @@
             
             </div>
 
-            <!--Seccion Operaciones-->
-
-            <section class="hidden lg:w-3/6 bg-white rounded-md">
-                    <div class="flex justify-between md:flex-row flex-col">
-                        <h3 class="m-4 text-2xl font-bold text-[#4a4a4a]">Operaciones</h3>
-                        <button class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]">+ Nueva Operacion</button>
-                    </div>
-                    <div>
-                        <div>
-                            <table class="min-w-full text-left text-sm font-light">
-                                <thead class="border-b font-medium dark:border-neutral-500">
-                                <tr>
-                                    <th class="px-6 py-4">Descripción</th>
-                                    <th class="px-6 py-4">Categoría</th>
-                                    <th class="px-6 py-4">Fecha</th>
-                                    <th class="px-6 py-4">Monto</th>
-                                    <th class="px-6 py-4">Acciones</th>
-                                </tr>
-                                </thead>
-                                <tbody id="tabla-operaciones">
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                    </div>               
-            </section>
+            
             
 
             <!--Seccion Categorias-->
