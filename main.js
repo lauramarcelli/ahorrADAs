@@ -165,7 +165,6 @@ const renderOperaciones = (operaciones) =>{
   limpiarContenedor("#tabla-operaciones")
   if (operaciones.length){
     esconder("#reportes-vista")
-    esconder("#sin-resultados")
     for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
       const categoriaSeleccionada = obtenerDato("categorias").find(cat => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
