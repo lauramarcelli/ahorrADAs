@@ -60,7 +60,15 @@ const renderCategoriasOpciones = (categorias) => {
     $("#categorias-filtro").innerHTML += `
             <option value="${id}">${nombre}</option>
         `
-    }
+  $("#categoria-form").innerHTML += `
+          <option value="${id}">${nombre}</option>
+   `    
+
+  $("#categoria-select").innerHTML += `
+   <option value="${id}">${nombre}</option>
+   `     
+  }
+    
 };
 
 
@@ -99,7 +107,7 @@ const guardarCategoriaDato =() => {
     nombre,
   }
 };
-
+ 
 
 const enviarNuevoDato = (key, callback) => {
   let datoActual = obtenerDato(key);
@@ -190,18 +198,18 @@ const renderOperaciones = (operaciones) => {
       const categoriaSeleccionada = todasCategorias.find((cat) => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
       <td>${descripcion}</td>
-      <td>${categoriaSeleccionada}</td>
+      <td>${categoriaSeleccionada.nombre}</td>
       <td>${fecha}</td>
       <td>${monto}</td>
       <td>${tipo}</td>    
       <td>
-        <button class="text-sm text-green-500" onclick="editarOperacion('${id}')"=>Editar</button>
+        <button class="text-sm text-green-500" onclick="editarOperacionForm('${id}')"=>Editar</button>
         <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
       </td>
     `
   }
   } else {
-    mostrar ("#reportes-vista")
+    mostrar ("#home")
 
   }
   
@@ -214,10 +222,7 @@ const agregarOperacion = () => {
   actualOperacion.push(nuevosDatosOperacion)
   guardarDato("operaciones", actualOperacion)
   renderOperaciones(actualOperacion)
-  mostrar("#operaciones-tabla-home")
-  mostrar("#home")
-  esconder("#vista-operacion")
-  esconder("#sin-resultados")
+  
 }
 
 
@@ -264,108 +269,95 @@ const initializeApp = () => {
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
   renderOperaciones(todasOperaciones)
-
+ 
   $("#btn-nueva-operacion").addEventListener("click", () => {
-      mostrar("#vista-operacion")
-      esconder("#home")
-      esconder("#reportes-vista")
-      esconder("#categorias-vista")
-      esconder("#editarcategorias-vista")
-  })
-
-  $("#mostrar-categorias").addEventListener("click", () => {
-      mostrar("#categorias-vista")
-      mostrar("#categorias-tabla")
-      esconder("#home")
-      esconder("#reportes-vista")
-      esconder("#vista-operacion")
-      esconder("#editarcategorias-vista")
-  })
-
-  $("#mostrar-balance").addEventListener("click", () =>{
-      mostrar("#home")
-      esconder("#categorias-vista")
-      esconder("#vista-operacion")
-      esconder("#reportes-vista")
-      esconder("#editarcategorias-vista")
-  })
-
-  $("#mostrar-reportes").addEventListener("click", () =>{
-      mostrar("#reportes-vista")
-      esconder("#home")
-      esconder("#categorias-vista")
-      esconder("#vista-operacion")
-      esconder("#editarcategorias-vista")
-  })
-
-  $("#titulo-ahorradas").addEventListener("click", () =>{
-      mostrar("#home")
-      esconder("#categorias-vista")
-      esconder("#vista-operacion")
-      esconder("#reportes-vista")
-      esconder("#editarcategorias-vista")
-  })
-
-  $("#ocultar-filtros").addEventListener("click", () =>{
-    mostrar("#mostrar-filtros")
-    esconder("#menu-tipo")
-    esconder("#menu-categorias")
-    esconder("#menu-desde")
-    esconder("#menu-ordenarpor")
-    esconder("#ocultar-filtros")
-    
+    mostrar("#vista-operacion")
+    esconder("#home")
+    esconder("#reportes-vista")
+    esconder("#categorias-vista")
+    esconder("#editarcategorias-vista")
 });
 
-$("#mostrar-filtros").addEventListener("click", () =>{
-  mostrar("#ocultar-filtros")
-  mostrar("#menu-tipo")
-  mostrar("#menu-categorias")
-  mostrar("#menu-desde")
-  mostrar("#menu-ordenarpor")
-  esconder("#mostrar-filtros")
-  
-})
-
-
-  $("#btn-agregar-operacion").addEventListener("click", (e) => {
-    e.preventDefault()
-    agregarOperacion()
+$("#mostrar-categorias").addEventListener("click", () => {
+  mostrar("#categorias-vista")
+  mostrar("#categorias-tabla")
+  esconder("#home")
+  esconder("#reportes-vista")
+  esconder("#vista-operacion")
+  esconder("#editarcategorias-vista")
+});
+$("#mostrar-balance").addEventListener("click", () =>{
+  mostrar("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#reportes-vista")
+  esconder("#editarcategorias-vista")
+});
+$("#mostrar-reportes").addEventListener("click", () =>{
+  mostrar("#reportes-vista")
+  esconder("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#editarcategorias-vista")
+});
+$("#titulo-ahorradas").addEventListener("click", () =>{
+  mostrar("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#reportes-vista")
+  esconder("#editarcategorias-vista")
+});
+$("#ocultar-filtros").addEventListener("click", () =>{
+  mostrar("#mostrar-filtros")
+  esconder("#menu-tipo")
+  esconder("#menu-categorias")
+  esconder("#menu-desde")
+  esconder("#menu-ordenarpor")
+  esconder("#ocultar-filtros")
   });
-
+  $("#mostrar-filtros").addEventListener("click", () =>{
+    mostrar("#ocultar-filtros")
+    mostrar("#menu-tipo")
+    mostrar("#menu-categorias")
+    mostrar("#menu-desde")
+    mostrar("#menu-ordenarpor")
+    esconder("#mostrar-filtros")
+      });
   
+        $("#agregar-categoria").addEventListener("click", (e) => {
+          e.preventDefault();
+          enviarNuevoDato("categorias", guardarCategoriaDato);
+          const categoriasActuales = obtenerDato("categorias");
+          renderCategoriasOpciones(categoriasActuales);
+          renderCategoriasTabla(categoriasActuales);
+          mostrar("#categorias-tabla")
+          });
+          $("#agregar-categoria").addEventListener("click", () => {
+            $("#categoriaPorEditar-input").value = ""
+              });
 
-  $("#agregar-categoria").addEventListener("click", (e) => {
-    e.preventDefault();
-    enviarNuevoDato("categorias", guardarCategoriaDato);
-    const categoriasActuales = obtenerDato("categorias");
-    renderCategoriasOpciones(categoriasActuales);
-    renderCategoriasTabla(categoriasActuales);
-    mostrar("#categorias-tabla")
-    });
+          $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
 
+          $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);
 
-  $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
-
-  $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);
-  
-  $("#btn-agregar-operacion").addEventListener("click", agregarOperacion)
-  
-
-  
-
- 
-
- 
-
- $("#btn-editar-operacion").addEventListener("click", (e) =>{
-  e.preventDefault()
-  editarOpeacion()
-  esconder("#vista-editar-operacion")
-  mostrar("#tabla-operaciones")
-  renderOperaciones(obtenerDato("operaciones "))
-  })
+          $("#btn-agregar-operacion").addEventListener("click", (e) => {
+            e.preventDefault()
+            agregarOperacion()
+            mostrar("#operaciones-tabla-home")
+            mostrar("#home")
+            esconder("#vista-operacion")
+            esconder("#sin-resultados")
+          }); 
+          
+          $("#btn-editar-operacion").addEventListener("click", (e) =>{
+            e.preventDefault()
+            editarOperacionForm()
+            esconder("#vista-editar-operacion")
+            mostrar("#tabla-operaciones")
+            renderOperaciones(obtenerDato("operaciones"))
+            });
+                                       
 
 }
-
 
 window.addEventListener("load", initializeApp)
