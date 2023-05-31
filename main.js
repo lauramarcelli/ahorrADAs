@@ -233,8 +233,6 @@ const eliminarOperacion = (id) => {
   renderOperaciones(actualOperacion)
 }
 
-
-
 const operacionEditar =() => {
   const operacionId = $("#btn-editar-operacion").getAttribute("data-id")
   const operacionesEditadas = obtenerDato("operaciones").map(operacion => {
@@ -251,14 +249,17 @@ const editarOperacionForm =(id) =>{
   esconder("#home")
   mostrar("#vista-editar-operacion")
   $("#btn-editar-operacion").setAttribute("data-id", id)
-  const operacionSeleccionada = obtenerDato("operaciones").find(operacion => operacion.id === id)
-  $("#descripcion-form").value = operacionSeleccionada.descripcion-form
-  $("#monto-form").valueAsNumber= operacionSeleccionada.monto-form
-  $("#tipo-form").value= operacionSeleccionada.tipo-form
-  $("#categoria-form").value= operacionSeleccionada.categoria-form
-  $("#fecha-form").value= operacionSeleccionada.fecha-form
+  const operacionSeleccionada = obtenerDato("operaciones").find((op) => op.id === id)
+  $("#descripcion-form").value = operacionSeleccionada.descripcion
+  $("#monto-form").valueAsNumber= operacionSeleccionada.monto
+  $("#tipo-form").value= operacionSeleccionada.tipo
+  $("#categoria-form").value= operacionSeleccionada.categoria
+  $("#fecha-form").value= operacionSeleccionada.fecha
   
 }
+
+
+
 
 
 
@@ -269,6 +270,14 @@ const initializeApp = () => {
   renderCategoriasOpciones(todasCategorias);
   renderCategoriasTabla(todasCategorias);
   renderOperaciones(todasOperaciones)
+
+  if (todasOperaciones.length) {
+    mostrar("#operaciones-tabla-home") 
+    esconder("#sin-resultados")
+    } else {
+    esconder("#operaciones-tabla-home") 
+    mostrar("#sin-resultados")
+    }
  
   $("#btn-nueva-operacion").addEventListener("click", () => {
     mostrar("#vista-operacion")
@@ -276,7 +285,7 @@ const initializeApp = () => {
     esconder("#reportes-vista")
     esconder("#categorias-vista")
     esconder("#editarcategorias-vista")
-});
+   });
 
 $("#mostrar-categorias").addEventListener("click", () => {
   mostrar("#categorias-vista")
