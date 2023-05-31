@@ -29,11 +29,15 @@ const guardarDato = (key, array) => localStorage.setItem(key, JSON.stringify(arr
 const categoriasPorDefault = [
   {
     id: randomId(),
+    nombre: "Todas"
+  },
+  {
+    id: randomId(),
     nombre: "Comida"
   },
   {
     id: randomId(),
-    nombre: "Transporte"
+    nombre: "Servicios"
   },
   {
     id: randomId(),
@@ -45,7 +49,15 @@ const categoriasPorDefault = [
   },
   {
     id: randomId(),
-    nombre: "Entretenimiento"
+    nombre: "Salidas"
+  },
+  {
+    id: randomId(),
+    nombre: "Transporte"
+  },
+  {
+    id: randomId(),
+    nombre: "Trabajo"
   }
 ]
 
@@ -194,17 +206,17 @@ const renderOperaciones = (operaciones) => {
   limpiarContenedor("#tabla-operaciones")
   if (operaciones.length){
     esconder("#reportes-vista")
-    for(const {id, descripcion, monto, tipo, categoria, fecha} of operaciones){
+    for(const {id, descripcion, monto, categoria, fecha} of operaciones){
       const categoriaSeleccionada = todasCategorias.find((cat) => cat.id === categoria)
       $("#tabla-operaciones").innerHTML += `
-      <td>${descripcion}</td>
-      <td>${categoriaSeleccionada.nombre}</td>
-      <td>${fecha}</td>
-      <td>${monto}</td>
-      <td>${tipo}</td>    
+      <td class="font-medium pl-6 pb-3 pt-3">${descripcion}</td>
+      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categoriaSeleccionada.nombre}</td>
+      <td class="pl-3 pb-3 pt-3">${fecha}</td>
+      <td class="pl-6 pb-3 pt-3">${monto}</td>
+        
       <td>
-        <button class="text-sm text-green-500" onclick="editarOperacionForm('${id}')"=>Editar</button>
-        <button class="text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
+        <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editarOperacionForm('${id}')"=>Editar</button>
+        <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
       </td>
     `
   }
@@ -249,7 +261,7 @@ const editarOperacionForm =(id) =>{
   esconder("#home")
   mostrar("#vista-editar-operacion")
   $("#btn-editar-operacion").setAttribute("data-id", id)
-  const operacionSeleccionada = obtenerDato("operaciones").find((op) => op.id === id)
+  const operacionSeleccionada = obtenerDato("operaciones").find(operacion => operacion.id === id)
   $("#descripcion-form").value = operacionSeleccionada.descripcion
   $("#monto-form").valueAsNumber= operacionSeleccionada.monto
   $("#tipo-form").value= operacionSeleccionada.tipo
@@ -262,7 +274,8 @@ const editarOperacionForm =(id) =>{
 
 
 
-
+const fecha = new Date();
+document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
 
 const initializeApp = () => {
   guardarDato("categorias", todasCategorias);
@@ -279,13 +292,6 @@ const initializeApp = () => {
     mostrar("#sin-resultados")
     }
  
-  $("#btn-nueva-operacion").addEventListener("click", () => {
-    mostrar("#vista-operacion")
-    esconder("#home")
-    esconder("#reportes-vista")
-    esconder("#categorias-vista")
-    esconder("#editarcategorias-vista")
-   });
 
 $("#mostrar-categorias").addEventListener("click", () => {
   mostrar("#categorias-vista")
@@ -341,6 +347,7 @@ $("#ocultar-filtros").addEventListener("click", () =>{
           renderCategoriasTabla(categoriasActuales);
           mostrar("#categorias-tabla")
           });
+
           $("#agregar-categoria").addEventListener("click", () => {
             $("#categoriaPorEditar-input").value = ""
               });
@@ -348,6 +355,20 @@ $("#ocultar-filtros").addEventListener("click", () =>{
           $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
 
           $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);
+
+          $("#btn-nueva-operacion").addEventListener("click", () => {
+            mostrar("#vista-operacion")
+            esconder("#home")
+            esconder("#reportes-vista")
+            esconder("#categorias-vista")
+            esconder("#editarcategorias-vista")
+           });
+        
+          $("#btn-cancelar-operacion").addEventListener("click", () => {
+            mostrar("#home") 
+            esconder("#vista-operacion")
+        
+          })
 
           $("#btn-agregar-operacion").addEventListener("click", (e) => {
             e.preventDefault()
@@ -360,9 +381,9 @@ $("#ocultar-filtros").addEventListener("click", () =>{
           
           $("#btn-editar-operacion").addEventListener("click", (e) =>{
             e.preventDefault()
-            editarOperacionForm()
+            operacionEditar()
             esconder("#vista-editar-operacion")
-            mostrar("#tabla-operaciones")
+            mostrar("#home")
             renderOperaciones(obtenerDato("operaciones"))
             });
                                        
