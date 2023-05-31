@@ -189,7 +189,6 @@ const cancelarEditarCategoria = () => {
 /*SECCION OPERACIONES*/
 
 
-//funcion para guardar datos del formulario de boton nueva operacion
 const guardarNuevaOperacion = (operacionId) => {
   return {
       id: operacionId ? operacionId :  randomId(),
@@ -227,7 +226,6 @@ const renderOperaciones = (operaciones) => {
   
 }
 
-
 const agregarOperacion = () => {
   const actualOperacion = obtenerDato("operaciones")
   const nuevosDatosOperacion = guardarNuevaOperacion()
@@ -236,8 +234,6 @@ const agregarOperacion = () => {
   renderOperaciones(actualOperacion)
   
 }
-
-
 
 const eliminarOperacion = (id) => {
   const actualOperacion = obtenerDato("operaciones").filter(operacion => operacion.id !== id)
@@ -270,12 +266,47 @@ const editarOperacionForm =(id) =>{
   
 }
 
+/////////////////////////////////////////////////////////////////////
+
+
+/*SECCION FILTROS*/
+
+
+/*$("#tipo-filtro").onchange = () => {
+  const operacionesFiltradasporTipo = obtenerDato("operaciones").filter(operacion =>  {
+    if ($("#tipo-filtro").value === "Todas") {
+      return operacion;
+    }
+    return operacion.tipo === $("#tipo-filtro").value;
+  })
+
+  renderOperaciones(operacionesFiltradasporTipo);
+  console.log($("#tipo-filtro").value);
+};
+
+$("#categorias-filtro")= () => {
+  const operacionesFiltradasporCategoria = obtenerDato("operaciones").filter(operacion => {
+    if ($("#categorias-filtro").value === "Todas") {
+      return operacion;
+    }
+    return operacion.categoria === $("#categorias-filtro").value;
+  });
+
+  renderOperaciones(operacionesFiltradasporCategoria);
+
+  console.log($("#categorias-filtro").value);
+};
+*/
 
 
 
+
+/////////////////////////////////////////////////////////////////////
 
 const fecha = new Date();
 document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
+
+
 
 const initializeApp = () => {
   guardarDato("categorias", todasCategorias);
@@ -363,6 +394,15 @@ $("#ocultar-filtros").addEventListener("click", () =>{
             esconder("#categorias-vista")
             esconder("#editarcategorias-vista")
            });
+          
+          $("#btn-nueva-operacion").addEventListener("click", () => {
+            $("#descripcion-form").value = ""
+            $("#monto-form").valueAsNumber = ""
+            $("#tipo-form").value = ""
+            $("#categoria-form").value = ""
+            $("#fecha-form").value = ""
+
+            }); 
         
           $("#btn-cancelar-operacion").addEventListener("click", () => {
             mostrar("#home") 
@@ -386,6 +426,8 @@ $("#ocultar-filtros").addEventListener("click", () =>{
             mostrar("#home")
             renderOperaciones(obtenerDato("operaciones"))
             });
+
+          
                                        
 
 }
