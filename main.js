@@ -5,14 +5,14 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
 
-//Ocultar or show Funciones
+//Hide or show Functions
 
 const hide = (selector) => $(selector).classList.add("hidden");
 const show = (selector) => $(selector).classList.remove("hidden");
 const cleanContainer = (selector) => $(selector).innerHTML = ""
 
 
-//Generador Aleatorio ID
+//Random Generator
 
 const randomId = () => self.crypto.randomUUID()
 
@@ -27,10 +27,6 @@ const saveData = (key, array) => localStorage.setItem(key, JSON.stringify(array)
 /* SECCION categories*/
 
 const categoriesByDefault = [
-  {
-    id: randomId(),
-    name: "Todas"
-  },
   {
     id: randomId(),
     name: "Comida"
@@ -61,7 +57,8 @@ const categoriesByDefault = [
   }
 ]
 
-const allCategories = getData("categories") || categoriesByDefault
+const allCategories = getData("categories") || categoriesByDefault;
+
 const allOperations = getData("operations") || []
 
 
