@@ -5,97 +5,100 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 
 
-//Hide or show Functions
+//Ocultar or Mostrar Funciones
 
-const hide = (selector) => $(selector).classList.add("hidden");
-const show = (selector) => $(selector).classList.remove("hidden");
-const cleanContainer = (selector) => $(selector).innerHTML = ""
+const esconder = (selector) => $(selector).classList.add("hidden");
+const mostrar = (selector) => $(selector).classList.remove("hidden");
+const limpiarContenedor = (selector) => $(selector).innerHTML = ""
 
 
-//Random Generator
+//Generador Aleatorio ID
 
 const randomId = () => self.crypto.randomUUID()
 
 
 //Localstorage Funciones
 
-const getData = (key) => JSON.parse(localStorage.getItem(key))
-const saveData = (key, array) => localStorage.setItem(key, JSON.stringify(array))
+const obtenerDato = (key) => JSON.parse(localStorage.getItem(key))
+const guardarDato = (key, array) => localStorage.setItem(key, JSON.stringify(array))
 
 ////////////////////////////////////////////////////////////////////////
 
-/* SECCION categories*/
+/* SECCION CATEGORIAS*/
 
-const categoriesByDefault = [
+const categoriasPorDefault = [
   {
     id: randomId(),
-    name: "Comida"
+    nombre: "Todas"
   },
   {
     id: randomId(),
-    name: "Servicios"
+    nombre: "Comida"
   },
   {
     id: randomId(),
-    name: "Salud"
+    nombre: "Servicios"
   },
   {
     id: randomId(),
-    name: "Educación"
+    nombre: "Salud"
   },
   {
     id: randomId(),
-    name: "Salidas"
+    nombre: "Educación"
   },
   {
     id: randomId(),
-    name: "Transporte"
+    nombre: "Salidas"
   },
   {
     id: randomId(),
-    name: "Trabajo"
+    nombre: "Transporte"
+  },
+  {
+    id: randomId(),
+    nombre: "Trabajo"
   }
 ]
 
-const allCategories = getData("categories") || categoriesByDefault;
-
-const allOperations = getData("operations") || []
-
+const todasCategorias = obtenerDato("categorias") || categoriasPorDefault
+const todasOperaciones = obtenerDato("operaciones") || []
 
 
-const renderCategoriesOptions = (categories) => {
-  cleanContainer("#categories-filter");
-  for (const { name, id } of categories) {
-    $("#categories-filter").innerHTML += `
-            <option value="${id}">${name}</option>
+
+const renderCategoriasOpciones = (categorias) => {
+  limpiarContenedor("#categorias-filtro");
+  for (const { nombre, id } of categorias) {
+    $("#categorias-filtro").innerHTML += `
+            <option value="${id}">${nombre}</option>
         `
-  $("#category-form").innerHTML += `
-          <option value="${id}">${name}</option>
+  $("#categoria-form").innerHTML += `
+          <option value="${id}">${nombre}</option>
    `    
 
-  $("#category-select").innerHTML += `
-   <option value="${id}">${name}</option>
+  $("#categoria-select").innerHTML += `
+   <option value="${id}">${nombre}</option>
    `     
   }
     
 };
 
 
-const renderCategoriesTable = (categories) => {
-  cleanContainer("#categories-table");
-  $("#categories-table").classList.add("w-full");
+const renderCategoriasTabla = (categorias) => {
+  limpiarContenedor("#categorias-tabla");
+  $("#categorias-tabla").classList.add("w-full");
 
   let tableHTML = `<table class="w-full">`;  
 
-  for (const { name, id } of categories) {
+  for (const { nombre, id } of categorias) {
 
     tableHTML += `
             <tr class="w-full">
-                <td class="w-1/2 pt-4 pb-4 pl-6">${name}</td>
+                <td class="w-1/2 pt-4 pb-4 pl-6">${nombre}</td>
                 <td class="w-1/2 flex justify-end">
-                <div id="btns-categorytable">
-                <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
-                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick=editcategory("${id}") =>Editar</button>
+                <div id="btns-categoriaTabla">
+                <button onclick="eliminarCategoria('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
+                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="editar-categoria-${id}" onclick=editarCategoria("${id}") =>Editar</button>
                 </div>
                     
                 </td>
@@ -105,227 +108,199 @@ const renderCategoriesTable = (categories) => {
 
   tableHTML += `</table>`;
 
-  $("#categories-table").innerHTML = tableHTML;
+  $("#categorias-tabla").innerHTML = tableHTML;
 
 }
 
-const saveCategoryData =() => {
-  const name = $("#categorieToEdit-input").value;
+const guardarCategoriaDato =() => {
+  const nombre = $("#categoriaPorEditar-input").value;
   return {
     id: randomId(),
-    name,
+    nombre,
   }
 };
  
 
-const sendNewData = (key, callback) => {
-  let currentData = getData(key);
-  if (!currentData) {
-    currentData = [];
+const enviarNuevoDato = (key, callback) => {
+  let datoActual = obtenerDato(key);
+  if (!datoActual) {
+    datoActual = [];
   }
-  const newData = callback();
-  currentData.push(newData);
-  saveData(key, currentData);
+  const nuevoDato = callback();
+  datoActual.push(nuevoDato);
+  guardarDato(key, datoActual);
 };
 
-//SECCION PARA EDITAR y ELIMINAR category
+//SECCION PARA EDITAR y ELIMINAR CATEGORIA
 
 
-let categoryEdit = null;
+let categoriaEditar = null;
 
 
-const editcategory = (id) => {
+const editarCategoria = (id) => {
  
-  const category = allCategories.find((cat) => cat.id === id);
-  if (category) {   
-    categoryEdit = id;
-    show("#editcategories-view");
-    hide("#categories-view");
-    $("#categorieEdit-input").value = category.name;
+  const categoria = todasCategorias.find((cat) => cat.id === id);
+  if (categoria) {   
+    categoriaEditar = id;
+    mostrar("#editarcategorias-vista");
+    esconder("#categorias-vista");
+    $("#categoriaEditada-input").value = categoria.nombre;
     
   }
-  console.log (category)
+  console.log (categoria)
 };
 
 
-const confirmCategoryEdited = () => {
-  if (categoryEdit) {
-    const newName = $("#categorieEdit-input").value;
-    const category = allCategories.find((cat) => cat.id === categoryEdit);
-    if (category) {
-      category.name = newName;
-      saveData("categories", allCategories);
-      hide("#editcategories-view");
-      show("#categories-view");
-      renderCategoriesOptions(allCategories);
-      renderCategoriesTable(allCategories);
+const confirmarCategoriaEditada = () => {
+  if (categoriaEditar) {
+    const nuevoNombre = $("#categoriaEditada-input").value;
+    const categoria = todasCategorias.find((cat) => cat.id === categoriaEditar);
+    if (categoria) {
+      categoria.nombre = nuevoNombre;
+      guardarDato("categorias", todasCategorias);
+      esconder("#editarcategorias-vista");
+      mostrar("#categorias-vista");
+      renderCategoriasOpciones(todasCategorias);
+      renderCategoriasTabla(todasCategorias);
     }
   }
 };
 
 
-const deleteCategory = (id) => {
-  const currentCategories = allCategories.filter((cat) => cat.id !== id);
-  saveData("categories", currentCategories);
-  renderCategoriesTable(allCategories);
-  renderCategoriesOptions(allCategories);
+const eliminarCategoria = (id) => {
+  const actualesCategorias = todasCategorias.filter((cat) => cat.id !== id);
+  guardarDato("categorias", actualesCategorias);
+  renderCategoriasTabla(todasCategorias);
+  renderCategoriasOpciones(todasCategorias);
 };
 
 
-//CANCELANDO EDICION DE categories
+//CANCELANDO EDICION DE CATEGORIAS
 
-const cancelEditCategory = () => {
-  hide("#editcategories-view");
-  show("#categories-view");
+const cancelarEditarCategoria = () => {
+  esconder("#editarcategorias-vista");
+  mostrar("#categorias-vista");
 };
 
 
 /////////////////////////////////////////////////////////////////////
 
 
-/*SECCION operations*/
+/*SECCION OPERACIONES*/
 
 
-const saveNewOperation = (operationId) => {
+
+const guardarNuevaOperacion = (operacionId) => {
   return {
-      id: operationId ? operationId :  randomId(),
-      description: $("#description-form").value,
-      amount: $("#amount-form").valueAsNumber,
-      type: $("#type-form").value,
-      category: $("#category-form").value,
-      date: $("#date-form").value,
+      id: operacionId ? operacionId :  randomId(),
+      descripcion: $("#descripcion-form").value,
+      monto: $("#monto-form").valueAsNumber,
+      tipo: $("#tipo-form").value,
+      categoria: $("#categoria-form").value,
+      fecha: $("#fecha-form").value,
 
   }
 }
 
-const balanceShowingEarnings = (operations) => {
-  
-  
-}
-
-const renderOperations = (operations) => {
-  let accE = 0;
-  let accS = 0;
-  let accEarnings = [];
-  let accSpendt = []
-  cleanContainer("#table-operations")
-  if (operations.length){
-    hide("#report-view")
-    for(const {id, description, type, amount, category, date} of operations){
-      const categorieSelected = allCategories.find((cat) => cat.id === category)
-      $("#table-operations").innerHTML += `
-      <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
-      <td class="pl-6 pb-3 pt-3">${type == "Ganancia" ? accEarnings.push(amount) : accSpendt.push(amount)}</td>
-      <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3">${amount}</td>
+const renderOperaciones = (operaciones) => {
+  limpiarContenedor("#tabla-operaciones")
+  if (operaciones.length){
+    esconder("#reportes-vista")
+    for(const {id, descripcion, monto, categoria, fecha} of operaciones){
+      const categoriaSeleccionada = todasCategorias.find((cat) => cat.id === categoria)
+      $("#tabla-operaciones").innerHTML += `
+      <td class="font-medium pl-6 pb-3 pt-3">${descripcion}</td>
+      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categoriaSeleccionada.nombre}</td>
+      <td class="pl-3 pb-3 pt-3">${fecha}</td>
+      <td class="pl-6 pb-3 pt-3">${monto}</td>
         
       <td>
-        <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
-        <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
+        <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editarOperacionForm('${id}')"=>Editar</button>
+        <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="eliminarOperacion('${id}')"=>Eliminar</button>
       </td>
     `
   }
   } else {
-    show ("#home")
+    mostrar ("#home")
 
   }
-  if (accEarnings == 0){$("#show-earnings").innerHTML ="0";
-  } else {
-    for (let i = 0; i <accEarnings.length; i++){
-      accE = accE + accEarnings[i];
-      $("#show-earnings").innerHTML = accE
-    }
-  }
-
-  if (accSpendt == 0){$
-    ("#show-spendings").innerHTML ="0";
-  } else {
-    for (let i = 0; i <accSpendt.length; i++){
-      accS = accS + accSpendt[i];
-      $("#show-spendings").innerHTML = accS
-    }
-  }
-
- 
   
 }
 
-const addOperation = () => {
-  const currentOperation = getData("operations")
-  const newDataOperation = saveNewOperation()
-  currentOperation.push(newDataOperation)
-  saveData("operations", currentOperation)
-  renderOperations(currentOperation)
+const agregarOperacion = () => {
+  const actualOperacion = obtenerDato("operaciones")
+  const nuevosDatosOperacion = guardarNuevaOperacion()
+  actualOperacion.push(nuevosDatosOperacion)
+  guardarDato("operaciones", actualOperacion)
+  renderOperaciones(actualOperacion)
   
 }
 
-const deleteOperation = (id) => {
-  const currentOperation = getData("operations").filter(operation => operation.id !== id)
-  saveData("operations", currentOperation)
-  renderOperations(currentOperation)
+const eliminarOperacion = (id) => {
+  const actualOperacion = obtenerDato("operaciones").filter(operacion => operacion.id !== id)
+  guardarDato("operaciones", actualOperacion)
+  renderOperaciones(actualOperacion)
 }
 
-const operationEdit =() => {
-  const operationId = $("#btn-edit-operation").getAttribute("data-id")
-  const operationEdited = getData("operations").map(operation => {
-    if (operation.id === operationId) {
-      return saveNewOperation(operation.id)
+const operacionEditar =() => {
+  const operacionId = $("#btn-editar-operacion").getAttribute("data-id")
+  const operacionesEditadas = obtenerDato("operaciones").map(operacion => {
+    if (operacion.id === operacionId) {
+      return guardarNuevaOperacion(operacion.id)
     }
-    return operation
+    return operacion
 
   })
-  saveData("operations", operationEdited) 
+  guardarDato("operaciones", operacionesEditadas) 
 }
 
-const editOperationForm =(id) =>{
-  hide("#home")
-  show("#view-edit-operation")
-  $("#btn-edit-operation").setAttribute("data-id", id)
-  const operationSelected = getData("operations").find(operation => operation.id === id)
-  $("#description-form").value = operationSelected.description
-  $("#amount-form").valueAsNumber= operationSelected.amount
-  $("#type-form").value= operationSelected.type
-  $("#category-form").value= operationSelected.category
-  $("#date-form").value= operationSelected.date
+const editarOperacionForm =(id) =>{
+  esconder("#home")
+  mostrar("#vista-editar-operacion")
+  $("#btn-editar-operacion").setAttribute("data-id", id)
+  const operacionSeleccionada = obtenerDato("operaciones").find(operacion => operacion.id === id)
+  $("#descripcion-form").value = operacionSeleccionada.descripcion
+  $("#monto-form").valueAsNumber= operacionSeleccionada.monto
+  $("#tipo-form").value= operacionSeleccionada.tipo
+  $("#categoria-form").value= operacionSeleccionada.categoria
+  $("#fecha-form").value= operacionSeleccionada.fecha
   
 }
 
 /////////////////////////////////////////////////////////////////////
 
 
-/*SECCION filterS*/
+/*SECCION FILTROS*/
 
 
-/*$("#type-filter").onchange = () => {
-  const operationsFiltradasportype = getData("operations").filter(operation =>  {
-    if ($("#type-filter").value === "Todas") {
-      return operation;
+/*$("#tipo-filtro").onchange = () => {
+  const operacionesFiltradasporTipo = obtenerDato("operaciones").filter(operacion =>  {
+    if ($("#tipo-filtro").value === "Todas") {
+      return operacion;
     }
-    return operation.type === $("#type-filter").value;
+    return operacion.tipo === $("#tipo-filtro").value;
   })
 
-  renderOperations(operationsFiltradasportype);
-  console.log($("#type-filter").value);
+  renderOperaciones(operacionesFiltradasporTipo);
+  console.log($("#tipo-filtro").value);
 };
 
-$("#categories-filter")= () => {
-  const operationsFiltradasporcategory = getData("operations").filter(operation => {
-    if ($("#categories-filter").value === "Todas") {
-      return operation;
+$("#categorias-filtro")= () => {
+  const operacionesFiltradasporCategoria = obtenerDato("operaciones").filter(operacion => {
+    if ($("#categorias-filtro").value === "Todas") {
+      return operacion;
     }
-    return operation.category === $("#categories-filter").value;
+    return operacion.categoria === $("#categorias-filtro").value;
   });
 
-  renderOperations(operationsFiltradasporcategory);
+  renderOperaciones(operacionesFiltradasporCategoria);
 
-  console.log($("#categories-filter").value);
+  console.log($("#categorias-filtro").value);
 };
 */
 
 /////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 // Filtros de operaciones//
 
 
@@ -336,130 +311,126 @@ $("#categories-filter")= () => {
 
 const fecha = new Date();
 document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
-=======
-const date = new Date();
-document.getElementById("today-date").value = date.toJSON().slice(0,10);
->>>>>>> 2f0469724f2e7d62793823062af2178f15be3c14
 
 
 
 const initializeApp = () => {
-  saveData("categories", allCategories);
-  saveData("operations", allOperations);
-  renderCategoriesOptions(allCategories);
-  renderCategoriesTable(allCategories);
-  renderOperations(allOperations)
+  guardarDato("categorias", todasCategorias);
+  guardarDato("operaciones", todasOperaciones);
+  renderCategoriasOpciones(todasCategorias);
+  renderCategoriasTabla(todasCategorias);
+  renderOperaciones(todasOperaciones)
 
-  if (allOperations.length) {
-    show("#operations-table-home") 
-    hide("#no-results")
+  if (todasOperaciones.length) {
+    mostrar("#operaciones-tabla-home") 
+    esconder("#sin-resultados")
     } else {
-    hide("#operations-table-home") 
-    show("#no-results")
+    esconder("#operaciones-tabla-home") 
+    mostrar("#sin-resultados")
     }
  
 
-$("#show-categories").addEventListener("click", () => {
-  show("#categories-view")
-  show("#categories-table")
-  hide("#home")
-  hide("#report-view")
-  hide("#operation-view")
-  hide("#editcategories-view")
+$("#mostrar-categorias").addEventListener("click", () => {
+  mostrar("#categorias-vista")
+  mostrar("#categorias-tabla")
+  esconder("#home")
+  esconder("#reportes-vista")
+  esconder("#vista-operacion")
+  esconder("#editarcategorias-vista")
 });
-$("#show-balance").addEventListener("click", () =>{
-  show("#home")
-  hide("#categories-view")
-  hide("#operation-view")
-  hide("#report-view")
-  hide("#editcategories-view")
+$("#mostrar-balance").addEventListener("click", () =>{
+  mostrar("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#reportes-vista")
+  esconder("#editarcategorias-vista")
 });
-$("#show-reports").addEventListener("click", () =>{
-  show("#report-view")
-  hide("#home")
-  hide("#categories-view")
-  hide("#operation-view")
-  hide("#editcategories-view")
+$("#mostrar-reportes").addEventListener("click", () =>{
+  mostrar("#reportes-vista")
+  esconder("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#editarcategorias-vista")
 });
-$("#title-ahorradas").addEventListener("click", () =>{
-  show("#home")
-  hide("#categories-view")
-  hide("#operation-view")
-  hide("#report-view")
-  hide("#editcategories-view")
+$("#titulo-ahorradas").addEventListener("click", () =>{
+  mostrar("#home")
+  esconder("#categorias-vista")
+  esconder("#vista-operacion")
+  esconder("#reportes-vista")
+  esconder("#editarcategorias-vista")
 });
-$("#hide-filters").addEventListener("click", () =>{
-  show("#show-filters")
-  hide("#menu-type")
-  hide("#menu-categories")
-  hide("#menu-from")
-  hide("#menu-arrangeby")
-  hide("#hide-filters")
+$("#ocultar-filtros").addEventListener("click", () =>{
+  mostrar("#mostrar-filtros")
+  esconder("#menu-tipo")
+  esconder("#menu-categorias")
+  esconder("#menu-desde")
+  esconder("#menu-ordenarpor")
+  esconder("#ocultar-filtros")
   });
-  $("#show-filters").addEventListener("click", () =>{
-    show("#hide-filters")
-    show("#menu-type")
-    show("#menu-categories")
-    show("#menu-from")
-    show("#menu-arrangeby")
-    hide("#show-filters")
+  $("#mostrar-filtros").addEventListener("click", () =>{
+    mostrar("#ocultar-filtros")
+    mostrar("#menu-tipo")
+    mostrar("#menu-categorias")
+    mostrar("#menu-desde")
+    mostrar("#menu-ordenarpor")
+    esconder("#mostrar-filtros")
       });
   
-        $("#toAdd-categorie").addEventListener("click", (e) => {
+        $("#agregar-categoria").addEventListener("click", (e) => {
           e.preventDefault();
-          sendNewData("categories", saveCategoryData);
-          const currentCategories = getData("categories");
-          renderCategoriesOptions(currentCategories);
-          renderCategoriesTable(currentCategories);
-          show("#categories-table")
+          enviarNuevoDato("categorias", guardarCategoriaDato);
+          const categoriasActuales = obtenerDato("categorias");
+          renderCategoriasOpciones(categoriasActuales);
+          renderCategoriasTabla(categoriasActuales);
+          mostrar("#categorias-tabla")
           });
 
-          $("#toAdd-categorie").addEventListener("click", () => {
-            $("#categorieToEdit-input").value = ""
+          $("#agregar-categoria").addEventListener("click", () => {
+            $("#categoriaPorEditar-input").value = ""
               });
 
-          $("#editcategorie-btn").addEventListener("click", confirmCategoryEdited);
+          $("#editarcategoria-btn").addEventListener("click", confirmarCategoriaEditada);
 
-          $("#cancelcategorie-btn").addEventListener("click", cancelEditCategory);
+          $("#cancelarcategoria-btn").addEventListener("click", cancelarEditarCategoria);
 
-          $("#btn-new-operation").addEventListener("click", () => {
-            show("#operation-view")
-            hide("#home")
-            hide("#report-view")
-            hide("#categories-view")
-            hide("#editcategories-view")
+          $("#btn-nueva-operacion").addEventListener("click", () => {
+            mostrar("#vista-operacion")
+            esconder("#home")
+            esconder("#reportes-vista")
+            esconder("#categorias-vista")
+            esconder("#editarcategorias-vista")
            });
           
-          $("#btn-new-operation").addEventListener("click", () => {
-            $("#description-form").value = ""
-            $("#amount-form").valueAsNumber = ""
-            $("#type-form").value = ""
-            $("#category-form").value = ""
-            $("#date-form").value = ""
+          $("#btn-nueva-operacion").addEventListener("click", () => {
+            $("#descripcion-form").value = ""
+            $("#monto-form").valueAsNumber = ""
+            $("#tipo-form").value = ""
+            $("#categoria-form").value = ""
+            $("#fecha-form").value = ""
 
             }); 
         
-          $("#btn-cancel-operation").addEventListener("click", () => {
-            show("#home") 
-            hide("#operation-view")
+          $("#btn-cancelar-operacion").addEventListener("click", () => {
+            mostrar("#home") 
+            esconder("#vista-operacion")
         
           })
 
-          $("#btn-add-operation").addEventListener("click", (e) => {
+          $("#btn-agregar-operacion").addEventListener("click", (e) => {
             e.preventDefault()
-            addOperation()
-            show("#operations-table-home")
-            show("#home")
-            hide("#operation-view")
-            hide("#no-results")
+            agregarOperacion()
+            mostrar("#operaciones-tabla-home")
+            mostrar("#home")
+            esconder("#vista-operacion")
+            esconder("#sin-resultados")
           }); 
           
-          $("#btn-edit-operation").addEventListener("click", (e) =>{
+          $("#btn-editar-operacion").addEventListener("click", (e) =>{
             e.preventDefault()
-            operationEdit()
-            hide("#view-edit-operation")
-            show("#home")
-            renderOperations(getData("operations"))
+            operacionEditar()
+            esconder("#vista-editar-operacion")
+            mostrar("#home")
+            renderOperaciones(obtenerDato("operaciones"))
             });
 
           
