@@ -17,16 +17,16 @@
     <header class="w-full bg-[#7e22ce] text-white p-7">
         <nav id="navbar" class="flex justify-between items-center w-full">
             <div class="flex items-center">
-                <a href="#" id="titulo-ahorradas">               
+                <a href="#" id="title-ahorradas">               
                 <h2 class="text-3xl font-semibold text-white"><i class="m-auto fa-regular fa-face-grin-wink mr-2"></i>AhorrADAs - Tu Herramienta Financiera</h2>
                 </a>               
             </div>    
             <div>
-                <a href="#" id="mostrar-balance" class="m-2 hover:text-[#2e1065]">
+                <a href="#" id="show-balance" class="m-2 hover:text-[#2e1065]">
                     <i class="fas fa-home mr-2"></i>Balance</a>
-                <a href="#" id="mostrar-categorias" class="m-2 hover:text-[#2e1065]">
+                <a href="#" id="show-categories" class="m-2 hover:text-[#2e1065]">
                     <i class="fa-regular fa-pen-to-square mr-2"></i>Categorias</a>                     
-                <a href="#" id="mostrar-reportes" class="m-2 hover:text-[#2e1065]">
+                <a href="#" id="show-reports" class="m-2 hover:text-[#2e1065]">
                     <i class="fa-solid fa-share-from-square mr-2"></i>Reportes</a>
             </div> 
         </nav>
@@ -39,49 +39,59 @@
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16">Balance<h2>
                     <div class="gap-2 columns-2">
                     <p class="text-[#4a4a4a] font-normal mb-4 text-xl">Ganancias</p>
-                    <div class="text-[#22c55e] font-light mb-4 text-lg text-right">+$0</div>
+                    <div class="flex">
+                        <p class="text-[#22c55e] font-light mb-4 text-lg text-right">+$</p>
+                        <p id="show-earnings"class="text-[#22c55e] font-light mb-4 text-lg text-right"></p>
+                    </div>
                     </div>
                     <div class="gap-2 columns-2">
                         <p class="text-[#4a4a4a] font-normal mb-6 text-xl">Gastos</p>
-                        <div class="text-[#ef4444] font-light mb-6 text-lg text-right">-$0</div>
+                        <div class="flex">
+                            <p  class="text-[#ef4444] font-light mb-6 text-lg text-right">-$</p>
+                            <p  id="show-spendings"class="text-[#ef4444] font-light mb-6 text-lg text-right"></p>
+                        </div>
                     </div>
                     <div class="gap-2 columns-2">
                         <p class="text-[#4a4a4a] font-medium mb-2 text-2xl">Total</p>
-                        <div class="text-[#4a4a4a] font-medium mb-2 text-lg text-right">+$0</div>
+                        <div class=" items-right bg-red-600 ">
+                            <p  class="text-[#4a4a4a] font-medium mb-2 text-lg text-right">$</p>
+                            <p  class="text-[#4a4a4a] font-medium mb-2 text-lg text-right"></p>
+                        </div>
                     </div>                                          
                 </section>
 
                 <section class="p-5 bg-white drop-shadow-lg rounded-md">
                     <div class="flex justify-between md:flex-row flex-col">
                         <h2 class="text-2xl text-[#4a4a4a] font-bold mt-4">Filtros</h2>
-                        <p id="ocultar-filtros"class="text-normal text-[#4a4a4a7] mt-5 cursor-pointer hover:text-[#7e22ce]">Ocultar Filtros</p>
-                        <p id="mostrar-filtros"class="hidden text-normal text-[#4a4a4a7] mt-5 cursor-pointer hover:text-[#7e22ce]">Mostrar Filtros</p>
+                        <p id="hide-filters"class="text-normal text-[#4a4a4a7] mt-5 cursor-pointer hover:text-[#7e22ce]">Ocultar Filtros</p>
+                        <p id="show-filters"class="hidden text-normal text-[#4a4a4a7] mt-5 cursor-pointer hover:text-[#7e22ce]">Mostrar Filtros</p>
                     </div>
-                    <div id="menu-tipo">
+                    <div id="menu-type">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Tipo</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="tipo" id="tipo-filtro">
-                            <option value="todos">Todos</option>
-                            <option value="gasto">Gasto</option>
-                            <option value="ganancia">Ganancia</option>
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="type" id="type-filter">
+                            <option value="all">Todos</option>
+                            <option value="spent">Gasto</option>
+                            <option value="profits">Ganancia</option>
                         </select>
                     </div>
                 
-                    <div id="menu-categorias">
+                    <div id="menu-categories">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Categoría</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categorias-filtro">                           
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Category" id="categories-filter">                           
+                            <option value="" selected="true">Todas</option>
                         </select>
                     </div>
-                    <div id="menu-desde">
+                    <div id="menu-from">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Desde</p>
-                        <input class="w-full mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="fecha-actual">
+                        <input class="w-full mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="today-date">
                     </div>
-                    <div id="menu-ordenarpor">
+                    <div id="menu-arrangeby">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Ordenar Por</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="ordenar" id="">
-                            <option value="mas">Más Reciente</option>
-                            <option value="menos">Menos Reciente</option>
-                            <option value="mayor">Mayor Monto</option>
-                            <option value="menor">Menor Monto</option>
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="arrange" id="">
+                            <option value="more">Más Reciente</option>
+                            <option value="less">Menos Reciente</option>
+                            <option value="higher">Mayor Monto</option>
+                            <option value="less">Menor Monto</option>
                             <option value="az">A/Z</option>
                             <option value="za">Z/A</option>
                         </select>
@@ -93,10 +103,10 @@
             <div class="lg:w-3/6 bg-white rounded-md">
                     <div class="flex justify-between md:flex-row flex-col">
                         <h3 class="m-4 text-2xl font-bold text-[#4a4a4a]">Operaciones</h3>
-                        <button id="btn-nueva-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]">+ Nueva Operacion</button>
+                        <button id="btn-new-operation" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]">+ Nueva Operacion</button>
                     </div>
                     <div>
-                        <div id="sin-resultados">
+                        <div id="no-results">
                             <div >
                                 <img src="assets/money-management.png" class="mx-auto p-20"alt="">
                             </div>
@@ -109,7 +119,7 @@
                         </div>
                         <!--Seccion Operaciones-->
 
-                    <section id="operaciones-tabla-home" class="hidden lg:w-5/6 bg-white rounded-md pl-8">
+                    <section id="operations-table-home" class="hidden lg:w-5/6 bg-white rounded-md pl-8">
                 
                 <div>
                     <div class="min-w-full ">
@@ -123,7 +133,7 @@
                                 <th class="px-10 py-4">Acciones</th>
                             </tr>
                             </thead>
-                            <tbody id="tabla-operaciones">
+                            <tbody id="table-operations">
                             </tbody>
                         </table>
                         
@@ -136,39 +146,39 @@
 
             <!--Boton Nueva Operacion-->
 
-            <section id="vista-operacion"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
+            <section id="operation-view"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
                 <div class="lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a7] font-bold mb-16 m-4 pt-8 pl-2">Nueva Operación</h2>
-                    <form id="form-operaciones">
+                    <form id="operation-form">
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Descripción</p>
-                            <input type="text" id="descripcion-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="categoria" id="descripcion-form" cols="1" rows="1"></input><br>
+                            <input type="text" id="description-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="category" id="description-form" cols="1" rows="1"></input><br>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Monto</p>
-                            <input type="number" id="monto-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
+                            <input type="number" id="amount-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="tipo-form">
-                                <option value="vacio"></option>
-                                <option value="gasto">Gasto</option>
-                                <option value="ganancia">Ganancia</option>
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
+                                <option value="empty"></option>
+                                <option value="spent">Gasto</option>
+                                <option value="earnings">Ganancia</option>
                             </select>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Categoría</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categoria-form">
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="category" id="category-form">
                                 
                             </select>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Fecha</p>
-                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="fecha-form">
+                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="date-form">
                         </div>
                         <div class="text-right">
-                            <button id="btn-eliminar-operacion" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
-                            <button id="btn-agregar-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Agregar</button>
+                            <button id="btn-delete-operation" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
+                            <button id="btn-add-operation" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Agregar</button>
                         </div>
                     </form>
                 </div>
@@ -177,39 +187,39 @@
 
             <!--Boton Editar Operacion-->
 
-            <section id="vista-editar-operacion"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
+            <section id="view-edit-operation"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
                 <div class="lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a7] font-bold mb-16 m-4 pt-8 pl-2">Editar Operacion</h2>
-                    <form id="form-operaciones">
+                    <form id="operation-form">
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Descripción</p>
-                            <input type="text" id="descripcion-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="categoria" id="descripcion-form" cols="1" rows="1"></input><br>
+                            <input type="text" id="description-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="category" id="category" cols="1" rows="1"></input><br>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Monto</p>
-                            <input type="number" id="monto-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
+                            <input type="number" id="amount-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
                         </div>
                         <div>
-                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="tipo-form">
-                                <option value="vacio"></option>
-                                <option value="gasto">Gasto</option>
-                                <option value="ganancia">Ganancia</option>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">tipo</p>
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
+                                <option value="empty"></option>
+                                <option value="spent">Gasto</option>
+                                <option value="earnings">Ganancia</option>
                             </select>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Categoría</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="Categoria" id="categoria-select">
+                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="category" id="category-select">
                                 
                             </select>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Fecha</p>
-                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="fecha-form">
+                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="date-form">
                         </div>
                         <div class="text-right">
-                            <button id="btn-cancelar-operacion" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
-                            <button id="btn-editar-operacion" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Editar</button>
+                            <button id="btn-cancel-operation" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
+                            <button id="btn-edit-operation" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065]"> Editar</button>
                         </div>
                     </form>
                 </div>
@@ -223,16 +233,16 @@
 
             <!--Seccion Categorias-->
 
-            <section id="categorias-vista" class="hidden bg-slate-200 py-16  w-full space-x-8">
+            <section id="categories-view" class="hidden bg-slate-200 py-16  w-full space-x-8">
                 <div class="flex-col lg:w-auto ml-80 mr-80 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Categorías</h2>
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
-                        <input id="categoriaPorEditar-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>
-                        <button id="agregar-categoria" class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>  
+                        <input id="categorieToEdit-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>
+                        <button id="toAdd-categorie" class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>  
                     </div>
                     <div  class="flex justify-between md:flex-row">
-                        <section id="categorias-tabla"></section>
+                        <section id="categories-table"></section>
                     </div>                                       
                 </div>
             </section>
@@ -241,14 +251,14 @@
 
             <!--Seccion Editar Categorias-->
 
-            <section id="editarcategorias-vista" class="hidden bg-slate-200 py-16  w-full space-x-8">
+            <section id="editcategories-view" class="hidden bg-slate-200 py-16  w-full space-x-8">
                 <div class="flex-col lg:w-auto ml-80 mr-80 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Categorías</h2>
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
-                        <input id="categoriaEditada-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>
-                            <button id="editarcategoria-btn" class="bg-[#84cc16] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Editar</button>
-                            <button id="cancelarcategoria-btn" class="bg-[#facc15] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Cancelar</button>
+                        <input id="categorieEdit-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>
+                            <button id="editcategorie-btn" class="bg-[#84cc16] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Editar</button>
+                            <button id="cancelcategorie-btn" class="bg-[#facc15] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Cancelar</button>
                     </div>                                                          
                 </div>
             </section>
@@ -257,7 +267,7 @@
 
             <!--Seccion Reportes-->
 
-            <section id="reportes-vista" class="hidden bg-slate-200 py-16 w-full space-x-8">
+            <section id="report-view" class="hidden bg-slate-200 py-16 w-full space-x-8">
                 <div class="flex-col lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Reportes</h2>
                     <div>
@@ -290,7 +300,7 @@
                                 <th class="px-6 py-4"></th>
                             </tr>
                             </thead>
-                            <tbody id="tabla-reportes">
+                            <tbody id="table-reports">
                                 <tr class="">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
                                 </tr>
@@ -322,7 +332,7 @@
                                     <th class="px-6 py-4">Balance</th>
                                 </tr>
                                 </thead>
-                                <tbody id="tabla-totales">
+                                <tbody id="table-totals">
                                 </tbody>
                             </table>
                             
@@ -340,7 +350,7 @@
                             <th class="px-6 py-4">Balance</th>
                         </tr>
                         </thead>
-                        <tbody id="tabla-totalesmensuales">
+                        <tbody id="table-totalsbymonth">
                         </tbody>
                     </table>
                     
