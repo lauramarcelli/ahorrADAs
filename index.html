@@ -39,26 +39,27 @@
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16">Balance<h2>
                     <div class="gap-2 columns-2">
                     <p class="text-[#4a4a4a] font-normal mb-4 text-xl">Ganancias</p>
-                    <div class="flex">
-                        <p class="text-[#22c55e] font-light mb-4 text-lg text-right">+$</p>
-                        <p id="show-earnings"class="text-[#22c55e] font-light mb-4 text-lg text-right"></p>
+                    <div class="flow-root">
+                        <p id="show-earnings"class="text-[#22c55e] font-light mb-4 text-lg text-right float-right"></p>
+                        <p class="text-[#22c55e] font-light mb-4 text-lg text-right float-right">+$
+                        </p>                     
                     </div>
                     </div>
                     <div class="gap-2 columns-2">
                         <p class="text-[#4a4a4a] font-normal mb-6 text-xl">Gastos</p>
-                        <div class="flex">
-                            <p  class="text-[#ef4444] font-light mb-6 text-lg text-right">-$</p>
-                            <p  id="show-spendings"class="text-[#ef4444] font-light mb-6 text-lg text-right"></p>
+                        <div class="flow-root">
+                            <p  id="show-spendings"class="text-[#ef4444] font-light mb-6 text-lg text-right float-right"></p>
+                            <p  class="text-[#ef4444] font-light mb-6 text-lg text-right float-right">-$</p>      
                         </div>
                     </div>
                     <div class="gap-2 columns-2">
                         <p class="text-[#4a4a4a] font-medium mb-2 text-2xl">Total</p>
-                        <div class=" items-right bg-red-600 ">
-                            <p  class="text-[#4a4a4a] font-medium mb-2 text-lg text-right">$</p>
-                            <p  class="text-[#4a4a4a] font-medium mb-2 text-lg text-right"></p>
+                        <div class="flow-root">
+                            <p  id="show-results"class="text-[#4a4a4a] font-bold mb-2 text-lg text-right float-right"></p>
+                            <p  class="text-[#4a4a4a] font-bold mb-2 text-lg text-right float-right ">$</p> 
                         </div>
-                    </div>                                          
-                </section>
+                    </div>
+                </section>                                          
 
                 <section class="p-5 bg-white drop-shadow-lg rounded-md">
                     <div class="flex justify-between md:flex-row flex-col">
@@ -77,8 +78,8 @@
                 
                     <div id="menu-categories">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Categoría</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Category" id="categories-filter">                           
-                            <option value="" selected="true">Todas</option>
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Category" id="categories-filter">                 
+                            <option value=""selected="true">Todas</option>
                         </select>
                     </div>
                     <div id="menu-from">
@@ -128,6 +129,7 @@
                             <tr>
                                 <th class="px-6 py-4">Descripción</th>
                                 <th class="px-6 py-4">Categoría</th>
+                                <th class="px-6 py-4"></th>
                                 <th class="px-6 py-4">Fecha</th>
                                 <th class="px-6 py-4">Monto</th>
                                 <th class="px-10 py-4">Acciones</th>
@@ -162,7 +164,7 @@
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
                             <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
                                 <option value="empty"></option>
-                                <option value="spent">Gasto</option>
+                                <option  value="spent">Gasto</option>
                                 <option value="earnings">Ganancia</option>
                             </select>
                         </div>

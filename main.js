@@ -198,11 +198,6 @@ const saveNewOperation = (operationId) => {
   }
 }
 
-const balanceShowingEarnings = (operations) => {
-  
-  
-}
-
 const renderOperations = (operations) => {
   let accE = 0;
   let accS = 0;
@@ -211,15 +206,15 @@ const renderOperations = (operations) => {
   cleanContainer("#table-operations")
   if (operations.length){
     hide("#report-view")
-    for(const {id, description, type, amount, category, date} of operations){
+    for(const {id, description, category, type, date, amount} of operations){
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
-      <td class="pl-6 pb-3 pt-3">${type == "Ganancia" ? accEarnings.push(amount) : accSpendt.push(amount)}</td>
+      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
+      </td>
       <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3">${amount}</td>
-        
+      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
         <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
@@ -238,8 +233,7 @@ const renderOperations = (operations) => {
     }
   }
 
-  if (accSpendt == 0){$
-    ("#show-spendings").innerHTML ="0";
+  if (accSpendt == 0){$("#show-spendings").innerHTML ="0";
   } else {
     for (let i = 0; i <accSpendt.length; i++){
       accS = accS + accSpendt[i];
@@ -247,9 +241,13 @@ const renderOperations = (operations) => {
     }
   }
 
- 
+  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
+  } else {$("#show-results").innerHTML = accE - accS
+  }
   
 }
+
+
 
 const addOperation = () => {
   const currentOperation = getData("operations")
