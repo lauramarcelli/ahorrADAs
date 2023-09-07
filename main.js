@@ -206,6 +206,7 @@ const renderOperations = (operations) => {
   cleanContainer("#table-operations")
   if (operations.length){
     hide("#report-view")
+    show("#btn-add-operation")
     for(const {id, description, category, type, date, amount} of operations){
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
@@ -276,11 +277,16 @@ const operationEdit =() => {
   saveData("operations", operationEdited) 
 }
 
-const editOperationForm =(id) =>{
+const editOperationForm = (id) =>{
   hide("#home")
-  show("#view-edit-operation")
+  hide("#new-operation-title")
+  hide("#btn-add-operation")
+  show("#operation-view")
+  show("#title-edit")
+  show("#btn-edit-operation")
+  
+  const operationSelected = getData("operations").find((operation) => operation.id === id);
   $("#btn-edit-operation").setAttribute("data-id", id)
-  const operationSelected = getData("operations").find(operation => operation.id === id)
   $("#description-form").value = operationSelected.description
   $("#amount-form").valueAsNumber= operationSelected.amount
   $("#type-form").value= operationSelected.type
@@ -427,7 +433,7 @@ $("#hide-filters").addEventListener("click", () =>{
 
             }); 
         
-          $("#btn-cancel-operation").addEventListener("click", () => {
+          $("#btn-delete-operation").addEventListener("click", () => {
             show("#home") 
             hide("#operation-view")
         
@@ -445,7 +451,7 @@ $("#hide-filters").addEventListener("click", () =>{
           $("#btn-edit-operation").addEventListener("click", (e) =>{
             e.preventDefault()
             operationEdit()
-            hide("#view-edit-operation")
+            hide("#operation-view")
             show("#home")
             renderOperations(getData("operations"))
             });
