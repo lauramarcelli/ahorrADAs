@@ -181,7 +181,8 @@ const renderOperations = (operations) => {
   let accE = 0;
   let accS = 0;
   let accEarnings = [];
-  let accSpendt = []
+  let accSpendt = [];
+
   cleanContainer("#table-operations");
   if (operations.length) {
     hide("#report-view");
@@ -193,20 +194,26 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find((cat) => cat.id === category)
+      const categorieSelected = allCategories.find((cat) => cat.id === category);
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
-      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
+       <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
+         categorieSelected.name
+       }</td>
+      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
+        type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
+      }
       </td>
       <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
+      <td class="pl-6 pb-3 pt-3 ${
+        type == "spent" ? `text-rose-500` : `text-teal-400`
+      }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
         <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
       </td>
-    `
-  }
+    `;
+    }
   } else {
     show("#home");
   }
@@ -228,8 +235,10 @@ const renderOperations = (operations) => {
     }
   }
 
-  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
-  } else {$("#show-results").innerHTML = accE - accS
+  if ($("#show-results").innerHTML === 0) {
+    $("#show-results").innerHTML = "0";
+  } else {
+    $("#show-results").innerHTML = accE - accS;
   }
 };
 
@@ -249,36 +258,35 @@ const deleteOperation = (id) => {
   renderOperations(currentOperation);
 };
 
-const operationEdit =() => {
-  const operationId = $("#btn-edit-operation").getAttribute("data-id")
-  const operationEdited = getData("operations").map(operation => {
+const operationEdit = () => {
+  const operationId = $("#btn-edit-operation").getAttribute("data-id");
+  const operationEdited = getData("operations").map((operation) => {
     if (operation.id === operationId) {
-      return saveNewOperation(operation.id)
+      return saveNewOperation(operation.id);
     }
-    return operation
+    return operation;
+  });
+  saveData("operations", operationEdited);
+};
 
-  })
-  saveData("operations", operationEdited) 
-}
+const editOperationForm = (id) => {
+  hide("#home");
+  hide("#new-operation-title");
+  hide("#btn-add-operation");
+  show("#operation-view");
+  show("#title-edit");
+  show("#btn-edit-operation");
 
-const editOperationForm = (id) =>{
-  hide("#home")
-  hide("#new-operation-title")
-  hide("#btn-add-operation")
-  show("#operation-view")
-  show("#title-edit")
-  show("#btn-edit-operation")
-  
-  const operationSelected = getData("operations").find((operation) => operation.id === id);
-  $("#btn-edit-operation").setAttribute("data-id", id)
-  $("#description-form").value = operationSelected.description
-  $("#amount-form").valueAsNumber= operationSelected.amount
-  $("#type-form").value= operationSelected.type
-  $("#category-form").value= operationSelected.category
-  $("#date-form").value= operationSelected.date
-  
-}
-
+  const operationSelected = getData("operations").find(
+    (operation) => operation.id === id
+  );
+  $("#btn-edit-operation").setAttribute("data-id", id);
+  $("#description-form").value = operationSelected.description;
+  $("#amount-form").valueAsNumber = operationSelected.amount;
+  $("#type-form").value = operationSelected.type;
+  $("#category-form").value = operationSelected.category;
+  $("#date-form").value = operationSelected.date;
+};
 
 /////////////////////////////////////////////////////////////////////
 
@@ -315,14 +323,13 @@ $("#categories-filter")= () => {
 //Filtrar operaciones//
 const allFilters = () => {
   const selectType = $("#type-filter").value;
-  console.log(allOperations);
   const filterType = allOperations.filter((operacion) => {
     if (selectType === "") {
       return allCategories;
     }
     return selectType === operacion.type;
   });
- 
+
   const selectCategory = $("#categories-filter").value;
   const filterCategory = filterType.filter((operacion) => {
     if (selectCategory === "") {
@@ -332,24 +339,32 @@ const allFilters = () => {
   });
 
   const inputDate = $("#today-date").value;
-  console.log(inputDate)
   const filterDate = filterCategory.filter((operacion) => {
     return new Date(operacion.date) > new Date(inputDate);
   });
- 
+
   const selectSortBy = $("#order-by").value;
-  console.log(selectSortBy);
-  const filterSort = filterDate.filterSort((a,b) =>{
- if(selectSortBy === "more"){
-  return a.date > b.date ? 1 : -1;
- }
- if(selectSortBy === "less"){
-  return a.date < b.date ? 1 : -1
- }
-//  if(selectSortBy === "")
-
-
-  })
+  const filterSort = filterDate.sort((a, b) => {
+    if (selectSortBy === "more") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (selectSortBy === "less") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (selectSortBy === "lower-amount") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (selectSortBy === "greater-amount") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (selectSortBy === "za") {
+      return a.description > b.description ? 1 : -1;
+    }
+    if (selectSortBy === "az") {
+      return a.description > b.description ? 1 : -1;
+    }
+    return filterSort;
+  });
 };
 
 //
@@ -436,7 +451,7 @@ const initializeApp = () => {
 
   $("#btn-new-operation").addEventListener("click", () => {
     show("#operation-view");
-    show("#btn-add-operation")
+    show("#btn-add-operation");
     hide("#home");
     hide("#report-view");
     hide("#categories-view");
@@ -451,7 +466,6 @@ const initializeApp = () => {
     $("#date-form").value = "";
   });
 
-  
   $("#btn-cancel-operation").addEventListener("click", () => {
     show("#home");
     hide("#operation-view");
@@ -466,36 +480,33 @@ const initializeApp = () => {
     hide("#no-results");
   });
 
-
-  
-  $("#btn-edit-operation").addEventListener("click", (e) =>{
-    e.preventDefault()
-    operationEdit()
-    hide("#operation-view")
-    show("#home")
-    renderOperations(getData("operations"))
-    });
+  $("#btn-edit-operation").addEventListener("click", () => {
+    e.preventDefault();
+    operationEdit();
+    hide("#operation-view");
+    show("#home");
+    renderOperations(getData("operations"));
+  });
 
   $("#type-filter").addEventListener("input", () => {
     const filterType = allFilters();
-    console.log(filterType);
-    // renderOperations(operationType)
+    renderOperations(filterType);
   });
 
-  $("#categories-filter").addEventListener("input",() =>{
-    const filterCategories = allFilters()
-    console.log(filterCategories)
-  })
+  $("#categories-filter").addEventListener("input", () => {
+    const filterCategories = allFilters();
+    renderOperations(filterCategories);
+  });
 
-  $("#today-date").addEventListener("input", () =>{
-    const filterDate = allFilters()
-    console.log(filterDate)
-  })
+  $("#today-date").addEventListener("input", () => {
+    const filterDate = allFilters();
+    renderOperations(filterDate);
+  });
 
-  $("#order-by").addEventListener("input", () =>{
-    const filterSort = allFilters()
-    console.log(filterSort)
-  })
+  $("#order-by").addEventListener("input", () => {
+    const filterSort = allFilters();
+    renderOperations(filterSort);
+  });
 };
 
 window.addEventListener("load", initializeApp);
