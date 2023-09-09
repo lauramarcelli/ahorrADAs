@@ -173,9 +173,12 @@ const saveNewOperation = (operationId) => {
     amount: $("#amount-form").valueAsNumber,
     type: $("#type-form").value,
     category: $("#category-form").value,
-    date: $("#date-form").value,
+    date: $("#date-form").value.replace(/-/g, '/'),
   };
 };
+
+
+
 
 const renderOperations = (operations) => {
   let accE = 0;
@@ -184,7 +187,7 @@ const renderOperations = (operations) => {
   let accSpendt = []
   cleanContainer("#table-operations");
   if (operations.length) {
-    hide("#report-view");
+    hide("#report-view"); 
     for (const {
       id,
       description,
@@ -192,14 +195,15 @@ const renderOperations = (operations) => {
       amount,
       category,
       date,
-    } of operations) {
+    } of operations) 
+    { const dateOf = new Date(saveNewOperation.date)
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
-      <td class="justify-self-auto pl-3 pb-3 pt-3">${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</td>
+      <td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>
       <td id ="amount-result" class=" justify-self-auto font-semibold pl-6 pb-3 pt-3  ${
         type === "earnings" ? "text-[#22c55e]" : "text-[#ef4444]"
       }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
