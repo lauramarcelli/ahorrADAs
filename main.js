@@ -195,14 +195,16 @@ const renderOperations = (operations) => {
     } of operations) {
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
-      <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
-      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
+      <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
+      <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
+      <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
-      <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
+      <td class="justify-self-auto pl-3 pb-3 pt-3">${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</td>
+      <td id ="amount-result" class=" justify-self-auto font-semibold pl-6 pb-3 pt-3  ${
+        type === "earnings" ? "text-[#22c55e]" : "text-[#ef4444]"
+      }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
-        <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
+        <button class=" pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
       </td>
     `
@@ -232,6 +234,14 @@ const renderOperations = (operations) => {
   } else {$("#show-results").innerHTML = accE - accS
   }
 };
+
+const changingColors = () =>{
+  const rowResutl = $("#amount-result").innerHTML
+  if (operation.type === "earnings"){rowResutl.classList = "text-[#22c55e] font-light mb-4 text-lg text-right float-right"}
+  else{
+    rowResutl.classList = "text-[#ef4444] font-light mb-6 text-lg text-right float-right"
+  }
+}
 
 const addOperation = () => {
   const currentOperation = getData("operations");
