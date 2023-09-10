@@ -234,18 +234,23 @@ const renderOperations = (operations) => {
     }
   }
 
-  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
-  } else {$("#show-results").innerHTML = accE - accS
+  let accAll = accE - accS
+
+  if (accAll === 0){$("#show-results").innerHTML ="0";
+  $("#show-results").classList.add ("text-black")
+  $("#local-currency").classList.add ("text-black") 
+  } else if (accAll > 0) {
+    $("#show-results").classList.add("text-[#22c55e]")
+    $("#local-currency").classList.add("text-[#22c55e]")
+    $("#show-results").innerHTML = accAll
+  } else {
+  $("#show-results").classList.add("text-[#ef4444]")
+  $("#local-currency").classList.add("text-[#ef4444]")
+  $("#show-results").innerHTML = accAll
+
   }
 };
 
-const changingColors = () =>{
-  const rowResutl = $("#amount-result").innerHTML
-  if (operation.type === "earnings"){rowResutl.classList = "text-[#22c55e] font-light mb-4 text-lg text-right float-right"}
-  else{
-    rowResutl.classList = "text-[#ef4444] font-light mb-6 text-lg text-right float-right"
-  }
-}
 
 const addOperation = () => {
   const currentOperation = getData("operations");
