@@ -173,7 +173,7 @@ const saveNewOperation = (operationId) => {
     amount: $("#amount-form").valueAsNumber,
     type: $("#type-form").value,
     category: $("#category-form").value,
-    date: $("#date-form").value.replace(/-/g, '/'),
+    date: $("#date-form").valueAsNumber,
   };
 };
 
@@ -196,14 +196,14 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) 
-    { const dateOf = new Date(saveNewOperation.date)
+    { 
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
-      <td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>
+      <td class="justify-self-auto pl-3 pb-3 pt-3">${date}</td>
       <td id ="amount-result" class=" justify-self-auto font-semibold pl-6 pb-3 pt-3  ${
         type === "earnings" ? "text-[#22c55e]" : "text-[#ef4444]"
       }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
@@ -251,6 +251,8 @@ const renderOperations = (operations) => {
   }
 };
 
+//const dateOf = new Date(saveNewOperation.date)
+//td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>*/
 
 const addOperation = () => {
   const currentOperation = getData("operations");
@@ -332,28 +334,49 @@ $("#categories-filter")= () => {
 /////////////////////////////////////////////////////////////////////
 
 //Filtrar operaciones//
+
+//Version Lau//
+
+/*const typeFilter = (operations, typeOf) => {
+  return operations.filter((operation) => operation.type === typeOf)
+ 
+}
+
+const allFilters = () => {
+  const typeOfFilter = $("#type-filter").value 
+  filteredOperations = [...allOperations]
+ 
+  filteredOperations = typeFilter(allOperations, typeOfFilter)
+ 
+   renderOperations(filteredOperations)
+  
+ 
+};*/
+
+
+//Versión Lore//
+
 const allFilters = () => {
   const selectType = $("#type-filter").value;
-  console.log(allOperations);
-  const filterType = allOperations.filter((operacion) => {
-    if (selectType === "") {
-      return allCategories;
+  const filterType = allOperations.filter((operation) => {
+    if (selectType === "Todos") {
+      return allOperations;
     }
-    return selectType === operacion.type;
+    return filterType === operation.type;
   });
  
   const selectCategory = $("#categories-filter").value;
-  const filterCategory = filterType.filter((operacion) => {
-    if (selectCategory === "") {
-      return operacion;
+  const filterCategory = allOperations.filter((operation) => {
+    if (selectCategory === "Todas") {
+      return allOperations;
     }
-    return selectCategory === operacion.category;
+    return selectCategory === operation.category;
   });
 
   const inputDate = $("#today-date").value;
   console.log(inputDate)
-  const filterDate = filterCategory.filter((operacion) => {
-    return new Date(operacion.date) > new Date(inputDate);
+  const filterDate = filterCategory.filter((operation) => {
+    return new Date(operation.date) > new Date(inputDate);
   });
  
   const selectSortBy = $("#order-by").value;
@@ -371,8 +394,10 @@ const allFilters = () => {
   })
 };
 
+
+
 //
-const fecha = new Date();
+//const fecha = new Date();
 // document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
 
 const initializeApp = () => {
@@ -495,26 +520,41 @@ const initializeApp = () => {
     renderOperations(getData("operations"))
     });
 
-  $("#type-filter").addEventListener("input", () => {
+    //Version Filtro Tipo Lau//
+
+  //$("#type-filter").addEventListener("change", () => allFilters)
+
+
+
+  //Version Filtro Tipo Lore//
+
+  $("#type-filter").addEventListener("change", () => {
     const filterType = allFilters();
-    console.log(filterType);
-    // renderOperations(operationType)
+    console.log(filterType)
+    
   });
 
-  $("#categories-filter").addEventListener("input",() =>{
+
+  $("#categories-filter").addEventListener("change",() =>{
     const filterCategories = allFilters()
     console.log(filterCategories)
+    
   })
 
-  $("#today-date").addEventListener("input", () =>{
+  $("#today-date").addEventListener("change", () =>{
     const filterDate = allFilters()
     console.log(filterDate)
+    
   })
 
-  $("#order-by").addEventListener("input", () =>{
+  $("#order-by").addEventListener("change", () =>{
     const filterSort = allFilters()
     console.log(filterSort)
+    
   })
+  
+
+
 };
 
 window.addEventListener("load", initializeApp);
