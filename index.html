@@ -49,14 +49,14 @@
                         <p class="text-[#4a4a4a] font-normal mb-6 text-xl">Gastos</p>
                         <div class="flow-root">
                             <p  id="show-spendings"class="text-[#ef4444] font-light mb-6 text-lg text-right float-right"></p>
-                            <p  class="text-[#ef4444] font-light mb-6 text-lg text-right float-right">-$</p>      
+                            <p class="text-[#ef4444] font-light mb-6 text-lg text-right float-right">-$</p>      
                         </div>
                     </div>
                     <div class="gap-2 columns-2">
                         <p class="text-[#4a4a4a] font-medium mb-2 text-2xl">Total</p>
                         <div class="flow-root">
                             <p  id="show-results"class="text-[#4a4a4a] font-bold mb-2 text-lg text-right float-right"></p>
-                            <p  class="text-[#4a4a4a] font-bold mb-2 text-lg text-right float-right ">$</p> 
+                            <p id="local-currency" class="text-[#4a4a4a] font-bold mb-2 text-lg text-right float-right ">$</p> 
                         </div>
                     </div>
                 </section>                                          
@@ -88,7 +88,7 @@
                     </div>
                     <div id="menu-arrangeby">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Ordenar Por</p>
-                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="arrange" id="order-by">
+                        <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="arrange" id="">
                             <option value="more">Más Reciente</option>
                             <option value="less">Menos Reciente</option>
                             <option value="greater-amount">Mayor Monto</option>
@@ -164,7 +164,6 @@
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
                             <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
-                                <option value="empty"></option>
                                 <option  value="spent">Gasto</option>
                                 <option value="earnings">Ganancia</option>
                             </select>

@@ -173,9 +173,12 @@ const saveNewOperation = (operationId) => {
     amount: $("#amount-form").valueAsNumber,
     type: $("#type-form").value,
     category: $("#category-form").value,
-    date: $("#date-form").value,
+    date: $("#date-form").valueAsNumber,
   };
 };
+
+
+
 
 const renderOperations = (operations) => {
   let accE = 0;
@@ -185,7 +188,7 @@ const renderOperations = (operations) => {
 
   cleanContainer("#table-operations");
   if (operations.length) {
-    hide("#report-view");
+    hide("#report-view"); 
     for (const {
       id,
       description,
@@ -194,22 +197,16 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find((cat) => cat.id === category);
+      const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-       <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-         categorieSelected.name
-       }</td>
-      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
-        type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
-      }
+      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
+      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
       <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3 ${
-        type == "spent" ? `text-rose-500` : `text-teal-400`
-      }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
+      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
-        <button class="pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
+        <button class=" pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
       </td>
     `;
@@ -235,12 +232,13 @@ const renderOperations = (operations) => {
     }
   }
 
-  if ($("#show-results").innerHTML === 0) {
-    $("#show-results").innerHTML = "0";
-  } else {
-    $("#show-results").innerHTML = accE - accS;
+  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
+  } else {$("#show-results").innerHTML = accE - accS
   }
 };
+
+//const dateOf = new Date(saveNewOperation.date)
+//td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>*/
 
 const addOperation = () => {
   const currentOperation = getData("operations");
@@ -321,24 +319,48 @@ $("#categories-filter")= () => {
 /////////////////////////////////////////////////////////////////////
 
 //Filtrar operaciones//
+
+//Version Lau//
+
+/*const typeFilter = (operations, typeOf) => {
+  return operations.filter((operation) => operation.type === typeOf)
+ 
+}
+
+const allFilters = () => {
+  const typeOfFilter = $("#type-filter").value 
+  filteredOperations = [...allOperations]
+ 
+  filteredOperations = typeFilter(allOperations, typeOfFilter)
+ 
+   renderOperations(filteredOperations)
+  
+ 
+};*/
+
+
+//Versión Lore//
+
 const allFilters = () => {
   const selectType = $("#type-filter").value;
+  console.log(allOperations);
   const filterType = allOperations.filter((operacion) => {
     if (selectType === "") {
       return allCategories;
     }
-    return selectType === operacion.type;
+    return filterType === operation.type;
   });
 
   const selectCategory = $("#categories-filter").value;
-  const filterCategory = filterType.filter((operacion) => {
-    if (selectCategory === "") {
-      return operacion;
+  const filterCategory = allOperations.filter((operation) => {
+    if (selectCategory === "Todas") {
+      return allOperations;
     }
-    return selectCategory === operacion.category;
+    return selectCategory === operation.category;
   });
 
   const inputDate = $("#today-date").value;
+  console.log(inputDate)
   const filterDate = filterCategory.filter((operacion) => {
     return new Date(operacion.date) > new Date(inputDate);
   });
@@ -367,8 +389,10 @@ const allFilters = () => {
   });
 };
 
+
+
 //
-const fecha = new Date();
+//const fecha = new Date();
 // document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
 
 const initializeApp = () => {
@@ -488,25 +512,34 @@ const initializeApp = () => {
     renderOperations(getData("operations"));
   });
 
-  $("#type-filter").addEventListener("input", () => {
+    //Version Filtro Tipo Lau//
+
+  //$("#type-filter").addEventListener("change", () => allFilters)
+
+
+
+  //Version Filtro Tipo Lore//
+
+  $("#type-filter").addEventListener("change", () => {
     const filterType = allFilters();
-    renderOperations(filterType);
+    console.log(filterType);
+    // renderOperations(operationType)
   });
 
-  $("#categories-filter").addEventListener("input", () => {
-    const filterCategories = allFilters();
-    renderOperations(filterCategories);
-  });
+  $("#categories-filter").addEventListener("input",() =>{
+    const filterCategories = allFilters()
+    console.log(filterCategories)
+  })
 
-  $("#today-date").addEventListener("input", () => {
-    const filterDate = allFilters();
-    renderOperations(filterDate);
-  });
+  $("#today-date").addEventListener("input", () =>{
+    const filterDate = allFilters()
+    console.log(filterDate)
+  })
 
-  $("#order-by").addEventListener("input", () => {
-    const filterSort = allFilters();
-    renderOperations(filterSort);
-  });
+  $("#order-by").addEventListener("input", () =>{
+    const filterSort = allFilters()
+    console.log(filterSort)
+  })
 };
 
 window.addEventListener("load", initializeApp);
