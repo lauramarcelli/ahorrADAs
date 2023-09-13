@@ -196,14 +196,15 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) 
-    { 
+    { const dateOf = new Date(saveNewOperation.date)
+      
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
-      <td class="justify-self-auto pl-3 pb-3 pt-3">${date}</td>
+      <td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td
       <td id ="amount-result" class=" justify-self-auto font-semibold pl-6 pb-3 pt-3  ${
         type === "earnings" ? "text-[#22c55e]" : "text-[#ef4444]"
       }"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
@@ -247,10 +248,10 @@ const renderOperations = (operations) => {
   $("#show-results").classList.add("text-[#ef4444]")
   $("#local-currency").classList.add("text-[#ef4444]")
   $("#show-results").innerHTML = accAll
-
   }
+  
 };
-
+console.log(dateOf())
 //const dateOf = new Date(saveNewOperation.date)
 //td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>*/
 
@@ -301,37 +302,7 @@ const editOperationForm = (id) =>{
 }
 
 
-/////////////////////////////////////////////////////////////////////
 
-/*SECCION filterS*/
-
-/*$("#type-filter").onchange = () => {
-  const operationsFiltradasportype = getData("operations").filter(operation =>  {
-    if ($("#type-filter").value === "Todas") {
-      return operation;
-    }
-    return operation.type === $("#type-filter").value;
-  })
-
-  renderOperations(operationsFiltradasportype);
-  console.log($("#type-filter").value);
-};
-
-$("#categories-filter")= () => {
-  const operationsFiltradasporcategory = getData("operations").filter(operation => {
-    if ($("#categories-filter").value === "Todas") {
-      return operation;
-    }
-    return operation.category === $("#categories-filter").value;
-  });
-
-  renderOperations(operationsFiltradasporcategory);
-
-  console.log($("#categories-filter").value);
-};
-*/
-
-/////////////////////////////////////////////////////////////////////
 
 //Filtrar operaciones//
 
