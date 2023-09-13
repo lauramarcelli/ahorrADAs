@@ -173,7 +173,7 @@ const saveNewOperation = (operationId) => {
     amount: $("#amount-form").valueAsNumber,
     type: $("#type-form").value,
     category: $("#category-form").value,
-    date: $("#date-form").valueAsNumber,
+    date: $("#date-form").value,
   };
 };
 
@@ -196,7 +196,7 @@ const hoy = new Date()
 
  //})
 
-const renderOperations = (operations) => {
+ const renderOperations = (operations) => {
   let accE = 0;
   let accS = 0;
   let accEarnings = [];
@@ -212,15 +212,14 @@ const renderOperations = (operations) => {
       amount,
       category,
       date,
-    } of operations) {
-      const dateOf = new Date(saveNewOperation.date)
+    } of operations) { 
       const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
       <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
-      <td class="justify-self-auto pl-3 pb-3 pt-3">${dateOf.getDate()}/${dateOf.getMonth() + 1}/${dateOf.getFullYear()}</td>
+      <td class="justify-self-auto pl-3 pb-3 pt-3">${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}</td>
       <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
         <button class=" pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
@@ -252,7 +251,7 @@ const renderOperations = (operations) => {
   if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
   } else {$("#show-results").innerHTML = accE - accS
   }
-  console.log(dateOf)
+
 };
 
 //const dateOf = new Date(saveNewOperation.date)
@@ -546,6 +545,15 @@ const initializeApp = () => {
 
 
   //Version Filtro Tipo Lore//
+
+  const currentDay = () => {
+  $$('.today').forEach((input) => {
+    input.valueAsDate = new Date();
+    console.log(input)
+  });
+  console.log($$('.today'))
+ 
+}
 
 
 };
