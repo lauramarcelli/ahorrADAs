@@ -177,10 +177,8 @@ const saveNewOperation = (operationId) => {
   };
 };
 
-
-
 //date//
-const hoy = new Date()
+const hoy = new Date();
 // let dia = date.getDate()
 // let mes = date.getMonth() + 1
 // let anio = date.getFullYear()
@@ -192,9 +190,9 @@ const hoy = new Date()
 //   console.log(date)
 //   console.log(dia,mes ,anio)
 //   const  operationDate = new Date(date.value)
-  // let dia = operationDate
+// let dia = operationDate
 
- //})
+//})
 
 const renderOperations = (operations) => {
   let accE = 0;
@@ -204,7 +202,7 @@ const renderOperations = (operations) => {
 
   cleanContainer("#table-operations");
   if (operations.length) {
-    hide("#report-view"); 
+    hide("#report-view");
     for (const {
       id,
       description,
@@ -213,14 +211,22 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find((cat) => cat.id === category)
+      const categorieSelected = allCategories.find(
+        (cat) => cat.id === category
+      );
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
-      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
+      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
+        categorieSelected.name
+      }</td>
+      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
+        type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
+      }
       </td>
       <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
+      <td class="pl-6 pb-3 pt-3"> ${
+        type === "spent" ? "-" : "+"
+      }  $ ${amount}</td>    
       <td>
         <button class=" pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
@@ -248,8 +254,10 @@ const renderOperations = (operations) => {
     }
   }
 
-  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
-  } else {$("#show-results").innerHTML = accE - accS
+  if ($("#show-results").innerHTML === 0) {
+    $("#show-results").innerHTML = "0";
+  } else {
+    $("#show-results").innerHTML = accE - accS;
   }
 };
 
@@ -355,97 +363,93 @@ const allFilters = () => {
 };*/
 
 // Version DOS de filtros Lore//
-const filterType = (operation, myType) =>{
+const filterType = (operation, myType) => {
   let operationFilter = allOperations.filter((operation) => {
-   if(myType === "all"){
-     return operation
-   }else{
-    return myType === operation.type
-   }
- })
- console.log(operationFilter)
-   return operationFilter
-}
+    if (myType === "all") {
+      return operation;
+    } else {
+      return myType === operation.type;
+    }
+  });
+  console.log(operationFilter);
+  return operationFilter;
+};
 
-const filterCategory = (operation, typeCategory) =>{
- let filterCategory = operation.filter((operation) =>{
- if (typeCategory === "all-category"){
-  return operation
- }else{
-  return typeCategory === operation.category
- }
- })
- console.log(filterCategory)
-  return filterCategory
-}
+const filterCategory = (operation, typeCategory) => {
+  let filterCategory = operation.filter((operation) => {
+    if (typeCategory === "all-category") {
+      return operation;
+    } else {
+      return typeCategory === operation.category;
+    }
+  });
+  console.log(filterCategory);
+  return filterCategory;
+};
 
-const filterDate = (operation, dateOperation) =>{
-let filterDate = operation.filter((operation) =>{
- new Date(operation.date) > new Date(dateOperation);
-})
-console.log(filterDate)
-return filterDate
-}
+const filterDate = (operation, dateOperation) => {
+  let filterDate = operation.filter((operation) => {
+    new Date(operation.date) > new Date(dateOperation);
+  });
+  console.log(filterDate);
+  return filterDate;
+};
 
-const orderBy = (operation, orderOperation) =>{
-let filterOrder = operation.sort((a, b) => {
-      if (orderOperation === "more") {
-        return a.date < b.date ? 1 : -1;
-      }
-      if (orderOperation === "less") {
-        return a.date > b.date ? 1 : -1;
-      }
-      if (orderOperation === "lower-amount") {
-        
-        return a.amount > b.amount ? 1 : -1;
-      }
-      if (orderOperation === "greater-amount") {
-        return a.amount < b.amount ? 1 : -1;
-      }
-      if (orderOperation === "az") {
-    return a.description > b.description ? 1 : -1;
-      }
-      if (orderOperation === "za") {
-         return a.description < b.description ? 1 : -1;
-      }
-    
-    });
-    console.log(filterOrder)
-    return filterOrder
-}
+const orderBy = (operation, orderOperation) => {
+  let filterOrder = operation.sort((a, b) => {
+    if (orderOperation === "more") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (orderOperation === "less") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (orderOperation === "lower-amount") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (orderOperation === "greater-amount") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (orderOperation === "az") {
+      return a.description > b.description ? 1 : -1;
+    }
+    if (orderOperation === "za") {
+      return a.description < b.description ? 1 : -1;
+    }
+  });
+  console.log(filterOrder);
+  return filterOrder;
+};
 
 //Aplicar filtros//
-const applyFilter = () =>{
-  let filteredOperations = [...allOperations]
-  let myType = $("#type-filter").value
-  let typeCategory = $("#categories-filter").value
-  let dateOperation = $("#today-date").value
-  let orderOperation = $("#order-by").value
-  filteredOperations = filterType(allOperations, myType)
-  filteredOperations = filterCategory(allOperations, typeCategory)
-  filteredOperations = filterDate(allOperations, dateOperation)
-  filteredOperations = orderBy(allOperations, orderOperation)
+const applyFilter = () => {
+  let filteredOperations = [...allOperations];
+  let myType = $("#type-filter").value;
+  let typeCategory = $("#categories-filter").value;
+  let dateOperation = $("#today-date").value;
+  let orderOperation = $("#order-by").value;
+  filteredOperations = filterType(allOperations, myType);
+  filteredOperations = filterCategory(allOperations, typeCategory);
+  filteredOperations = filterDate(allOperations, dateOperation);
+  filteredOperations = orderBy(allOperations, orderOperation);
 
   // renderOperations(filteredOperations)
-}
+};
 //Eventos filtros//
-$("#type-filter").addEventListener("input", () =>{
-applyFilter()
+$("#type-filter").addEventListener("input", () => {
+  applyFilter();
+});
 
-})
+$("#categories-filter").addEventListener("input", () => {
+  applyFilter();
+});
 
-$("#categories-filter").addEventListener("input", () =>{
-  applyFilter()
-})
+$("#today-date").addEventListener("input", () => {
+  applyFilter();
+});
 
-$("#today-date").addEventListener("input", () =>{
-applyFilter()
-})
-
-$("#order-by").addEventListener("input", () =>{
-applyFilter()
-})
-
+$("#order-by").addEventListener("input", () => {
+  applyFilter();
+});
 
 //
 //const fecha = new Date();
@@ -568,14 +572,9 @@ const initializeApp = () => {
     renderOperations(getData("operations"));
   });
 
-    //Version Filtro Tipo Lau//
+  //Version Filtro Tipo Lau//
 
   //$("#type-filter").addEventListener("change", () => allFilters)
-
-
-  //Version Filtro Tipo Lore//
-
-
 };
 
 window.addEventListener("load", initializeApp);
