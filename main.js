@@ -1,4 +1,8 @@
-//Selector DOM:
+////////////////////////////////////////////////////////////////////////
+
+/* Selector Dom*/
+
+///////////////////////////////////////////////////////////////////////
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -19,9 +23,16 @@ const getData = (key) => JSON.parse(localStorage.getItem(key));
 const saveData = (key, array) =>
   localStorage.setItem(key, JSON.stringify(array));
 
+
+
 ////////////////////////////////////////////////////////////////////////
 
 /* SECCION categories*/
+
+///////////////////////////////////////////////////////////////////////
+
+
+
 
 const categoriesByDefault = [
   {
@@ -162,9 +173,15 @@ const cancelEditCategory = () => {
   show("#categories-view");
 };
 
-/////////////////////////////////////////////////////////////////////
 
-/*SECCION OPERACIONES*/
+
+
+////////////////////////////////////////////////////////////////////////
+
+/* SECCION operaciones*/
+
+///////////////////////////////////////////////////////////////////////
+
 
 const saveNewOperation = (operationId) => {
   return {
@@ -173,12 +190,14 @@ const saveNewOperation = (operationId) => {
     amount: $("#amount-form").valueAsNumber,
     type: $("#type-form").value,
     category: $("#category-form").value,
-    date: $("#date-form").valueAsNumber,
+    date: $("#date-form").value,
   };
 };
 
+
+
 //date//
-const hoy = new Date();
+const hoy = new Date()
 // let dia = date.getDate()
 // let mes = date.getMonth() + 1
 // let anio = date.getFullYear()
@@ -190,16 +209,15 @@ const hoy = new Date();
 //   console.log(date)
 //   console.log(dia,mes ,anio)
 //   const  operationDate = new Date(date.value)
-// let dia = operationDate
+  // let dia = operationDate
 
-//})
+ //})
 
 const renderOperations = (operations) => {
   let accE = 0;
   let accS = 0;
   let accEarnings = [];
-  let accSpendt = [];
-
+  let accSpendt = []
   cleanContainer("#table-operations");
   if (operations.length) {
     hide("#report-view");
@@ -211,28 +229,20 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find(
-        (cat) => cat.id === category
-      );
+      const categorieSelected = allCategories.find((cat) => cat.id === category)
       $("#table-operations").innerHTML += `
       <td class="font-medium pl-6 pb-3 pt-3">${description}</td>
-      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-        categorieSelected.name
-      }</td>
-      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
-        type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
-      }
+      <td class="text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${categorieSelected.name}</td>
+      <td class="pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)}
       </td>
       <td class="pl-3 pb-3 pt-3">${date}</td>
-      <td class="pl-6 pb-3 pt-3"> ${
-        type === "spent" ? "-" : "+"
-      }  $ ${amount}</td>    
+      <td class="pl-6 pb-3 pt-3"> ${type === "spent" ? "-" : "+"}  $ ${amount}</td>    
       <td>
         <button class=" pl-6 pb-3 pt-3 text-sm text-green-500" onclick="editOperationForm('${id}')"=>Editar</button>
         <button class="pl-3 pb-3 pt-3 text-sm text-red-500" onclick="deleteOperation('${id}')"=>Eliminar</button>
       </td>
-    `;
-    }
+    `
+  }
   } else {
     show("#home");
   }
@@ -254,10 +264,8 @@ const renderOperations = (operations) => {
     }
   }
 
-  if ($("#show-results").innerHTML === 0) {
-    $("#show-results").innerHTML = "0";
-  } else {
-    $("#show-results").innerHTML = accE - accS;
+  if ($("#show-results").innerHTML === 0){$("#show-results").innerHTML ="0";
+  } else {$("#show-results").innerHTML = accE - accS
   }
 };
 
@@ -280,16 +288,17 @@ const deleteOperation = (id) => {
   renderOperations(currentOperation);
 };
 
-const operationEdit = () => {
-  const operationId = $("#btn-edit-operation").getAttribute("data-id");
-  const operationEdited = getData("operations").map((operation) => {
+const operationEdit =() => {
+  const operationId = $("#btn-edit-operation").getAttribute("data-id")
+  const operationEdited = getData("operations").map(operation => {
     if (operation.id === operationId) {
-      return saveNewOperation(operation.id);
+      return saveNewOperation(operation.id)
     }
-    return operation;
-  });
-  saveData("operations", operationEdited);
-};
+    return operation
+
+  })
+  saveData("operations", operationEdited) 
+}
 
 const editOperationForm = (id) => {
   hide("#home");
@@ -363,17 +372,17 @@ const allFilters = () => {
 };*/
 
 // Version DOS de filtros Lore//
-const filterType = (operation, myType) => {
+const filterType = (operation, myType) =>{
   let operationFilter = allOperations.filter((operation) => {
-    if (myType === "all") {
-      return operation;
-    } else {
-      return myType === operation.type;
-    }
-  });
-  console.log(operationFilter);
-  return operationFilter;
-};
+   if(myType === "all"){
+     return operation
+   }else{
+    return myType === operation.type
+   }
+ })
+ console.log(operationFilter)
+  //  return operationFilter
+}
 
 const filterCategory = (operation, typeCategory) => {
   let filterCategory = operation.filter((operation) => {
@@ -451,9 +460,13 @@ $("#order-by").addEventListener("input", () => {
   applyFilter();
 });
 
-//
-//const fecha = new Date();
-// document.getElementById("fecha-actual").value = fecha.toJSON().slice(0,10);
+
+////////////////////////////////////////////////////////////////////////
+
+/*MANEJO DEL DOM*/
+
+///////////////////////////////////////////////////////////////////////
+
 
 const initializeApp = () => {
   saveData("categories", allCategories);
@@ -461,6 +474,15 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
+
+  const currentDay = () => {
+    $$('.today').forEach((input) => {
+      input.valueAsDate = new Date();
+      console.log(input)
+    });
+    console.log($$('.today'))
+   
+  }
 
   if (allOperations.length) {
     show("#operations-table-home");
@@ -535,7 +557,10 @@ const initializeApp = () => {
 
   $("#btn-new-operation").addEventListener("click", () => {
     show("#operation-view");
-    show("#btn-add-operation");
+    show("#btn-add-operation")
+    show("#new-operation-title")
+    hide("#btn-edit-operation")
+    hide("#title-edit")
     hide("#home");
     hide("#report-view");
     hide("#categories-view");
@@ -550,6 +575,7 @@ const initializeApp = () => {
     $("#date-form").value = "";
   });
 
+  
   $("#btn-cancel-operation").addEventListener("click", () => {
     show("#home");
     hide("#operation-view");
@@ -564,17 +590,24 @@ const initializeApp = () => {
     hide("#no-results");
   });
 
-  $("#btn-edit-operation").addEventListener("click", () => {
-    e.preventDefault();
-    operationEdit();
-    hide("#operation-view");
-    show("#home");
-    renderOperations(getData("operations"));
-  });
+
+  
+  $("#btn-edit-operation").addEventListener("click", (e) =>{
+    e.preventDefault()
+    operationEdit()
+    hide("#operation-view")
+    show("#home")
+    renderOperations(getData("operations"))
+    });
 
   //Version Filtro Tipo Lau//
 
   //$("#type-filter").addEventListener("change", () => allFilters)
+
+
+  //Version Filtro Tipo Lore//
+
+
 };
 
 window.addEventListener("load", initializeApp);
