@@ -364,7 +364,7 @@ const filterType = (operation, myType) =>{
    }
  })
  console.log(operationFilter)
-  //  return operationFilter
+   return operationFilter
 }
 
 const filterCategory = (operation, typeCategory) =>{
@@ -376,7 +376,7 @@ const filterCategory = (operation, typeCategory) =>{
  }
  })
  console.log(filterCategory)
-//  return filterCategory
+  return filterCategory
 }
 
 const filterDate = (operation, dateOperation) =>{
@@ -384,7 +384,7 @@ let filterDate = operation.filter((operation) =>{
  new Date(operation.date) > new Date(dateOperation);
 })
 console.log(filterDate)
-//return filterDate
+return filterDate
 }
 
 const orderBy = (operation, orderOperation) =>{
@@ -411,7 +411,7 @@ let filterOrder = operation.sort((a, b) => {
     
     });
     console.log(filterOrder)
-    //return filterOrder
+    return filterOrder
 }
 
 //Aplicar filtros//
@@ -426,7 +426,7 @@ const applyFilter = () =>{
   filteredOperations = filterDate(allOperations, dateOperation)
   filteredOperations = orderBy(allOperations, orderOperation)
 
-  renderOperations(filteredOperations)
+  // renderOperations(filteredOperations)
 }
 //Eventos filtros//
 $("#type-filter").addEventListener("input", () =>{
