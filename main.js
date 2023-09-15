@@ -323,9 +323,10 @@ const filterType = (operations, myType) =>{
    }else{
     return myType === operation.type
    }
+   
  })
- console.log(operationFilter)
-  //  return operationFilter
+  console.log(operationFilter)
+ return operationFilter
 }
 
 const filterCategory = (operation, typeCategory) =>{
@@ -337,7 +338,7 @@ const filterCategory = (operation, typeCategory) =>{
  }
  })
  console.log(filterCategory)
-//  return filterCategory
+  return filterCategory
 }
 
 const filterDate = (operation, dateOperation) =>{
@@ -345,7 +346,7 @@ let filterDate = operation.filter((operation) =>{
  new Date(operation.date) > new Date(dateOperation);
 })
 console.log(filterDate)
-//return filterDate
+  return filterDate
 }
 
 const orderBy = (operation, orderOperation) =>{
@@ -372,44 +373,48 @@ let filterOrder = operation.sort((a, b) => {
     
     });
     console.log(filterOrder)
-    //return filterOrder
+    return  filterOrder
 }
 
 //Aplicar filtros//
 
 const applyFilter = () =>{
+
   let filteredOperations = [...allOperations]
   let myType = $("#type-filter").value
   let typeCategory = $("#categories-filter").value
   let dateOperation = $("#today-date").value
   let orderOperation = $("#order-by").value
-  filteredOperations = filterType(allOperations, myType)
+  filteredOperations =  filterType(allOperations, myType)
   filteredOperations = filterCategory(allOperations, typeCategory)
   filteredOperations = filterDate(allOperations, dateOperation)
   filteredOperations = orderBy(allOperations, orderOperation)
 
   renderOperations(filteredOperations)
+  
 }
 
 
-//Eventos filtros//
+//seccion reportes//
 
-$("#type-filter").addEventListener("input", () =>{
-applyFilter()
 
-})
+// const totalByCategory = () =>{
+//  $("#table-totals").innerHTML = ""
+// let categoriesReport = allCategories
+// console.log(categoriesReport)
+//  let newObjCategory = {}
+//  let profitsTotal = 0
+//  let expensesTotal = 0
+// let balance = 0
+// let nameCategory = ""
 
-$("#categories-filter").addEventListener("input", () =>{
-  applyFilter()
-})
 
-$("#today-date").addEventListener("input", () =>{
-applyFilter()
-})
-
-$("#order-by").addEventListener("input", () =>{
-applyFilter()
-})
+// for (let i = 0; i < categoriesReport.length; i++) {
+//   const operationsFilters = allOperations.filter(
+//     (operation) => operation.category === categoriesReport[i].id
+//   );  
+//   }
+// }
 
 
 
@@ -426,6 +431,7 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
+
 
   const currentDay = () => {
     $$('.today').forEach((input) => {
@@ -559,33 +565,23 @@ const initializeApp = () => {
 
 
   //Version Filtro Tipo Lore//
-
-  $("#type-filter").addEventListener("change", () => {
-    const filterType = allFilters();
-    console.log(filterType)
+  $("#type-filter").addEventListener("input", () =>{
+    applyFilter()  
+    })
     
-  });
-
-
-  $("#categories-filter").addEventListener("change",() =>{
-    const filterCategories = allFilters()
-    console.log(filterCategories)
+    $("#categories-filter").addEventListener("input", () =>{
+      applyFilter()   
+    })
     
-  })
-
-  $("#today-date").addEventListener("change", () =>{
-    const filterDate = allFilters()
-    console.log(filterDate)
+    $("#today-date").addEventListener("input", () =>{
+     
+    applyFilter()    
+    })
     
-  })
+    $("#order-by").addEventListener("input", () =>{
 
-  $("#order-by").addEventListener("change", () =>{
-    const filterSort = allFilters()
-    console.log(filterSort)
-    
-  })
-  
-
+    applyFilter()
+    })
 
 };
 
