@@ -376,6 +376,7 @@ let filterOrder = operation.sort((a, b) => {
 }
 
 //Aplicar filtros//
+
 const applyFilter = () =>{
   let filteredOperations = [...allOperations]
   let myType = $("#type-filter").value
@@ -389,7 +390,10 @@ const applyFilter = () =>{
 
   renderOperations(filteredOperations)
 }
+
+
 //Eventos filtros//
+
 $("#type-filter").addEventListener("input", () =>{
 applyFilter()
 
