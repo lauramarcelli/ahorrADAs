@@ -329,17 +329,17 @@ const filterCategory = (operations, typeCategory) => {
 };
 
 
-/*const filterDate = (operation, dateOperation) => {
-  let filterDate = operation.filter((operation) => {
-    new Date(operation.date) > new Date(dateOperation);
-  });
+const filterDate = (operations, dateOperation) => {
+  let filterDate = operations.filter(
+  (operation) => new Date(operation.date) >= new Date(dateOperation));
   console.log(filterDate);
   return filterDate;
 };
 
-const filterDate = (operation, dateOperation) =>{
+
+/*const filterDate = (operation, dateOperation) =>{
 let filterDate = operation.filter((operation) =>{
- new Date(operation.date) > new Date(dateOperation);
+new Date(operation.date) > new Date(dateOperation);
 })
 console.log(filterDate)
 //return filterDate
@@ -391,7 +391,12 @@ const applyFilter = () => {
     filteredOperations = filterCategory(filteredOperations, typeCategory);
   }
 
-  //filteredOperations = filterDate(allOperations, dateOperation)
+  if (dateOperation != "all") {
+    console.log(filterDate(filteredOperations, dateOperation));
+    filteredOperations = filterDate(filteredOperations, dateOperation);
+  }
+
+  
   //filteredOperations = orderBy(allOperations, orderOperation)
 
   console.log(filteredOperations);
@@ -406,7 +411,7 @@ $("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
 
-
+$("#today-date").addEventListener("change", () => applyFilter());
 
 
 
