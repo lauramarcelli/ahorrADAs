@@ -65,7 +65,7 @@ const allCategories = getData("categories") || categoriesByDefault;
 const allOperations = getData("operations") || [];
 
 const renderCategoriesOptions = (categories) => {
-  cleanContainer("#categories-filter");
+  // cleanContainer("#categories-filter");
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
