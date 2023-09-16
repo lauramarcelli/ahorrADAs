@@ -417,14 +417,31 @@ applyFilter()
 
 ///////////////////////////////////////////////////////////////////////
 
+const selecDate = () => {
+  var fecha = new Date();
+  var mes = fecha.getMonth() + 1;
+  var dia = fecha.getDate();
+  var ano = fecha.getFullYear();
+  if (dia < 10) dia = "0" + dia;
+  if (mes < 10) mes = "0" + mes;
+  $("#today-date").value = ano + "-" + mes + "-" + dia;
+
+};
+
+
 const initializeApp = () => {
   saveData("categories", allCategories);
   saveData("operations", allOperations);
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
+selecDate()
+
+//
 
 
+
+//
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
@@ -432,6 +449,7 @@ const initializeApp = () => {
     });
     console.log($$(".today"));
   };
+
 
   if (allOperations.length) {
     show("#operations-table-home");
