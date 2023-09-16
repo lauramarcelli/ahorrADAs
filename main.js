@@ -65,7 +65,7 @@ const allCategories = getData("categories") || categoriesByDefault;
 const allOperations = getData("operations") || [];
 
 const renderCategoriesOptions = (categories) => {
-  cleanContainer("#categories-filter");
+  // cleanContainer("#categories-filter");
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -329,7 +329,7 @@ const filterCategory = (operations, typeCategory) => {
 };
 
 
-const filterDate = (operation, dateOperation) => {
+/*const filterDate = (operation, dateOperation) => {
   let filterDate = operation.filter((operation) => {
     new Date(operation.date) > new Date(dateOperation);
   });
@@ -337,46 +337,55 @@ const filterDate = (operation, dateOperation) => {
   return filterDate;
 };
 
-const orderBy = (operation, orderOperation) => {
-  let filterOrder = operation.sort((a, b) => {
-    if (orderOperation === "more") {
-      return a.date < b.date ? 1 : -1;
-    }
-    if (orderOperation === "less") {
-      return a.date > b.date ? 1 : -1;
-    }
-    if (orderOperation === "lower-amount") {
-      return a.amount > b.amount ? 1 : -1;
-    }
-    if (orderOperation === "greater-amount") {
-      return a.amount < b.amount ? 1 : -1;
-    }
-    if (orderOperation === "az") {
-      return a.description > b.description ? 1 : -1;
-    }
-    if (orderOperation === "za") {
-      return a.description < b.description ? 1 : -1;
-    }
-  });
-  console.log(filterOrder);
-  return filterOrder;
-};
+const filterDate = (operation, dateOperation) =>{
+let filterDate = operation.filter((operation) =>{
+ new Date(operation.date) > new Date(dateOperation);
+})
+console.log(filterDate)
+//return filterDate
+}
+
+const orderBy = (operation, orderOperation) =>{
+let filterOrder = operation.sort((a, b) => {
+      if (orderOperation === "more") {
+        return a.date < b.date ? 1 : -1;
+      }
+      if (orderOperation === "less") {
+        return a.date > b.date ? 1 : -1;
+      }
+      if (orderOperation === "lower-amount") {
+        
+        return a.amount > b.amount ? 1 : -1;
+      }
+      if (orderOperation === "greater-amount") {
+        return a.amount < b.amount ? 1 : -1;
+      }
+      if (orderOperation === "az") {
+    return a.description > b.description ? 1 : -1;
+      }
+      if (orderOperation === "za") {
+         return a.description < b.description ? 1 : -1;
+      }
+    
+    });
+    console.log(filterOrder)
+    //return filterOrder
+}*/
 
 //Aplicar filtros//
 
 const applyFilter = () => {
-  console.log("me ejecute");
   let filteredOperations = [...allOperations];
-  console.log(filteredOperations);
   let myType = $("#type-filter").value;
-  console.log(myType);
   let typeCategory = $("#categories-filter").value;
   let dateOperation = $("#today-date").value;
   let orderOperation = $("#order-by").value;
+
   if (myType != "all") {
     console.log(filterType(filteredOperations, myType));
     filteredOperations = filterType(filteredOperations, myType);
   }
+
   if (typeCategory != "all-category") {
     console.log(filterCategory(filteredOperations, typeCategory));
     filteredOperations = filterCategory(filteredOperations, typeCategory);
@@ -384,24 +393,21 @@ const applyFilter = () => {
 
   //filteredOperations = filterDate(allOperations, dateOperation)
   //filteredOperations = orderBy(allOperations, orderOperation)
+
   console.log(filteredOperations);
   renderOperations(filteredOperations);
 };
 
+
+
 //Eventos filtros//
 
-$("#type-filter").addEventListener("change", () => applyFilter());
+$("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
 
 
-$("#today-date").addEventListener("input", () => {
-  applyFilter();
-});
 
-$("#order-by").addEventListener("input", () => {
-  applyFilter();
-});
 
 
 
@@ -411,13 +417,33 @@ $("#order-by").addEventListener("input", () => {
 
 ///////////////////////////////////////////////////////////////////////
 
+const selecDate = () => {
+  var fecha = new Date();
+  var mes = fecha.getMonth() + 1;
+  var dia = fecha.getDate();
+  var ano = fecha.getFullYear();
+  if (dia < 10) dia = "0" + dia;
+  if (mes < 10) mes = "0" + mes;
+  $("#today-date").value = ano + "-" + mes + "-" + dia;
+
+};
+
+
+
+
 const initializeApp = () => {
   saveData("categories", allCategories);
   saveData("operations", allOperations);
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
+selecDate()
 
+//
+
+
+
+//
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
@@ -425,6 +451,7 @@ const initializeApp = () => {
     });
     console.log($$(".today"));
   };
+
 
   if (allOperations.length) {
     show("#operations-table-home");
@@ -537,8 +564,9 @@ const initializeApp = () => {
     hide("#operation-view");
     show("#home");
     renderOperations(getData("operations"));
-  });
+  })
 
-  };
+};
 
 window.addEventListener("load", initializeApp);
+
