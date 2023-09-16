@@ -314,24 +314,20 @@ const editOperationForm = (id) => {
 //------------Filtros de Operaciones---------------------//
 
 const filterType = (operations, myType) => {
-  let filteredOperations =  operations.filter((operation) => 
-    operation.type === myType
+  let filteredOperations = operations.filter(
+  (operation) => operation.type === myType
   );
-  console.log(filteredOperations)
+  console.log(filteredOperations);
   return filteredOperations;
 };
 
-const filterCategory = (operation, typeCategory) => {
-  let filterCategory = operation.filter((operation) => {
-    if (typeCategory === "all-category") {
-      return operation;
-    } else {
-      return typeCategory === operation.category;
-    }
-  });
+const filterCategory = (operations, typeCategory) => {
+  let filterCategory = operations.filter(
+  (operation) => operation.category === typeCategory);
   console.log(filterCategory);
   return filterCategory;
 };
+
 
 const filterDate = (operation, dateOperation) => {
   let filterDate = operation.filter((operation) => {
@@ -369,23 +365,26 @@ const orderBy = (operation, orderOperation) => {
 //Aplicar filtros//
 
 const applyFilter = () => {
-  console.log("me ejecute")
+  console.log("me ejecute");
   let filteredOperations = [...allOperations];
-  console.log(filteredOperations)
+  console.log(filteredOperations);
   let myType = $("#type-filter").value;
-  console.log(myType)
+  console.log(myType);
   let typeCategory = $("#categories-filter").value;
   let dateOperation = $("#today-date").value;
   let orderOperation = $("#order-by").value;
   if (myType != "all") {
-    console.log(filterType(filteredOperations, myType))
+    console.log(filterType(filteredOperations, myType));
     filteredOperations = filterType(filteredOperations, myType);
   }
+  if (typeCategory != "all-category") {
+    console.log(filterCategory(filteredOperations, typeCategory));
+    filteredOperations = filterCategory(filteredOperations, typeCategory);
+  }
 
-  //filteredOperations = filterCategory(allOperations, typeCategory)
   //filteredOperations = filterDate(allOperations, dateOperation)
   //filteredOperations = orderBy(allOperations, orderOperation)
-  console.log(filteredOperations)
+  console.log(filteredOperations);
   renderOperations(filteredOperations);
 };
 
@@ -393,9 +392,8 @@ const applyFilter = () => {
 
 $("#type-filter").addEventListener("change", () => applyFilter());
 
-$("#categories-filter").addEventListener("input", () => {
-  applyFilter();
-});
+$("#categories-filter").addEventListener("change", () => applyFilter());
+
 
 $("#today-date").addEventListener("input", () => {
   applyFilter();
@@ -404,6 +402,8 @@ $("#today-date").addEventListener("input", () => {
 $("#order-by").addEventListener("input", () => {
   applyFilter();
 });
+
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -539,32 +539,6 @@ const initializeApp = () => {
     renderOperations(getData("operations"));
   });
 
-  //Version Filtro Tipo Lore//
-
-  /*$("#type-filter").addEventListener("change", () => {
-    const filterType = allFilters();
-    console.log(filterType)
-    
-  });
-
-
-  $("#categories-filter").addEventListener("change",() =>{
-    const filterCategories = allFilters()
-    console.log(filterCategories)
-    
-  })
-
-  $("#today-date").addEventListener("change", () =>{
-    const filterDate = allFilters()
-    console.log(filterDate)
-    
-  })
-
-  $("#order-by").addEventListener("change", () =>{
-    const filterSort = allFilters()
-    console.log(filterSort)
-    
-  })*/
-};
+  };
 
 window.addEventListener("load", initializeApp);
