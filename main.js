@@ -337,14 +337,6 @@ const filterDate = (operations, dateOperation) => {
 };
 
 
-/*const filterDate = (operation, dateOperation) =>{
-let filterDate = operation.filter((operation) =>{
-new Date(operation.date) > new Date(dateOperation);
-})
-console.log(filterDate)
-//return filterDate
-}
-
 const orderBy = (operation, orderOperation) =>{
 let filterOrder = operation.sort((a, b) => {
       if (orderOperation === "more") {
@@ -364,13 +356,13 @@ let filterOrder = operation.sort((a, b) => {
     return a.description > b.description ? 1 : -1;
       }
       if (orderOperation === "za") {
-         return a.description < b.description ? 1 : -1;
+      return a.description < b.description ? 1 : -1;
       }
     
     });
     console.log(filterOrder)
-    //return filterOrder
-}*/
+    return filterOrder
+}
 
 //Aplicar filtros//
 
@@ -397,7 +389,7 @@ const applyFilter = () => {
   }
 
   
-  //filteredOperations = orderBy(allOperations, orderOperation)
+  filteredOperations = orderBy(allOperations, orderOperation)
 
   console.log(filteredOperations);
   renderOperations(filteredOperations);
@@ -413,6 +405,7 @@ $("#categories-filter").addEventListener("change", () => applyFilter());
 
 $("#today-date").addEventListener("change", () => applyFilter());
 
+$("#order-by").addEventListener("change", () => applyFilter());
 
 
 
