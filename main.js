@@ -409,6 +409,54 @@ $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
 
+//-------------------------SECCION REPORTES-------------------------//
+ 
+//-----------TOTALES POR MES--------//
+const totalsPerMont = () =>{
+ let objMonthProfit = {}
+ let objMonthExpenses = {}
+ let objMonthBalance = {}
+ let nameMonthBalance = ""
+ let dataOperations = allOperations
+ console.log(dataOperations)
+  let nameMonth = ""
+ $("#table-totalsbymonth").innerHTML = ""
+      let montExpense = 0
+     let monthProfit = 0     
+ for(let i = 0; i < dataOperations.length; i++){
+   const monthFilter = allOperations.filter((operations) => operations.date === dataOperations[i].date)
+     for(const date of monthFilter){
+       type = date.type
+       operation = date.amount,
+       fecha= date.date.slice(0,7)
+       if(fecha === fecha && type === "earnings"){
+        monthProfit += operation
+        nameMonth = fecha
+       objMonthProfit[nameMonth] = monthProfit
+       } else if (fecha === fecha && type  === "spent"){
+          montExpense += operation   
+           nameMonth = fecha
+          objMonthExpenses[nameMonth] = montExpense      
+       }
+        nameMonthBalance = monthProfit - montExpense
+        nameMonth = fecha
+        objMonthBalance[nameMonth] = date.amount   
+      //  console.log(objMonthProfit)
+      //  console.log(objMonthExpenses)
+      console.log(nameMonthBalance)
+     }
+      
+    $("#table-totalsbymonth").innerHTML = `
+     <td class="pl-4 font-medium">${nameMonth}</td> 
+     <td class="pl-6 text-teal-400">$${monthProfit} </td>
+     <td class="pl-6 text-rose-500"> $${montExpense}</td>
+     <td>$${nameMonthBalance}</td>      
+      `
+  } 
+}
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -417,7 +465,7 @@ applyFilter()
 
 ///////////////////////////////////////////////////////////////////////
 
-const selecDate = () => {
+const selecDateFilter= () => {
   var fecha = new Date();
   var mes = fecha.getMonth() + 1;
   var dia = fecha.getDate();
@@ -425,7 +473,7 @@ const selecDate = () => {
   if (dia < 10) dia = "0" + dia;
   if (mes < 10) mes = "0" + mes;
   $("#today-date").value = ano + "-" + mes + "-" + dia;
-
+  $("#date-form").value = ano + "-" + mes + "-" + dia;
 };
 
 
@@ -435,7 +483,7 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-selecDate()
+selecDateFilter()
 
 //
 
@@ -466,6 +514,7 @@ selecDate()
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
+
   });
   $("#show-balance").addEventListener("click", () => {
     show("#home");
