@@ -65,7 +65,7 @@ const allCategories = getData("categories") || categoriesByDefault;
 const allOperations = getData("operations") || [];
 
 const renderCategoriesOptions = (categories) => {
-  // cleanContainer("#categories-filter");
+  cleanContainer("#categories-filter");
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -93,7 +93,7 @@ const renderCategoriesTable = (categories) => {
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categorytable">
                 <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
-                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick=editcategory("${id}") =>Editar</button>
+                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick="editcategory('${id}')" >Editar</button>
                 </div>
                     
                 </td>
@@ -135,8 +135,10 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
+    console.log(category)
   }
-  console.log(category);
+  ;
+  return category
 };
 
 const confirmCategoryEdited = () => {
@@ -155,11 +157,15 @@ const confirmCategoryEdited = () => {
 };
 
 const deleteCategory = (id) => {
-  const currentCategories = allCategories.filter((cat) => cat.id !== id);
+  currentCategories = getData("categories").filter((cat) => cat.id !== id);
+  console.log(currentCategories)
   saveData("categories", currentCategories);
-  renderCategoriesTable(allCategories);
-  renderCategoriesOptions(allCategories);
+  renderCategoriesTable(currentCategories);
+  renderCategoriesOptions(currentCategories);
+  
 };
+
+
 
 //CANCELANDO EDICION DE categories
 
@@ -207,7 +213,7 @@ const renderOperations = (operations) => {
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-        categorieSelected.name
+      categorieSelected.name
       }</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
         type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
@@ -430,18 +436,15 @@ const selecDate = () => {
 
 
 const initializeApp = () => {
+
   saveData("categories", allCategories);
   saveData("operations", allOperations);
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-selecDate()
-
-//
+  selecDate()
 
 
-
-//
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
