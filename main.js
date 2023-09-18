@@ -443,7 +443,7 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-  selecDate()
+  selecDateFilter()
 
 
   const currentDay = () => {
