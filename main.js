@@ -343,7 +343,6 @@ const filterDate = (operations, dateOperation) => {
 };
 
 
-
 const orderBy = (operation, orderOperation) =>{
 let filterOrder = operation.sort((a, b) => {
       if (orderOperation === "more") {
@@ -365,6 +364,7 @@ let filterOrder = operation.sort((a, b) => {
       if (orderOperation === "za") {
       return a.description < b.description ? 1 : -1;
       }
+    
     });
     console.log(filterOrder)
     return filterOrder
@@ -394,6 +394,7 @@ const applyFilter = () => {
     filteredOperations = filterDate(filteredOperations, dateOperation);
   }
 
+  
   filteredOperations = orderBy(allOperations, orderOperation)
 
   console.log(filteredOperations);
@@ -410,9 +411,7 @@ $("#categories-filter").addEventListener("change", () => applyFilter());
 
 $("#today-date").addEventListener("change", () => applyFilter());
 
-$("#order-by").addEventListener("input", () =>{
-applyFilter()
-})
+$("#order-by").addEventListener("change", () => applyFilter());
 
 
 
@@ -422,7 +421,7 @@ applyFilter()
 
 ///////////////////////////////////////////////////////////////////////
 
-const selecDateFilter= () => {
+const selecDate = () => {
   var fecha = new Date();
   var mes = fecha.getMonth() + 1;
   var dia = fecha.getDate();
@@ -430,7 +429,7 @@ const selecDateFilter= () => {
   if (dia < 10) dia = "0" + dia;
   if (mes < 10) mes = "0" + mes;
   $("#today-date").value = ano + "-" + mes + "-" + dia;
-  $("#date-form").value = ano + "-" + mes + "-" + dia;
+
 };
 
 
@@ -443,7 +442,7 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-  selecDateFilter()
+  selecDate()
 
 
   const currentDay = () => {
@@ -453,6 +452,7 @@ const initializeApp = () => {
     });
     console.log($$(".today"));
   };
+
 
   if (allOperations.length) {
     show("#operations-table-home");
@@ -469,7 +469,6 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
-
   });
   $("#show-balance").addEventListener("click", () => {
     show("#home");
