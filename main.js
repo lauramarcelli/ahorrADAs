@@ -367,14 +367,12 @@ let filterOrder = operation.sort((a, b) => {
       if (orderOperation === "za") {
          return a.description < b.description ? 1 : -1;
       }
-    
     });
     console.log(filterOrder)
     //return filterOrder
 }
 
 //Aplicar filtros//
-
 const applyFilter = () =>{
   let filteredOperations = [...allOperations]
   let myType = $("#type-filter").value
@@ -385,16 +383,13 @@ const applyFilter = () =>{
   filteredOperations = filterCategory(allOperations, typeCategory)
   filteredOperations = filterDate(allOperations, dateOperation)
   filteredOperations = orderBy(allOperations, orderOperation)
-
   renderOperations(filteredOperations)
 }
 
 
 //Eventos filtros//
-
 $("#type-filter").addEventListener("input", () =>{
 applyFilter()
-
 })
 
 $("#categories-filter").addEventListener("input", () =>{
@@ -408,7 +403,6 @@ applyFilter()
 $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
-
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -427,7 +421,6 @@ const selecDateFilter= () => {
   $("#date-form").value = ano + "-" + mes + "-" + dia;
 };
 
-
 const initializeApp = () => {
   saveData("categories", allCategories);
   saveData("operations", allOperations);
@@ -436,11 +429,6 @@ const initializeApp = () => {
   renderOperations(allOperations);
 selecDateFilter()
 
-//
-
-
-
-//
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
@@ -448,7 +436,6 @@ selecDateFilter()
     });
     console.log($$(".today"));
   };
-
 
   if (allOperations.length) {
     show("#operations-table-home");
@@ -575,18 +562,14 @@ selecDateFilter()
     })
     
     $("#today-date").addEventListener("input", () =>{
-     
     applyFilter()    
-    })
-    
+    })  
   })
 
   $("#order-by").addEventListener("change", () =>{
     const filterSort = allFilters()
-    console.log(filterSort)
-    
+    console.log(filterSort) 
   })
-  
 
 
 };
