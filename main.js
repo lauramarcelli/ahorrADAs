@@ -334,15 +334,12 @@ const filterCategory = (operations, typeCategory) => {
   return filterCategory;
 };
 
-
 const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
   (operation) => new Date(operation.date) >= new Date(dateOperation));
   console.log(filterDate);
   return filterDate;
 };
-
-
 
 const orderBy = (operation, orderOperation) =>{
 let filterOrder = operation.sort((a, b) => {
@@ -371,7 +368,6 @@ let filterOrder = operation.sort((a, b) => {
 }
 
 //Aplicar filtros//
-
 const applyFilter = () => {
   let filteredOperations = [...allOperations];
   let myType = $("#type-filter").value;
@@ -400,10 +396,7 @@ const applyFilter = () => {
   renderOperations(filteredOperations);
 };
 
-
-
 //Eventos filtros//
-
 $("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
@@ -413,6 +406,43 @@ $("#today-date").addEventListener("change", () => applyFilter());
 $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
+
+
+//reportes//
+const totalsPerMont = () =>{
+  let objMonthProfit = {}
+  let objMonthExpenses = {}
+  let objMonthBalance = {}
+  let nameMonthBalance = 0
+  let dataOperations = allOperations
+   let nameMonth = ""
+  $("#table-totalsbymonth").innerHTML = ""
+  for(let i = 0; i < dataOperations.length; i++){
+      let montExpense = 0
+      let monthProfit = 0  
+    const monthFilter = allOperations.filter((operations) => operations.date === dataOperations[i].date)   
+    for(const date of monthFilter){  
+        type = date.type
+        operation = date.amount,
+        fecha= date.date.slice(0,7)
+        if(fecha === fecha && type === "earnings"){
+         nameMonth = fecha
+        objMonthProfit[nameMonth] += monthProfit   
+        } else if (fecha === fecha && type  === "spent"){
+           montExpense += operation   
+            nameMonth = fecha
+           objMonthExpenses[nameMonth] = montExpense   
+        }
+         nameMonthBalance = monthProfit - montExpense
+          nameMonth = fecha
+         objMonthBalance[nameMonth] = date.amount              
+ 
+      }
+   }  
+ }
+totalsPerMont() 
+
+
 
 
 
@@ -433,9 +463,6 @@ const selecDateFilter= () => {
   $("#date-form").value = ano + "-" + mes + "-" + dia;
 };
 
-
-
-
 const initializeApp = () => {
 
   saveData("categories", allCategories);
@@ -444,7 +471,6 @@ const initializeApp = () => {
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
   selecDateFilter()
-
 
   const currentDay = () => {
     $$(".today").forEach((input) => {
