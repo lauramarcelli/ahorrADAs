@@ -65,7 +65,7 @@ const allCategories = getData("categories") || categoriesByDefault;
 const allOperations = getData("operations") || [];
 
 const renderCategoriesOptions = (categories) => {
-  // cleanContainer("#categories-filter");
+  cleanContainer("#categories-filter");
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -93,7 +93,7 @@ const renderCategoriesTable = (categories) => {
                 <td class="w-1/2 flex justify-end">
                 <div id="btns-categorytable">
                 <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
-                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick=editcategory("${id}") =>Editar</button>
+                <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick="editcategory('${id}')" >Editar</button>
                 </div>
                     
                 </td>
@@ -135,8 +135,10 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
+    console.log(category)
   }
-  console.log(category);
+  ;
+  return category
 };
 
 const confirmCategoryEdited = () => {
@@ -155,11 +157,15 @@ const confirmCategoryEdited = () => {
 };
 
 const deleteCategory = (id) => {
-  const currentCategories = allCategories.filter((cat) => cat.id !== id);
+  currentCategories = getData("categories").filter((cat) => cat.id !== id);
+  console.log(currentCategories)
   saveData("categories", currentCategories);
-  renderCategoriesTable(allCategories);
-  renderCategoriesOptions(allCategories);
+  renderCategoriesTable(currentCategories);
+  renderCategoriesOptions(currentCategories);
+  
 };
+
+
 
 //CANCELANDO EDICION DE categories
 
@@ -207,7 +213,7 @@ const renderOperations = (operations) => {
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-        categorieSelected.name
+      categorieSelected.name
       }</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
         type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
@@ -313,38 +319,30 @@ const editOperationForm = (id) => {
 
 //------------Filtros de Operaciones---------------------//
 
+const filterType = (operations, myType) => {
+  let filteredOperations = operations.filter(
+  (operation) => operation.type === myType
+  );
+  console.log(filteredOperations);
+  return filteredOperations;
+};
 
-const filterType = (operations, myType) =>{
-  let operationFilter = allOperations.filter((operation) => {
-   if(myType === "all"){
-     return operations
-   }else{
-    return myType === operation.type
-   }
- })
- console.log(operationFilter)
-  //  return operationFilter
-}
+const filterCategory = (operations, typeCategory) => {
+  let filterCategory = operations.filter(
+  (operation) => operation.category === typeCategory);
+  console.log(filterCategory);
+  return filterCategory;
+};
 
-const filterCategory = (operation, typeCategory) =>{
- let filterCategory = operation.filter((operation) =>{
- if (typeCategory === "all-category"){
-  return operation
- }else{
-  return typeCategory === operation.category
- }
- })
- console.log(filterCategory)
-//  return filterCategory
-}
 
-const filterDate = (operation, dateOperation) =>{
-let filterDate = operation.filter((operation) =>{
- new Date(operation.date) > new Date(dateOperation);
-})
-console.log(filterDate)
-//return filterDate
-}
+const filterDate = (operations, dateOperation) => {
+  let filterDate = operations.filter(
+  (operation) => new Date(operation.date) >= new Date(dateOperation));
+  console.log(filterDate);
+  return filterDate;
+};
+
+
 
 const orderBy = (operation, orderOperation) =>{
 let filterOrder = operation.sort((a, b) => {
@@ -365,44 +363,58 @@ let filterOrder = operation.sort((a, b) => {
     return a.description > b.description ? 1 : -1;
       }
       if (orderOperation === "za") {
-         return a.description < b.description ? 1 : -1;
+      return a.description < b.description ? 1 : -1;
       }
     });
     console.log(filterOrder)
-    //return filterOrder
+    return filterOrder
 }
 
 //Aplicar filtros//
-const applyFilter = () =>{
-  let filteredOperations = [...allOperations]
-  let myType = $("#type-filter").value
-  let typeCategory = $("#categories-filter").value
-  let dateOperation = $("#today-date").value
-  let orderOperation = $("#order-by").value
-  filteredOperations = filterType(allOperations, myType)
-  filteredOperations = filterCategory(allOperations, typeCategory)
-  filteredOperations = filterDate(allOperations, dateOperation)
+
+const applyFilter = () => {
+  let filteredOperations = [...allOperations];
+  let myType = $("#type-filter").value;
+  let typeCategory = $("#categories-filter").value;
+  let dateOperation = $("#today-date").value;
+  let orderOperation = $("#order-by").value;
+
+  if (myType != "all") {
+    console.log(filterType(filteredOperations, myType));
+    filteredOperations = filterType(filteredOperations, myType);
+  }
+
+  if (typeCategory != "all-category") {
+    console.log(filterCategory(filteredOperations, typeCategory));
+    filteredOperations = filterCategory(filteredOperations, typeCategory);
+  }
+
+  if (dateOperation != "all") {
+    console.log(filterDate(filteredOperations, dateOperation));
+    filteredOperations = filterDate(filteredOperations, dateOperation);
+  }
+
   filteredOperations = orderBy(allOperations, orderOperation)
-  renderOperations(filteredOperations)
-}
+
+  console.log(filteredOperations);
+  renderOperations(filteredOperations);
+};
+
 
 
 //Eventos filtros//
-$("#type-filter").addEventListener("input", () =>{
-applyFilter()
-})
 
-$("#categories-filter").addEventListener("input", () =>{
-  applyFilter()
-})
+$("#type-filter").addEventListener("input", () => applyFilter());
 
-$("#today-date").addEventListener("input", () =>{
-applyFilter()
-})
+$("#categories-filter").addEventListener("change", () => applyFilter());
+
+$("#today-date").addEventListener("change", () => applyFilter());
 
 $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
+
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -421,13 +433,18 @@ const selecDateFilter= () => {
   $("#date-form").value = ano + "-" + mes + "-" + dia;
 };
 
+
+
+
 const initializeApp = () => {
+
   saveData("categories", allCategories);
   saveData("operations", allOperations);
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-selecDateFilter()
+  selecDate()
+
 
   const currentDay = () => {
     $$(".today").forEach((input) => {
@@ -549,29 +566,9 @@ selecDateFilter()
     hide("#operation-view");
     show("#home");
     renderOperations(getData("operations"));
-  });
-
-  //Version Filtro Tipo Lore//
-
-  $("#type-filter").addEventListener("change", () => {
-    const filterType = allFilters();
-    console.log(filterType)
-    
-    $("#categories-filter").addEventListener("input", () =>{
-      applyFilter()   
-    })
-    
-    $("#today-date").addEventListener("input", () =>{
-    applyFilter()    
-    })  
   })
-
-  $("#order-by").addEventListener("change", () =>{
-    const filterSort = allFilters()
-    console.log(filterSort) 
-  })
-
 
 };
 
 window.addEventListener("load", initializeApp);
+
