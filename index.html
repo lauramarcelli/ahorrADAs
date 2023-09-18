@@ -156,6 +156,7 @@
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Descripción</p>
                             <input type="text" id="description-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="category" id="description-form" cols="1" rows="1"></input><br>
+                            <p class="w-[250px]  ml-6 bg-yellow-400 rounded-sm hidden" id="complete-field"><i class="mr-4 fa-solid fa-circle-xmark pl-2"></i> Complete este campo</p>
                         </div>
                         <div>
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Monto</p>
@@ -241,10 +242,11 @@
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Categorías</h2>
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
-                        <input id="categorieToEdit-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>
-                        <button id="toAdd-categorie" class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>  
-                    </div>
-                    <div  class="flex justify-between md:flex-row">
+                        <input id="categorieToEdit-input" class=" w-5/6 m-6 p-2 border-solid border-2 border-[#4a4a4a7] focus :caret-purple-700 " name="" type="text"  cols="1" rows="1"></input><br>                     
+                        <button id="toAdd-categorie" class="bg-[#7e22ce] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Agregar</button>                     
+                   </div>
+                    <p class="w-[250px] ml-6 bg-yellow-400 rounded-sm hidden" id="complete-field-category"><i class=" mr-4 fa-solid fa-circle-xmark pl-2"></i> Complete este campo</p>
+                    <div  class=" flex justify-between md:flex-row">
                         <section id="categories-table"></section>
                     </div>                                       
                 </div>

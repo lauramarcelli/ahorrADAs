@@ -64,6 +64,17 @@ const allCategories = getData("categories") || categoriesByDefault;
 
 const allOperations = getData("operations") || [];
 
+
+const validateNewCategory = () =>{
+  const newCategoryForm = $("#categorieToEdit-input").value
+  if(newCategoryForm == ""){
+    show ("#complete-field-category")
+  }
+  return newCategoryForm !== ""
+}
+
+
+
 const renderCategoriesOptions = (categories) => {
   cleanContainer("#categories-filter");
   for (const { name, id } of categories) {
@@ -162,7 +173,7 @@ const deleteCategory = (id) => {
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
-  
+
 };
 
 
@@ -271,6 +282,16 @@ const renderOperations = (operations) => {
   }
 };
 
+const description = $("#description-form")
+const validateDescriptionOperation = () =>{
+  if(description.value == ""){
+    show("#complete-field")
+  }
+  return description.value !== ""
+}
+
+
+
 const addOperation = () => {
   const currentOperation = getData("operations");
   const newDataOperation = saveNewOperation();
@@ -316,6 +337,8 @@ const editOperationForm = (id) => {
   $("#category-form").value = operationSelected.category;
   $("#date-form").value = operationSelected.date;
 };
+
+
 
 //------------Filtros de Operaciones---------------------//
 
@@ -400,10 +423,6 @@ const applyFilter = () => {
   renderOperations(filteredOperations);
 };
 
-
-
-//Eventos filtros//
-
 $("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
@@ -413,7 +432,6 @@ $("#today-date").addEventListener("change", () => applyFilter());
 $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -431,9 +449,8 @@ const selecDateFilter= () => {
   if (mes < 10) mes = "0" + mes;
   $("#today-date").value = ano + "-" + mes + "-" + dia;
   $("#date-form").value = ano + "-" + mes + "-" + dia;
+
 };
-
-
 
 
 const initializeApp = () => {
@@ -445,7 +462,7 @@ const initializeApp = () => {
   renderOperations(allOperations);
   selecDateFilter()
 
-
+  
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
@@ -469,6 +486,7 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
+    hide("#complete-field-category")
 
   });
   $("#show-balance").addEventListener("click", () => {
@@ -477,6 +495,7 @@ const initializeApp = () => {
     hide("#operation-view");
     hide("#report-view");
     hide("#editcategories-view");
+    hide("#complete-field")
   });
   $("#show-reports").addEventListener("click", () => {
     show("#report-view");
@@ -511,11 +530,15 @@ const initializeApp = () => {
 
   $("#toAdd-categorie").addEventListener("click", (e) => {
     e.preventDefault();
-    sendNewData("categories", saveCategoryData);
+    if(validateNewCategory()){
+          sendNewData("categories", saveCategoryData);
     const currentCategories = getData("categories");
     renderCategoriesOptions(currentCategories);
     renderCategoriesTable(currentCategories);
     show("#categories-table");
+    hide("#complete-field-category")
+    }
+
   });
 
   $("#toAdd-categorie").addEventListener("click", () => {
@@ -527,6 +550,7 @@ const initializeApp = () => {
   $("#cancelcategorie-btn").addEventListener("click", cancelEditCategory);
 
   $("#btn-new-operation").addEventListener("click", () => {
+  
     show("#operation-view");
     show("#btn-add-operation");
     show("#new-operation-title");
@@ -536,6 +560,7 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#categories-view");
     hide("#editcategories-view");
+  
   });
 
   $("#btn-new-operation").addEventListener("click", () => {
@@ -553,11 +578,14 @@ const initializeApp = () => {
 
   $("#btn-add-operation").addEventListener("click", (e) => {
     e.preventDefault();
-    addOperation();
-    show("#operations-table-home");
+    if(validateDescriptionOperation()){
+      addOperation();
+       show("#operations-table-home");
     show("#home");
     hide("#operation-view");
     hide("#no-results");
+    }
+  
   });
 
   $("#btn-edit-operation").addEventListener("click", (e) => {
