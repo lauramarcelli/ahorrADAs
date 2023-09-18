@@ -408,8 +408,14 @@ applyFilter()
 })
 
 
-//reportes//
-const totalsPerMont = () =>{
+////////////////////////////////////////////////////////////////////////
+
+/* SECCION reportes*/
+
+///////////////////////////////////////////////////////////////////////
+
+
+const totalsPerMonth = () =>{
   let objMonthProfit = {}
   let objMonthExpenses = {}
   let objMonthBalance = {}
@@ -426,21 +432,21 @@ const totalsPerMont = () =>{
         operation = date.amount,
         fecha= date.date.slice(0,7)
         if(fecha === fecha && type === "earnings"){
-         nameMonth = fecha
+        nameMonth = fecha
         objMonthProfit[nameMonth] += monthProfit   
         } else if (fecha === fecha && type  === "spent"){
-           montExpense += operation   
+          montExpense += operation   
             nameMonth = fecha
-           objMonthExpenses[nameMonth] = montExpense   
+          objMonthExpenses[nameMonth] = montExpense   
         }
-         nameMonthBalance = monthProfit - montExpense
+        nameMonthBalance = monthProfit - montExpense
           nameMonth = fecha
-         objMonthBalance[nameMonth] = date.amount              
+        objMonthBalance[nameMonth] = date.amount              
  
       }
    }  
  }
-totalsPerMont() 
+totalsPerMonth() 
 
 
 
