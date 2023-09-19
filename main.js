@@ -222,7 +222,7 @@ const renderOperations = (operations) => {
         (cat) => cat.id === category
       );
       $("#table-operations").innerHTML += `
-      <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
+      <td class=" justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
       categorieSelected.name
       }</td>
@@ -415,6 +415,7 @@ const applyFilter = () => {
   if (dateOperation != "all") {
     console.log(filterDate(filteredOperations, dateOperation));
     filteredOperations = filterDate(filteredOperations, dateOperation);
+    
   }
 
   filteredOperations = orderBy(allOperations, orderOperation)
