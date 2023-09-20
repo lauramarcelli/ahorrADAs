@@ -207,7 +207,7 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find(
+      const categorieSelected = getData("categories").find(
         (cat) => cat.id === category
       );
       $("#table-operations").innerHTML += `
@@ -407,49 +407,65 @@ $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
 
-
 ////////////////////////////////////////////////////////////////////////
 
-/* SECCION reportes*/
+/* Seccion de Reportes*/
 
 ///////////////////////////////////////////////////////////////////////
 
+//reportes//
+// const totalsPerMonth = () =>{
+//   let objMonthProfit = {}
+//   let objMonthExpenses = {}
+//   let objMonthBalance = {}
+//   let nameMonthBalance = ""
+//   let dataOperations = allOperations
+//    let nameMonth = ""
+//   $("#table-totalsbymonth").innerHTML = ""
+//   for(let i = 0; i < dataOperations.length; i++){
+//       let montExpense = 0
+//       let monthProfit = 0  
+//     const monthFilter = allOperations.filter((operations) => operations.date === dataOperations[i].date)   
+//     for(const date of monthFilter){  
+//         type = date.type
+//         operation = date.amount,
+//         fecha= date.date.slice(0,7)
+//         if(fecha === fecha && type === "earnings"){
+//          nameMonth = fecha
+//         objMonthProfit[nameMonth] += monthProfit   
+//         } else if (fecha === fecha && type  === "spent"){
+//            montExpense += operation   
+//             nameMonth = fecha
+//            objMonthExpenses[nameMonth] = montExpense  
 
-const totalsPerMonth = () =>{
-  let objMonthProfit = {}
-  let objMonthExpenses = {}
-  let objMonthBalance = {}
-  let nameMonthBalance = 0
-  let dataOperations = allOperations
-   let nameMonth = ""
-  $("#table-totalsbymonth").innerHTML = ""
-  for(let i = 0; i < dataOperations.length; i++){
-      let montExpense = 0
-      let monthProfit = 0  
-    const monthFilter = allOperations.filter((operations) => operations.date === dataOperations[i].date)   
-    for(const date of monthFilter){  
-        type = date.type
-        operation = date.amount,
-        fecha= date.date.slice(0,7)
-        if(fecha === fecha && type === "earnings"){
-        nameMonth = fecha
-        objMonthProfit[nameMonth] += monthProfit   
-        } else if (fecha === fecha && type  === "spent"){
-          montExpense += operation   
-            nameMonth = fecha
-          objMonthExpenses[nameMonth] = montExpense   
-        }
-        nameMonthBalance = monthProfit - montExpense
-          nameMonth = fecha
-        objMonthBalance[nameMonth] = date.amount              
- 
-      }
-   }  
- }
-totalsPerMonth() 
+//         }
+//          nameMonthBalance = monthProfit - montExpense
+//           nameMonth = fecha
+//          objMonthBalance[nameMonth] = date.amount              
+
+//       }
+//       // $(".totales-por-mes").innerHTML += `
+//       // <td class="pl-4 font-medium">${nameMonth}   </td> 
+//       //  <td class="pl-6 text-teal-400">$${monthProfit} </td>
+//       // <td class="pl-6 text-rose-500"> $${montExpense} </td>
+//       // <td>$${nameMonthBalance}</td> 
+//       // `; 
+//    }  
+
+//  }
+// totalsPerMonth() 
+//
+
+//resumen//
 
 
+const resumenCategory = () =>{
+  //todas las operaciones  ganancias//
+const highestProfitCategory = getData("operations").filter((operation) => operation.type === "earnings")
+const largestExpenseCategory = getData("operations").filter((operation) => operation.type === "spent")
 
+}
+resumenCategory()
 
 
 ////////////////////////////////////////////////////////////////////////
