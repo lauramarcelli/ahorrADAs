@@ -207,7 +207,7 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find(
+      const categorieSelected = getData("categories").find(
         (cat) => cat.id === category
       );
       $("#table-operations").innerHTML += `
@@ -472,13 +472,19 @@ const resumenCategory = (allOperations) =>{
    highestProfitAmount = totalGanancia
   }
 }
-$("#highest-profit-category").innerHTML += `
-<td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
-  <td class="pl-6 text-teal-400 font-semibold  ">${profitCategory} 
-</td>
- <td class="pl-6 text-teal-400 font-semibold "> $${highestProfitAmount} </td>
-`
+// $("#highest-profit-category").innerHTML += `
+// <td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
+//   <td class="pl-6 text-teal-400 font-semibold  ">${profitCategory} 
+// </td>
+//  <td class="pl-6 text-teal-400 font-semibold "> $${highestProfitAmount} </td>
+// `
 console.log(profitCategory, highestProfitAmount)
+$("#most-profitable-category").innerHTML = `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
+ <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> $${highestProfitAmount}</td>
+ `;
+
 
 //--------categoria mayor gasto----------//
 let higherExpenseCategory = ""
@@ -541,7 +547,7 @@ let largestAmountSpendt = 0
  if(highestSpendingMonth === "" && largestAmountSpendt === 0){
     highestSpendingMonth = dateYearMonth
     largestAmountSpendt = gastosTotales
-    console.log(gastosTotales)
+   // console.log(gastosTotales)
   }else if (largestAmountSpendt < gastosTotales){
     highestSpendingMonth = dateYearMonth
     largestAmountSpendt = gastosTotales
@@ -559,7 +565,6 @@ $("#highest-spending-month").innerHTML = `
 
 }
 resumenCategory(allOperations)
-
 
 
 
@@ -622,13 +627,26 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#editcategories-view");
   });
+
+  //vista con operaciones en reportes
   $("#show-reports").addEventListener("click", () => {
-    show("#report-view");
+    show("#report-with-results");
     hide("#home");
     hide("#categories-view");
     hide("#operation-view");
     hide("#editcategories-view");
   });
+
+  //mostrar vista reportes sin operaciones
+  /*$("#show-reports").addEventListener("click", () => {
+    show("#report-view");
+    hide("#home");
+    hide("#categories-view");
+    hide("#operation-view");
+    hide("#editcategories-view");
+  });*/
+
+
   $("#title-ahorradas").addEventListener("click", () => {
     show("#home");
     hide("#categories-view");
