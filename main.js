@@ -407,12 +407,6 @@ $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
 
-////////////////////////////////////////////////////////////////////////
-
-/* Seccion de Reportes*/
-
-///////////////////////////////////////////////////////////////////////
-
 //reportes//
 // const totalsPerMonth = () =>{
 //   let objMonthProfit = {}
@@ -459,13 +453,59 @@ applyFilter()
 //resumen//
 
 
-const resumenCategory = () =>{
+const resumenCategory = (allOperations) =>{
   //todas las operaciones  ganancias//
-const highestProfitCategory = getData("operations").filter((operation) => operation.type === "earnings")
-const largestExpenseCategory = getData("operations").filter((operation) => operation.type === "spent")
+  let profitCategory = ""
+  let highestProfitAmount = 0
+for (let {name,id} of allCategories){
+  let operationCategories = allOperations.filter((operacion) => operacion.category === id)
+  const highestProfitCategory = operationCategories.filter((operation) => operation.type === "earnings")
+  let totalGanancia = highestProfitCategory.reduce((acc, monto) =>
+    acc + monto.amount
 
+  ,0)
+  if(profitCategory === ""  && highestProfitAmount === 0){
+    profitCategory = name
+    highestProfitAmount = totalGanancia
+  } else if (highestProfitAmount < totalGanancia){
+   profitCategory = name
+   highestProfitAmount = totalGanancia
+  }
 }
-resumenCategory()
+console.log(profitCategory, highestProfitAmount)
+$("#most-profitable-category").innerHTML = `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
+ <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> $${highestProfitAmount}</td>
+ `;
+
+
+let higherExpenseCategory = ""
+let amountExpenseCategory = 0
+for(let {name,id} of allCategories){
+  let opeCategory = allOperations.filter((operation) => operation.category === id)
+  const largestExpenseCategory = opeCategory.filter((operation) => operation.type === "spent")
+  let totalMontoGasto = largestExpenseCategory.reduce((accGasto, montoGasto)=> 
+  accGasto + montoGasto.amount
+  ,0)
+  if(higherExpenseCategory === "" && amountExpenseCategory === 0){
+    higherExpenseCategory = name
+    amountExpenseCategory = totalMontoGasto
+  }else if(amountExpenseCategory < totalMontoGasto){
+    higherExpenseCategory = name
+    amountExpenseCategory = totalMontoGasto
+  }
+}
+console.log(higherExpenseCategory, amountExpenseCategory)
+$("#highest-expending-category").innerHTML = `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor gasto</td>
+ <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${higherExpenseCategory}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> $${amountExpenseCategory}</td>
+ `;
+}
+resumenCategory(allOperations)
+
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -526,13 +566,26 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#editcategories-view");
   });
+
+  //vista con operaciones en reportes
   $("#show-reports").addEventListener("click", () => {
-    show("#report-view");
+    show("#report-with-results");
     hide("#home");
     hide("#categories-view");
     hide("#operation-view");
     hide("#editcategories-view");
   });
+
+  //mostrar vista reportes sin operaciones
+  /*$("#show-reports").addEventListener("click", () => {
+    show("#report-view");
+    hide("#home");
+    hide("#categories-view");
+    hide("#operation-view");
+    hide("#editcategories-view");
+  });*/
+
+
   $("#title-ahorradas").addEventListener("click", () => {
     show("#home");
     hide("#categories-view");
