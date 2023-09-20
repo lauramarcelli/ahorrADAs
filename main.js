@@ -407,52 +407,11 @@ $("#order-by").addEventListener("input", () =>{
 applyFilter()
 })
 
+
+
 //reportes//
-// const totalsPerMonth = () =>{
-//   let objMonthProfit = {}
-//   let objMonthExpenses = {}
-//   let objMonthBalance = {}
-//   let nameMonthBalance = ""
-//   let dataOperations = allOperations
-//    let nameMonth = ""
-//   $("#table-totalsbymonth").innerHTML = ""
-//   for(let i = 0; i < dataOperations.length; i++){
-//       let montExpense = 0
-//       let monthProfit = 0  
-//     const monthFilter = allOperations.filter((operations) => operations.date === dataOperations[i].date)   
-//     for(const date of monthFilter){  
-//         type = date.type
-//         operation = date.amount,
-//         fecha= date.date.slice(0,7)
-//         if(fecha === fecha && type === "earnings"){
-//          nameMonth = fecha
-//         objMonthProfit[nameMonth] += monthProfit   
-//         } else if (fecha === fecha && type  === "spent"){
-//            montExpense += operation   
-//             nameMonth = fecha
-//            objMonthExpenses[nameMonth] = montExpense  
-
-//         }
-//          nameMonthBalance = monthProfit - montExpense
-//           nameMonth = fecha
-//          objMonthBalance[nameMonth] = date.amount              
-
-//       }
-//       // $(".totales-por-mes").innerHTML += `
-//       // <td class="pl-4 font-medium">${nameMonth}   </td> 
-//       //  <td class="pl-6 text-teal-400">$${monthProfit} </td>
-//       // <td class="pl-6 text-rose-500"> $${montExpense} </td>
-//       // <td>$${nameMonthBalance}</td> 
-//       // `; 
-//    }  
-
-//  }
-// totalsPerMonth() 
-//
 
 //resumen//
-
-
 const resumenCategory = (allOperations) =>{
   //------categoria mayor ganancia ---------//
   let profitCategory = ""
@@ -464,6 +423,7 @@ const resumenCategory = (allOperations) =>{
     acc + monto.amount
 
   ,0)
+
   if(profitCategory === ""  && highestProfitAmount === 0){
     profitCategory = name
     highestProfitAmount = totalGanancia
@@ -471,14 +431,16 @@ const resumenCategory = (allOperations) =>{
    profitCategory = name
    highestProfitAmount = totalGanancia
   }
+
+  //probando//
+  //console.log(name, totalGanancia)
+$("#table-totals").innerHTML += `
+<tr>
+<td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-teal-400"> $${totalGanancia}</td>
+</tr>    
+`
 }
-// $("#highest-profit-category").innerHTML += `
-// <td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
-//   <td class="pl-6 text-teal-400 font-semibold  ">${profitCategory} 
-// </td>
-//  <td class="pl-6 text-teal-400 font-semibold "> $${highestProfitAmount} </td>
-// `
-console.log(profitCategory, highestProfitAmount)
 $("#most-profitable-category").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
  <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
@@ -502,14 +464,20 @@ for(let {name,id} of allCategories){
     higherExpenseCategory = name
     amountExpenseCategory = totalMontoGasto
   }
+
+  //REVISAR COMO SE PINTA EN EL HTML//
+console.log(name, totalMontoGasto)
+$("#table-totals").innerHTML += `
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] flex"> $${totalMontoGasto}</td>
+`
 }
-console.log(higherExpenseCategory,  amountExpenseCategory)
+
+//console.log(higherExpenseCategory,  amountExpenseCategory)
 $("#largest-expense-category").innerHTML += `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor gasto</td>
 <td class="pl-6 text-teal-400 font-semibold  "> ${higherExpenseCategory}</td>
 <td class="pl-6 text-rose-800 font-semibold "> $${amountExpenseCategory} </td>
 `
-
 
 //---------mes con mayor ganancia-----------//
 let highestProfitMonth = ""
@@ -561,10 +529,14 @@ $("#highest-spending-month").innerHTML = `
 `
 }
 //--------------balance---------------//
-
-
 }
 resumenCategory(allOperations)
+
+
+
+
+
+
 
 
 
