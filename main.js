@@ -454,10 +454,10 @@ applyFilter()
 
 
 const resumenCategory = (allOperations) =>{
-  //todas las operaciones  ganancias//
+  //------categoria mayor ganancia ---------//
   let profitCategory = ""
   let highestProfitAmount = 0
-for (let {name,id} of allCategories){
+  for (let {name,id} of allCategories){
   let operationCategories = allOperations.filter((operacion) => operacion.category === id)
   const highestProfitCategory = operationCategories.filter((operation) => operation.type === "earnings")
   let totalGanancia = highestProfitCategory.reduce((acc, monto) =>
@@ -472,8 +472,15 @@ for (let {name,id} of allCategories){
    highestProfitAmount = totalGanancia
   }
 }
+$("#highest-profit-category").innerHTML += `
+<td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
+  <td class="pl-6 text-teal-400 font-semibold  ">${profitCategory} 
+</td>
+ <td class="pl-6 text-teal-400 font-semibold "> $${highestProfitAmount} </td>
+`
 console.log(profitCategory, highestProfitAmount)
 
+//--------categoria mayor gasto----------//
 let higherExpenseCategory = ""
 let amountExpenseCategory = 0
 for(let {name,id} of allCategories){
@@ -491,6 +498,65 @@ for(let {name,id} of allCategories){
   }
 }
 console.log(higherExpenseCategory,  amountExpenseCategory)
+$("#largest-expense-category").innerHTML += `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor gasto</td>
+<td class="pl-6 text-teal-400 font-semibold  "> ${higherExpenseCategory}</td>
+<td class="pl-6 text-rose-800 font-semibold "> $${amountExpenseCategory} </td>
+`
+
+
+//---------mes con mayor ganancia-----------//
+let highestProfitMonth = ""
+let totalMonth = 0
+
+for( let {date, amount} of allOperations){
+let dateYearMonth = date.slice(0,7)
+let operGanancias = allOperations.filter((operations) => operations.type === "earnings")
+let forMonth = operGanancias.filter((operations) => operations.date.slice(0,7) === dateYearMonth )
+let gananciaTotales = forMonth.reduce((acc,montoMes) => 
+acc + montoMes.amount
+,0)
+if(highestProfitMonth === "" && totalMonth === 0){
+   highestProfitMonth = dateYearMonth
+totalMonth = gananciaTotales
+}else if (totalMonth < gananciaTotales){
+   highestProfitMonth =dateYearMonth
+   totalMonth = gananciaTotales
+}
+//console.log(highestProfitMonth ,  totalMonth)
+$("#highest-profit-month").innerHTML = `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
+<td class="pl-6 text-black-400 font-semibold "> ${highestProfitMonth}</td>
+<td class="pl-6 text-teal-400 font-semibold "> $${totalMonth} </td>
+`
+
+//----------mes mayor gasto--------//
+let highestSpendingMonth = ""
+let largestAmountSpendt = 0
+ let opeGastos = allOperations.filter((operations) => operations.type === "spent")
+ let opeMonth = opeGastos.filter((operations) => operations.date.slice(0,7) === dateYearMonth)
+ let gastosTotales = opeMonth.reduce((accGa, gastoMes) => 
+ accGa + gastoMes.amount
+ ,0)
+ if(highestSpendingMonth === "" && largestAmountSpendt === 0){
+    highestSpendingMonth = dateYearMonth
+    largestAmountSpendt = gastosTotales
+    console.log(gastosTotales)
+  }else if (largestAmountSpendt < gastosTotales){
+    highestSpendingMonth = dateYearMonth
+    largestAmountSpendt = gastosTotales
+  }
+//console.log(highestSpendingMonth, largestAmountSpendt)
+
+$("#highest-spending-month").innerHTML = `
+<td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
+<td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
+<td class="pl-6 text-rose-500 font-semibold "> $${largestAmountSpendt} </td>
+`
+}
+//--------------balance---------------//
+
+
 }
 resumenCategory(allOperations)
 
