@@ -100,8 +100,8 @@ const renderCategoriesTable = (categories) => {
   for (const { name, id } of categories) {
     tableHTML += `
             <tr class="w-full">
-                <td class="w-1/2 pt-4 pb-4 pl-6">${name}</td>
-                <td class="w-1/2 flex justify-end">
+                <td class="w-1/2 pt-4 pb-4 pl-5">${name}</td>
+                <td class="mr-4 flex justify-end">
                 <div id="btns-categorytable">
                 <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick="editcategory('${id}')" >Editar</button>
@@ -167,6 +167,11 @@ const confirmCategoryEdited = () => {
   }
 };
 
+
+
+
+///////////////
+
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
   console.log(currentCategories)
@@ -175,7 +180,6 @@ const deleteCategory = (id) => {
   renderCategoriesOptions(currentCategories);
 
 };
-
 
 
 //CANCELANDO EDICION DE categories
@@ -453,6 +457,12 @@ const selecDateFilter= () => {
 
 };
 
+const cleanForm = () =>{
+  $("#description-form").value = "";
+  $("#amount-form").valueAsNumber = "";
+   $("#type-form").value = "";
+  $("#category-form").value = "";
+}
 
 const initializeApp = () => {
 
@@ -463,7 +473,6 @@ const initializeApp = () => {
   renderOperations(allOperations);
   selecDateFilter()
 
-  
   const currentDay = () => {
     $$(".today").forEach((input) => {
       input.valueAsDate = new Date();
@@ -565,11 +574,8 @@ const initializeApp = () => {
   });
 
   $("#btn-new-operation").addEventListener("click", () => {
-    $("#description-form").value = "";
-    $("#amount-form").valueAsNumber = "";
-    $("#type-form").value = "";
-    $("#category-form").value = "";
-    $("#date-form").value = "";
+    cleanForm()
+
   });
 
   $("#btn-cancel-operation").addEventListener("click", () => {
@@ -581,12 +587,13 @@ const initializeApp = () => {
     e.preventDefault();
     if(validateDescriptionOperation()){
       addOperation();
+   
        show("#operations-table-home");
     show("#home");
     hide("#operation-view");
     hide("#no-results");
     }
-  
+
   });
 
   $("#btn-edit-operation").addEventListener("click", (e) => {
