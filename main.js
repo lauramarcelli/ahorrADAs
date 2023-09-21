@@ -435,7 +435,7 @@ const resumenCategory = (allOperations) => {
     $("#table-totals").innerHTML += `
     <tr>
     <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
-    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${totalProfit}</td>
+    <td class="justify-items-center font-semibold pl-12 pb-3 pt-3 text-[#22c55e] "> +$${totalProfit}</td>
     </tr>`;}
   $("#most-profitable-category").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
@@ -504,7 +504,7 @@ const resumenCategory = (allOperations) => {
     $("#highest-profit-month").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
 <td class="pl-6 text-black-400 font-semibold "> ${highestProfitMonth}</td>
-<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] flex"> $${totalMonth} </td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] flex "> $${totalMonth} </td>
 `;
 
     //----------mes mayor gasto--------//
