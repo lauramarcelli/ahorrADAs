@@ -135,10 +135,9 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
-    console.log(category)
+    console.log(category);
   }
-  ;
-  return category
+  return category;
 };
 
 const confirmCategoryEdited = () => {
@@ -158,14 +157,11 @@ const confirmCategoryEdited = () => {
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  console.log(currentCategories)
+  console.log(currentCategories);
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
-  
 };
-
-
 
 //CANCELANDO EDICION DE categories
 
@@ -213,7 +209,7 @@ const renderOperations = (operations) => {
       $("#table-operations").innerHTML += `
       <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-      categorieSelected.name
+        categorieSelected.name
       }</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
         type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
@@ -321,7 +317,7 @@ const editOperationForm = (id) => {
 
 const filterType = (operations, myType) => {
   let filteredOperations = operations.filter(
-  (operation) => operation.type === myType
+    (operation) => operation.type === myType
   );
   console.log(filteredOperations);
   return filteredOperations;
@@ -329,43 +325,44 @@ const filterType = (operations, myType) => {
 
 const filterCategory = (operations, typeCategory) => {
   let filterCategory = operations.filter(
-  (operation) => operation.category === typeCategory);
+    (operation) => operation.category === typeCategory
+  );
   console.log(filterCategory);
   return filterCategory;
 };
 
 const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
-  (operation) => new Date(operation.date) >= new Date(dateOperation));
+    (operation) => new Date(operation.date) >= new Date(dateOperation)
+  );
   console.log(filterDate);
   return filterDate;
 };
 
-const orderBy = (operation, orderOperation) =>{
-let filterOrder = operation.sort((a, b) => {
-      if (orderOperation === "more") {
-        return a.date < b.date ? 1 : -1;
-      }
-      if (orderOperation === "less") {
-        return a.date > b.date ? 1 : -1;
-      }
-      if (orderOperation === "lower-amount") {
-        
-        return a.amount > b.amount ? 1 : -1;
-      }
-      if (orderOperation === "greater-amount") {
-        return a.amount < b.amount ? 1 : -1;
-      }
-      if (orderOperation === "az") {
-    return a.description > b.description ? 1 : -1;
-      }
-      if (orderOperation === "za") {
+const orderBy = (operation, orderOperation) => {
+  let filterOrder = operation.sort((a, b) => {
+    if (orderOperation === "more") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (orderOperation === "less") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (orderOperation === "lower-amount") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (orderOperation === "greater-amount") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (orderOperation === "az") {
+      return a.description > b.description ? 1 : -1;
+    }
+    if (orderOperation === "za") {
       return a.description < b.description ? 1 : -1;
-      }
-    });
-    console.log(filterOrder)
-    return filterOrder
-}
+    }
+  });
+  console.log(filterOrder);
+  return filterOrder;
+};
 
 //Aplicar filtros//
 const applyFilter = () => {
@@ -390,7 +387,7 @@ const applyFilter = () => {
     filteredOperations = filterDate(filteredOperations, dateOperation);
   }
 
-  filteredOperations = orderBy(allOperations, orderOperation)
+  filteredOperations = orderBy(allOperations, orderOperation);
 
   console.log(filteredOperations);
   renderOperations(filteredOperations);
@@ -403,143 +400,145 @@ $("#categories-filter").addEventListener("change", () => applyFilter());
 
 $("#today-date").addEventListener("change", () => applyFilter());
 
-$("#order-by").addEventListener("input", () =>{
-applyFilter()
-})
+$("#order-by").addEventListener("input", () => {
+  applyFilter();
+});
 
+////////////////////////////////////////////////////////////////////////
 
+/* SECCION reportes*/
 
-//reportes//
+///////////////////////////////////////////////////////////////////////
 
 //resumen//
-const resumenCategory = (allOperations) =>{
+const resumenCategory = (allOperations) => {
   //------categoria mayor ganancia ---------//
-  let profitCategory = ""
-  let highestProfitAmount = 0
-  for (let {name,id} of allCategories){
-  let operationCategories = allOperations.filter((operacion) => operacion.category === id)
-  const highestProfitCategory = operationCategories.filter((operation) => operation.type === "earnings")
-  let totalGanancia = highestProfitCategory.reduce((acc, monto) =>
-    acc + monto.amount
+  let profitCategory = "";
+  let highestProfitAmount = 0;
+  for (let { name, id } of allCategories) {
+    let operationCategories = allOperations.filter(
+      (operation) => operation.category === id);
+    const highestProfitCategory = operationCategories.filter(
+      (operation) => operation.type === "earnings");
+    let totalProfit = highestProfitCategory.reduce(
+      (acc, monto) => acc + monto.amount,0
+    );
 
-  ,0)
+    if (profitCategory === "" && highestProfitAmount === 0) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    } else if (highestProfitAmount < totalProfit) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    }
 
-  if(profitCategory === ""  && highestProfitAmount === 0){
-    profitCategory = name
-    highestProfitAmount = totalGanancia
-  } else if (highestProfitAmount < totalGanancia){
-   profitCategory = name
-   highestProfitAmount = totalGanancia
-  }
-
-  //probando//
-  //console.log(name, totalGanancia)
-$("#table-totals").innerHTML += `
-<tr>
-<td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
-<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-teal-400"> $${totalGanancia}</td>
-</tr>    
-`
-}
-$("#most-profitable-category").innerHTML = `
+    $("#table-totals").innerHTML += `
+    <tr>
+    <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
+    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${totalProfit}</td>
+    </tr>`;}
+  $("#most-profitable-category").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
- <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
-<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> $${highestProfitAmount}</td>
- `;
+<td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${highestProfitAmount}</td>
+`;
 
+  //--------categoria mayor gasto----------//
+  let higherExpenseCategory = "";
+  let amountExpenseCategory = 0;
+  for (let { name, id } of allCategories) {
+    let opeCategory = allOperations.filter(
+      (operation) => operation.category === id
+    );
+    const largestExpenseCategory = opeCategory.filter(
+      (operation) => operation.type === "spent"
+    );
+    let totalAmountExpense = largestExpenseCategory.reduce(
+      (accSpent, amountSpent) => accSpent + amountSpent.amount,
+      0
+    );
+    if (higherExpenseCategory === "" && amountExpenseCategory === 0) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    } else if (amountExpenseCategory < totalAmountExpense) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    }
 
-//--------categoria mayor gasto----------//
-let higherExpenseCategory = ""
-let amountExpenseCategory = 0
-for(let {name,id} of allCategories){
-  let opeCategory = allOperations.filter((operation) => operation.category === id)
-  const largestExpenseCategory = opeCategory.filter((operation) => operation.type === "spent")
-  let totalMontoGasto = largestExpenseCategory.reduce((accGasto, montoGasto)=> 
-  accGasto + montoGasto.amount
-  ,0)
-  if(higherExpenseCategory === "" && amountExpenseCategory === 0){
-    higherExpenseCategory = name
-    amountExpenseCategory = totalMontoGasto
-  }else if(amountExpenseCategory < totalMontoGasto){
-    higherExpenseCategory = name
-    amountExpenseCategory = totalMontoGasto
+    //REVISAR COMO SE PINTA EN EL HTML//
+    console.log(name, totalAmountExpense);
+    $("#table-totals").innerHTML += `
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> -$${totalAmountExpense}</td>
+`;
   }
-
-  //REVISAR COMO SE PINTA EN EL HTML//
-console.log(name, totalMontoGasto)
-$("#table-totals").innerHTML += `
-<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] flex"> $${totalMontoGasto}</td>
-`
-}
-
-//console.log(higherExpenseCategory,  amountExpenseCategory)
-$("#largest-expense-category").innerHTML += `
+  $("#largest-expense-category").innerHTML += `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor gasto</td>
-<td class="pl-6 text-teal-400 font-semibold  "> ${higherExpenseCategory}</td>
-<td class="pl-6 text-rose-800 font-semibold "> $${amountExpenseCategory} </td>
-`
+<td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${higherExpenseCategory}</td>
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> -$${amountExpenseCategory} </td>
+`;
 
-//---------mes con mayor ganancia-----------//
-let highestProfitMonth = ""
-let totalMonth = 0
+  //---------mes con mayor ganancia-----------//
+  let highestProfitMonth = "";
+  let totalMonth = 0;
 
-for( let {date, amount} of allOperations){
-let dateYearMonth = date.slice(0,7)
-let operGanancias = allOperations.filter((operations) => operations.type === "earnings")
-let forMonth = operGanancias.filter((operations) => operations.date.slice(0,7) === dateYearMonth )
-let gananciaTotales = forMonth.reduce((acc,montoMes) => 
-acc + montoMes.amount
-,0)
-if(highestProfitMonth === "" && totalMonth === 0){
-   highestProfitMonth = dateYearMonth
-totalMonth = gananciaTotales
-}else if (totalMonth < gananciaTotales){
-   highestProfitMonth =dateYearMonth
-   totalMonth = gananciaTotales
-}
-//console.log(highestProfitMonth ,  totalMonth)
-$("#highest-profit-month").innerHTML = `
+  for (let { date, amount } of allOperations) {
+    let dateYearMonth = date.slice(0, 7);
+    let operEarnings = allOperations.filter(
+      (operations) => operations.type === "earnings"
+    );
+    let forMonth = operEarnings.filter(
+      (operations) => operations.date.slice(0, 7) === dateYearMonth
+    );
+    let totalEarnings = forMonth.reduce(
+      (acc, montoMes) => acc + montoMes.amount,
+      0
+    );
+    if (highestProfitMonth === "" && totalMonth === 0) {
+      highestProfitMonth = dateYearMonth;
+      totalMonth = totalEarnings;
+    } else if (totalMonth < totalEarnings) {
+      highestProfitMonth = dateYearMonth;
+      totalMonth = totalEarnings;
+    }
+    //console.log(highestProfitMonth ,  totalMonth)
+    $("#highest-profit-month").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
 <td class="pl-6 text-black-400 font-semibold "> ${highestProfitMonth}</td>
-<td class="pl-6 text-teal-400 font-semibold "> $${totalMonth} </td>
-`
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] flex"> $${totalMonth} </td>
+`;
 
-//----------mes mayor gasto--------//
-let highestSpendingMonth = ""
-let largestAmountSpendt = 0
- let opeGastos = allOperations.filter((operations) => operations.type === "spent")
- let opeMonth = opeGastos.filter((operations) => operations.date.slice(0,7) === dateYearMonth)
- let gastosTotales = opeMonth.reduce((accGa, gastoMes) => 
- accGa + gastoMes.amount
- ,0)
- if(highestSpendingMonth === "" && largestAmountSpendt === 0){
-    highestSpendingMonth = dateYearMonth
-    largestAmountSpendt = gastosTotales
-   // console.log(gastosTotales)
-  }else if (largestAmountSpendt < gastosTotales){
-    highestSpendingMonth = dateYearMonth
-    largestAmountSpendt = gastosTotales
-  }
-//console.log(highestSpendingMonth, largestAmountSpendt)
+    //----------mes mayor gasto--------//
+    let highestSpendingMonth = "";
+    let largestAmountSpendt = 0;
+    let opeSpents = allOperations.filter(
+      (operations) => operations.type === "spent"
+    );
+    let opeMonth = opeSpents.filter(
+      (operations) => operations.date.slice(0, 7) === dateYearMonth
+    );
+    let totalSpents = opeMonth.reduce(
+      (accSpe, spentMonth) => accSpe + spentMonth.amount,
+      0
+    );
+    if (highestSpendingMonth === "" && largestAmountSpendt === 0) {
+      highestSpendingMonth = dateYearMonth;
+      largestAmountSpendt = totalSpents;
+      // console.log(totalSpents)
+    } else if (largestAmountSpendt < totalSpents) {
+      highestSpendingMonth = dateYearMonth;
+      largestAmountSpendt = totalSpents;
+    }
+    //console.log(highestSpendingMonth, largestAmountSpendt)
 
-$("#highest-spending-month").innerHTML = `
+    $("#highest-spending-month").innerHTML = `
 <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
 <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
-<td class="pl-6 text-rose-500 font-semibold "> $${largestAmountSpendt} </td>
-`
-}
-//--------------balance---------------//
-}
-resumenCategory(allOperations)
-
-
-
-
-
-
-
-
-
+<td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${largestAmountSpendt} </td>
+`;
+  }
+  //--------------balance---------------//
+};
+resumenCategory(allOperations);
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -547,7 +546,7 @@ resumenCategory(allOperations)
 
 ///////////////////////////////////////////////////////////////////////
 
-const selecDateFilter= () => {
+const selecDateFilter = () => {
   var fecha = new Date();
   var mes = fecha.getMonth() + 1;
   var dia = fecha.getDate();
@@ -559,13 +558,12 @@ const selecDateFilter= () => {
 };
 
 const initializeApp = () => {
-
   saveData("categories", allCategories);
   saveData("operations", allOperations);
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-  selecDateFilter()
+  selecDateFilter();
 
   const currentDay = () => {
     $$(".today").forEach((input) => {
@@ -590,7 +588,6 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
-
   });
   $("#show-balance").addEventListener("click", () => {
     show("#home");
@@ -617,7 +614,6 @@ const initializeApp = () => {
     hide("#operation-view");
     hide("#editcategories-view");
   });*/
-
 
   $("#title-ahorradas").addEventListener("click", () => {
     show("#home");
@@ -700,9 +696,7 @@ const initializeApp = () => {
     hide("#operation-view");
     show("#home");
     renderOperations(getData("operations"));
-  })
-
+  });
 };
 
 window.addEventListener("load", initializeApp);
-
