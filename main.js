@@ -174,12 +174,24 @@ const confirmCategoryEdited = () => {
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  console.log(currentCategories)
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
 
+  //elimina operacion relacionada a la categoria eliminada//
+  const currentOperation = getData("operations").filter((operation) => operation.category !== id)
+    saveData("operations", currentOperation)
+    renderOperations(currentOperation)
 };
+
+/////////////////////
+
+const eliminarope = () =>{
+  console.log(allOperations)
+
+}
+eliminarope()
+////////////
 
 
 //CANCELANDO EDICION DE categories
@@ -383,7 +395,7 @@ let filterOrder = operation.sort((a, b) => {
         
         return a.amount > b.amount ? 1 : -1;
       }
-      if (orderOperation === "greater-amount") {
+      if (orderOperation === "greater-amount" ) {
         return a.amount < b.amount ? 1 : -1;
       }
       if (orderOperation === "az") {

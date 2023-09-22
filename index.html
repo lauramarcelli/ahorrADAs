@@ -16,12 +16,12 @@
 <body class="font-['Montserrat'] bg-slate-200">
     <header class="w-full bg-[#7e22ce] text-white p-7">
         <nav id="navbar" class="flex justify-between items-center w-full">
-            <div class="flex items-center">
+            <div class="flex items-center ">
                 <a href="#" id="title-ahorradas">               
                 <h2 class="text-3xl sm:text-2x1 font-semibold text-white"><i class="m-auto fa-regular fa-face-grin-wink mr-2"></i>AhorrADAs - Tu Herramienta Financiera</h2>
                 </a>               
             </div>    
-            <div>
+            <div class="options" id="options-nav">
                 <a href="#" id="show-balance" class="m-2 hover:text-[#2e1065]">
                     <i class="fas fa-home mr-2"></i>Balance</a>
                 <a href="#" id="show-categories" class="m-2 hover:text-[#2e1065]">
@@ -29,6 +29,12 @@
                 <a href="#" id="show-reports" class="m-2 hover:text-[#2e1065]">
                     <i class="fa-solid fa-share-from-square mr-2"></i>Reportes</a>
             </div> 
+
+             <button class="navbar-toggler collapsed hidden" id="btn-bars" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+           <i class=" fa-solid fa-bars"></i>
+        </button>
+                      
         </nav>
     </header>
     
@@ -120,7 +126,7 @@
                         </div>
                         <!--Seccion Operaciones-->
 
-                    <section id="operations-table-home" class="hidden lg:w-5/6 bg-white rounded-md pl-8">
+                    <section id="operations-table-home" class="hidden lg:w-5/6 bg-white rounded-md ">
                 
                 <div>
                     <div class="min-w-full ">
@@ -148,7 +154,7 @@
 
             <!--Boton Nueva Operacion-->
 
-            <section id="operation-view"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
+            <section id="operation-view"class="hidden bg-slate-200 py-16 items-center w-full space-x-8  rounded-md">
                 <main class="">
                     <div class=" bg-slate-200 lg:[90%] flex justify-center sm:flex-none ">
                 <div class=" m-4 p-5 sm:w-[60%]  bg-white rounded-md">
