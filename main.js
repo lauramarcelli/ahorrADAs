@@ -73,10 +73,10 @@ const validateNewCategory = () => {
 };
 
 const renderCategoriesOptions = (categories) => {
-cleanContainer("#categories-filter");
-$("#categories-filter").innerHTML = `
+  cleanContainer("#categories-filter");
+  $("#categories-filter").innerHTML = `
 <option value="">Todas</option>
-`
+`;
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -89,8 +89,6 @@ $("#categories-filter").innerHTML = `
    <option value="${id}">${name}</option>
    `;
   }
- 
-
 };
 
 const renderCategoriesTable = (categories) => {
@@ -149,10 +147,9 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
-    //console.log(category);
+    console.log(category);
   }
 
-  return category
   return category;
 };
 
@@ -171,27 +168,24 @@ const confirmCategoryEdited = () => {
   }
 };
 
-
-
-
 ///////////////
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  
+
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
 
-    //elimina operacion relacionada a la categoria eliminada//
-    const currentOperation = getData("operations").filter((operation) => operation.category !== id)
-    saveData("operations", currentOperation)
-    renderOperations(currentOperation)
-
+  //elimina operacion relacionada a la categoria eliminada//
+  const currentOperation = getData("operations").filter(
+    (operation) => operation.category !== id
+  );
+  saveData("operations", currentOperation);
+  renderOperations(currentOperation);
 };
 
 /////////////////////
-
 
 //CANCELANDO EDICION DE categories
 
@@ -357,7 +351,6 @@ const filterType = (operations, myType) => {
   let filteredOperations = operations.filter(
     (operation) => operation.type === myType
   );
-  //console.log(filteredOperations);
   return filteredOperations;
 };
 
@@ -365,7 +358,6 @@ const filterCategory = (operations, typeCategory) => {
   let filterCategory = operations.filter(
     (operation) => operation.category === typeCategory
   );
-  //console.log(filterCategory);
   return filterCategory;
 };
 
@@ -373,7 +365,6 @@ const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
     (operation) => new Date(operation.date) >= new Date(dateOperation)
   );
-  //console.log(filterDate);
   return filterDate;
 };
 
@@ -398,7 +389,6 @@ const orderBy = (operation, orderOperation) => {
       return a.description < b.description ? 1 : -1;
     }
   });
-  //console.log(filterOrder);
   return filterOrder;
 };
 
@@ -410,29 +400,24 @@ const applyFilter = () => {
   let typeCategory = $("#categories-filter").value;
   let dateOperation = $("#today-date").value;
   let orderOperation = $("#order-by").value;
-  
 
   if (myType != "all") {
     filteredOperations = filterType(filteredOperations, myType);
-    console.log("filtradasportipo",filteredOperations);
   }
   if (typeCategory != "") {
-    console.log(typeCategory)
     filteredOperations = filterCategory(filteredOperations, typeCategory);
-    console.log("filtradasporcategoria",filteredOperations);
   }
-   
+
   filteredOperations = filterDate(filteredOperations, dateOperation);
-  console.log("filtradasporfecha",filteredOperations);
-  
 
   filteredOperations = orderBy(filteredOperations, orderOperation);
 
-  console.log("operacionesordenadas",filteredOperations);
+  console.log("operacionesordenadas", filteredOperations);
   renderOperations(filteredOperations);
 };
 
 //Eventos filtros//
+
 $("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
@@ -448,7 +433,6 @@ $("#order-by").addEventListener("change", () => applyFilter());
 ///////////////////////////////////////////////////////////////////////
 
 const resumenCategory = (allOperations) => {
-
   //------categoria mayor ganancia ---------//
 
   let profitCategory = "";
@@ -456,43 +440,57 @@ const resumenCategory = (allOperations) => {
   //mayor gasto//
   let higherExpenseCategory = "";
   let amountExpenseCategory = 0;
-for (let { name, id } of allCategories) {
-  let operationCategories = allOperations.filter((operation) => operation.category === id);
-  const highestProfitCategory = operationCategories.filter((operation) => operation.type === "earnings");
-  let totalProfit = highestProfitCategory.reduce((acc, monto) => acc + monto.amount,0);
-  if(profitCategory === "" && highestProfitAmount === 0){
-      profitCategory = name;
-      highestProfitAmount = totalProfit;
-  }else if(highestProfitAmount < totalProfit){
-      profitCategory = name;
-      highestProfitAmount = totalProfit;
-  }
 
- let opeCategory = allOperations.filter( (operation) => operation.category === id);
-  const largestExpenseCategory = opeCategory.filter((operation) => operation.type === "spent");
-  let totalAmountExpense = largestExpenseCategory.reduce((accSpent, amountSpent) => accSpent + amountSpent.amount,0 );
-  if (higherExpenseCategory === "" && amountExpenseCategory === 0) {
-    higherExpenseCategory = name;
-    amountExpenseCategory = totalAmountExpense;
-  } else if (amountExpenseCategory < totalAmountExpense) {
-    higherExpenseCategory = name;
-    amountExpenseCategory = totalAmountExpense;
-  }
-     //MONTOS BALANCE POR CATEGORIA//
-    let balance = totalProfit - totalAmountExpense
-  // console.log(name, balance)
- 
-  $("#table-totals").innerHTML += `
+  for (let { name, id } of allCategories) {
+    let operationCategories = allOperations.filter(
+      (operation) => operation.category === id
+    );
+    const highestProfitCategory = operationCategories.filter(
+      (operation) => operation.type === "earnings"
+    );
+    let totalProfit = highestProfitCategory.reduce(
+      (acc, monto) => acc + monto.amount,
+      0
+    );
+    if (profitCategory === "" && highestProfitAmount === 0) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    } else if (highestProfitAmount < totalProfit) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    }
+
+    let opeCategory = allOperations.filter(
+      (operation) => operation.category === id
+    );
+    const largestExpenseCategory = opeCategory.filter(
+      (operation) => operation.type === "spent"
+    );
+    let totalAmountExpense = largestExpenseCategory.reduce(
+      (accSpent, amountSpent) => accSpent + amountSpent.amount,
+      0
+    );
+    if (higherExpenseCategory === "" && amountExpenseCategory === 0) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    } else if (amountExpenseCategory < totalAmountExpense) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    }
+    //MONTOS BALANCE POR CATEGORIA//
+    let balance = totalProfit - totalAmountExpense;
+    console.log(name, balance);
+
+    $("#table-totals").innerHTML += `
     <tr>
     <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
     <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${totalProfit}</td>
     <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> $${totalAmountExpense}</td>
     <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 "> $${balance}</td>
    </tr>`;
+  }
 
-   }
-
- $("#most-profitable-category").innerHTML = `
+  $("#most-profitable-category").innerHTML = `
    <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
    <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${highestProfitAmount}</td>
@@ -512,56 +510,65 @@ for (let { name, id } of allCategories) {
       (operations) => operations.type === "earnings"
     );
     let forMonth = operEarnings.filter(
-      (operations) => operations.date.slice(0, 7) === dateYearMonth);
+      (operations) => operations.date.slice(0, 7) === dateYearMonth
+    );
     let totalEarnings = forMonth.reduce(
-      (acc, amountMonth) => acc + amountMonth.amount,0);
-  if (highestProfitMonth === "" && totalMonth === 0) {
+      (acc, amountMonth) => acc + amountMonth.amount,
+      0
+    );
+    if (highestProfitMonth === "" && totalMonth === 0) {
       highestProfitMonth = dateYearMonth;
       totalMonth = totalEarnings;
-  } else if (totalMonth < totalEarnings) {
+    } else if (totalMonth < totalEarnings) {
       highestProfitMonth = dateYearMonth;
       totalMonth = totalEarnings;
-  }
-  $("#highest-profit-month").innerHTML = `
+    }
+    $("#highest-profit-month").innerHTML = `
     <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
     <td class="pl-6 text-black-400 font-semibold "> ${highestProfitMonth}</td>
    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] flex"> $${totalMonth} </td>
   `;
-  //----------mes mayor gasto--------//
-   let highestSpendingMonth = "";
-   let largestAmountSpendt = 0;
-   let opeSpents = allOperations.filter(
-      (operations) => operations.type === "spent");
-   let opeMonth = opeSpents.filter(
+    //----------mes mayor gasto--------//
+    let highestSpendingMonth = "";
+    let largestAmountSpendt = 0;
+    let opeSpents = allOperations.filter(
+      (operations) => operations.type === "spent"
+    );
+    let opeMonth = opeSpents.filter(
       (operations) => operations.date.slice(0, 7) === dateYearMonth
     );
-    let totalSpents = opeMonth.reduce((accSpe, spentMonth) =>
-     accSpe + spentMonth.amount,0);
-  if (highestSpendingMonth === "" && largestAmountSpendt === 0) {
+    let totalSpents = opeMonth.reduce(
+      (accSpe, spentMonth) => accSpe + spentMonth.amount,
+      0
+    );
+    if (highestSpendingMonth === "" && largestAmountSpendt === 0) {
       highestSpendingMonth = dateYearMonth;
       largestAmountSpendt = totalSpents;
-  } else if (largestAmountSpendt < totalSpents) {
+    } else if (largestAmountSpendt < totalSpents) {
       highestSpendingMonth = dateYearMonth;
       largestAmountSpendt = totalSpents;
-  }
-    console.log(highestSpendingMonth, largestAmountSpendt)
-  $("#highest-spending-month").innerHTML = `
+    }
+    console.log(highestSpendingMonth, largestAmountSpendt);
+    $("#highest-spending-month").innerHTML = `
    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
    <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${largestAmountSpendt} </td>
-  `
-  //--------------Totales por Mes---------------//
-  
-  let monthBalance = totalEarnings - totalSpents
-  $("#table-totalsbymonth").innerHTML += `
-   <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${monthBalance } </td>
-  `
+  `;
+    //--------------Totales por Mes---------------//
+
+    let monthBalance = totalEarnings - totalSpents;
+    $("#table-totalsbymonth").innerHTML += `
+   <td class="pl-6 text-black-400 font-semibold "> ${(highestSpendingMonth =
+     dateYearMonth)}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${(largestAmountSpendt =
+     totalEarnings)} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${(totalMonth =
+     totalSpents)} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${monthBalance} </td>
+  `;
   }
 };
-resumenCategory(allOperations)
+resumenCategory(allOperations);
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -725,3 +732,4 @@ const initializeApp = () => {
 };
 
 window.addEventListener("load", initializeApp);
+
