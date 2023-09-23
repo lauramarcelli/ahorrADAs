@@ -417,6 +417,11 @@ const resumenCategory = (allOperations) => {
   //mayor gasto//
   let higherExpenseCategory = "";
   let amountExpenseCategory = 0;
+
+  // balance//
+  let nombreBalance = ""
+   let montoBlance = 0
+
 for (let { name, id } of allCategories) {
   let operationCategories = allOperations.filter((operation) => operation.category === id);
   const highestProfitCategory = operationCategories.filter((operation) => operation.type === "earnings");
@@ -439,10 +444,17 @@ for (let { name, id } of allCategories) {
     higherExpenseCategory = name;
     amountExpenseCategory = totalAmountExpense;
   }
+      let balance = totalProfit - totalAmountExpense
+ console.log(name, balance)
+  if(nombreBalance === "" && montoBlance === 0){
+   nombreBalance = name
+ montoBlance = balance
+  }else if(montoBlance < balance){
+   nombreBalance = name
+   montoBlance = balance
+    console.log(nombreBalance, balance)
+  }
      //MONTOS BALANCE POR CATEGORIA//
-    let balance = totalProfit - totalAmountExpense
-  // console.log(name, balance)
- 
   $("#table-totals").innerHTML += `
     <tr>
     <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
@@ -452,6 +464,12 @@ for (let { name, id } of allCategories) {
    </tr>`;
 
    }
+
+   $("#highest-balance-category").innerHTML = `
+   <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor balance</td>
+   <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${nombreBalance}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${montoBlance}</td>
+   `
 
  $("#most-profitable-category").innerHTML = `
    <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
@@ -468,7 +486,7 @@ for (let { name, id } of allCategories) {
   let totalMonth = 0;
 
   for (let { date, amount } of allOperations) {
-    let dateYearMonth = date.slice(0, 7);
+  let   dateYearMonth = date.slice(0, 7);
     let operEarnings = allOperations.filter(
       (operations) => operations.type === "earnings"
     );
@@ -505,20 +523,20 @@ for (let { name, id } of allCategories) {
       highestSpendingMonth = dateYearMonth;
       largestAmountSpendt = totalSpents;
   }
-    console.log(highestSpendingMonth, largestAmountSpendt)
+  //  console.log(highestSpendingMonth, largestAmountSpendt)
   $("#highest-spending-month").innerHTML = `
    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
    <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${largestAmountSpendt} </td>
   `
   //--------------balance---------------//
-  let balanceMes = totalEarnings - totalSpents
-  $("#table-totalsbymonth").innerHTML += `
-   <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${balanceMes } </td>
-  `
+  //let balanceMes = totalEarnings - totalSpents
+  // $("#table-totalsbymonth").innerHTML += `
+  //  <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
+  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
+  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
+  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${balanceMes } </td>
+  // `
   }
 };
 resumenCategory(allOperations)
