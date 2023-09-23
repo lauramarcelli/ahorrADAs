@@ -141,6 +141,7 @@ let categoryEdit = null;
 
 const editcategory = (id) => {
   const category = allCategories.find((cat) => cat.id === id);
+
   if (category) {
     categoryEdit = id;
     show("#editcategories-view");
@@ -148,7 +149,7 @@ const editcategory = (id) => {
     $("#categorieEdit-input").value = category.name;
     console.log(category)
   }
-  ;
+
   return category
 };
 
@@ -165,6 +166,15 @@ const confirmCategoryEdited = () => {
       renderCategoriesTable(allCategories);
     }
   }
+
+  const operationSelected = getData("operations").filter(
+    (operation) => operation.category  === categoryEdit
+  );
+
+$("#categorieEdit-input").value = operationSelected.category;
+saveData("operations", operationSelected)
+renderOperations(operationSelected)
+
 };
 
 
@@ -185,13 +195,6 @@ const deleteCategory = (id) => {
 };
 
 /////////////////////
-
-const eliminarope = () =>{
-  console.log(allOperations)
-
-}
-eliminarope()
-////////////
 
 
 //CANCELANDO EDICION DE categories
