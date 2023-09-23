@@ -64,19 +64,19 @@ const allCategories = getData("categories") || categoriesByDefault;
 
 const allOperations = getData("operations") || [];
 
-
-const validateNewCategory = () =>{
-  const newCategoryForm = $("#categorieToEdit-input").value
-  if(newCategoryForm == ""){
-    show ("#complete-field-category")
+const validateNewCategory = () => {
+  const newCategoryForm = $("#categorieToEdit-input").value;
+  if (newCategoryForm == "") {
+    show("#complete-field-category");
   }
-  return newCategoryForm !== ""
-}
-
-
+  return newCategoryForm !== "";
+};
 
 const renderCategoriesOptions = (categories) => {
-  cleanContainer("#categories-filter");
+cleanContainer("#categories-filter");
+$("#categories-filter").innerHTML = `
+<option value="">Todas</option>
+`
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -89,6 +89,8 @@ const renderCategoriesOptions = (categories) => {
    <option value="${id}">${name}</option>
    `;
   }
+ 
+
 };
 
 const renderCategoriesTable = (categories) => {
@@ -146,7 +148,7 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
-    console.log(category);
+    //console.log(category);
   }
   return category;
 };
@@ -166,17 +168,19 @@ const confirmCategoryEdited = () => {
   }
 };
 
-
-
-
 ///////////////
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  console.log(currentCategories);
+  
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
+
+    //elimina operacion relacionada a la categoria eliminada//
+    const currentOperation = getData("operations").filter((operation) => operation.category !== id)
+    saveData("operations", currentOperation)
+    renderOperations(currentOperation)
 
 };
 
@@ -285,15 +289,13 @@ const renderOperations = (operations) => {
   }
 };
 
-const description = $("#description-form")
-const validateDescriptionOperation = () =>{
-  if(description.value == ""){
-    show("#complete-field")
+const description = $("#description-form");
+const validateDescriptionOperation = () => {
+  if (description.value == "") {
+    show("#complete-field");
   }
-  return description.value !== ""
-}
-
-
+  return description.value !== "";
+};
 
 const addOperation = () => {
   const currentOperation = getData("operations");
@@ -341,102 +343,103 @@ const editOperationForm = (id) => {
   $("#date-form").value = operationSelected.date;
 };
 
-//------------Filtros de Operaciones---------------------//
+//------------FILTROS---------------------//
 
 const filterType = (operations, myType) => {
   let filteredOperations = operations.filter(
-  (operation) => operation.type === myType
+    (operation) => operation.type === myType
   );
-  console.log(filteredOperations);
+  //console.log(filteredOperations);
   return filteredOperations;
 };
 
 const filterCategory = (operations, typeCategory) => {
   let filterCategory = operations.filter(
-  (operation) => operation.category === typeCategory);
-  console.log(filterCategory);
+    (operation) => operation.category === typeCategory
+  );
+  //console.log(filterCategory);
   return filterCategory;
 };
 
 const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
-  (operation) => new Date(operation.date) >= new Date(dateOperation));
-  console.log(filterDate);
+    (operation) => new Date(operation.date) >= new Date(dateOperation)
+  );
+  //console.log(filterDate);
   return filterDate;
 };
 
-const orderBy = (operation, orderOperation) =>{
+const orderBy = (operation, orderOperation) => {
   let filterOrder = operation.sort((a, b) => {
-        if (orderOperation === "more") {
-          return a.date < b.date ? 1 : -1;
-        }
-        if (orderOperation === "less") {
-          return a.date > b.date ? 1 : -1;
-        }
-        if (orderOperation === "lower-amount") {
-          
-          return a.amount > b.amount ? 1 : -1;
-        }
-        if (orderOperation === "greater-amount") {
-          return a.amount < b.amount ? 1 : -1;
-        }
-        if (orderOperation === "az") {
+    if (orderOperation === "more") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (orderOperation === "less") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (orderOperation === "lower-amount") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (orderOperation === "greater-amount") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (orderOperation === "az") {
       return a.description > b.description ? 1 : -1;
-        }
-        if (orderOperation === "za") {
-          return a.description < b.description ? 1 : -1;
-        }
-  
-      });
-      console.log(filterOrder)
-      return filterOrder
     }
-  
-  //Aplicar filtros//
-  
-  const applyFilter = () => {
-    let filteredOperations = [...allOperations];
-    let myType = $("#type-filter").value;
-    let typeCategory = $("#categories-filter").value;
-    let dateOperation = $("#today-date").value;
-    let orderOperation = $("#order-by").value;
-    if (myType != "all") {
-      console.log(filterType(filteredOperations, myType));
-      filteredOperations = filterType(filteredOperations, myType);
+    if (orderOperation === "za") {
+      return a.description < b.description ? 1 : -1;
     }
-    if (typeCategory != "") {
-      console.log(filterCategory(filteredOperations, typeCategory));
-      filteredOperations = filterCategory(filteredOperations, typeCategory);
-    }
-    if (dateOperation != "all") {
-      console.log(filterDate(filteredOperations, dateOperation));
-      filteredOperations = filterDate(filteredOperations, dateOperation);
-    }
-  
-    filteredOperations = orderBy(allOperations, orderOperation)
-  
-    console.log(filteredOperations);
-    renderOperations(filteredOperations);
-  };
+  });
+  //console.log(filterOrder);
+  return filterOrder;
+};
 
-  //Eventos filtros//
-  $("#type-filter").addEventListener("input", () => applyFilter());
+//Aplicar filtros//
 
-  $("#categories-filter").addEventListener("change", () => applyFilter());
+const applyFilter = () => {
+  let filteredOperations = getData("operations");
+  let myType = $("#type-filter").value;
+  let typeCategory = $("#categories-filter").value;
+  let dateOperation = $("#today-date").value;
+  let orderOperation = $("#order-by").value;
   
-  $("#today-date").addEventListener("change", () => applyFilter());
+
+  if (myType != "all") {
+    filteredOperations = filterType(filteredOperations, myType);
+    console.log("filtradasportipo",filteredOperations);
+  }
+  if (typeCategory != "") {
+    console.log(typeCategory)
+    filteredOperations = filterCategory(filteredOperations, typeCategory);
+    console.log("filtradasporcategoria",filteredOperations);
+  }
+   
+  filteredOperations = filterDate(filteredOperations, dateOperation);
+  console.log("filtradasporfecha",filteredOperations);
   
-  $("#order-by").addEventListener("change", () => applyFilter());
-  
-  
+
+  filteredOperations = orderBy(filteredOperations, orderOperation);
+
+  console.log("operacionesordenadas",filteredOperations);
+  renderOperations(filteredOperations);
+};
+
+//Eventos filtros//
+$("#type-filter").addEventListener("input", () => applyFilter());
+
+$("#categories-filter").addEventListener("change", () => applyFilter());
+
+$("#today-date").addEventListener("change", () => applyFilter());
+
+$("#order-by").addEventListener("change", () => applyFilter());
+
 ////////////////////////////////////////////////////////////////////////
 
 /* SECCION reportes*/
 
 ///////////////////////////////////////////////////////////////////////
 
-
-/*const resumenCategory = (allOperations) => {
+const resumenCategory = (allOperations) => {
 
   //------categoria mayor ganancia ---------//
 
@@ -550,7 +553,7 @@ for (let { name, id } of allCategories) {
   `
   }
 };
-resumenCategory(allOperations)*/
+resumenCategory(allOperations)
 
 ////////////////////////////////////////////////////////////////////////
 
