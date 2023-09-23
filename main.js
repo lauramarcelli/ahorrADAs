@@ -410,8 +410,11 @@ $("#order-by").addEventListener("input", () => {
 
 ///////////////////////////////////////////////////////////////////////
 
+
 const resumenCategory = (allOperations) => {
+
   //------categoria mayor ganancia ---------//
+
   let profitCategory = "";
   let highestProfitAmount = 0;
   //mayor gasto//
@@ -493,7 +496,7 @@ for (let { name, id } of allCategories) {
     let forMonth = operEarnings.filter(
       (operations) => operations.date.slice(0, 7) === dateYearMonth);
     let totalEarnings = forMonth.reduce(
-      (acc, montoMes) => acc + montoMes.amount,0);
+      (acc, amountMonth) => acc + amountMonth.amount,0);
   if (highestProfitMonth === "" && totalMonth === 0) {
       highestProfitMonth = dateYearMonth;
       totalMonth = totalEarnings;
@@ -537,6 +540,15 @@ for (let { name, id } of allCategories) {
   //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
   //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${balanceMes } </td>
   // `
+  //--------------Totales por Mes---------------//
+  
+  let monthBalance = totalEarnings - totalSpents
+  $("#table-totalsbymonth").innerHTML += `
+   <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${monthBalance } </td>
+  `
   }
 };
 resumenCategory(allOperations)
