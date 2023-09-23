@@ -169,6 +169,11 @@ const confirmCategoryEdited = () => {
       renderCategoriesTable(allCategories);
     }
   }
+  // const operationSelected = getData("operations").filter((operation) => operation.category === categoryEdit)
+
+  //  $("#categorieEdit-input").value= operationSelected.category
+  //  saveData("operations", operationSelected)
+  //  renderOperations(operationSelected)
 };
 
 
