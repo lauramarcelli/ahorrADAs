@@ -14,14 +14,15 @@
 </head>
 
 <body class="font-['Montserrat'] bg-slate-200">
-    <header class="w-full bg-[#7e22ce] text-white p-7 ">
+    <header class="w-full bg-[#7e22ce] text-white p-7 sm:flex justify-end ... ">
+
         <nav id="navbar" class="sm:flex lg:flex-none justify-between items-center w-full  ">
             <div class="sm:flex items-center  lg:flex-none">
                 <a href="#" id="title-ahorradas">               
                 <h2 class="text-3xl sm:text-2x1  font-semibold text-white"><i class="m-auto fa-regular fa-face-grin-wink mr-2"></i>AhorrADAs - Tu Herramienta Financiera</h2>
                 </a>               
             </div>    
-            <div class="options " id="options-nav">
+            <div class="options sm:invisible md:visible " id="options-nav">
                 <a href="#" id="show-balance" class="m-2 hover:text-[#2e1065]">
                     <i class="fas fa-home mr-2"></i>Balance</a>
                 <a href="#" id="show-categories" class="m-2 hover:text-[#2e1065]">
@@ -29,13 +30,16 @@
                 <a href="#" id="show-reports" class="m-2 hover:text-[#2e1065]">
                     <i class="fa-solid fa-share-from-square mr-2"></i>Reportes</a>
             </div> 
-
-             <button class="navbar-toggler collapsed hidden" id="btn-bars" type="button" data-bs-toggle="collapse" data-bs-target="#options-nav" aria-controls="#options-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-           <i class=" fa-solid fa-bars"></i>
-        </button>
-                      
+                  
         </nav>
+     <button class=" h-9 p-2 bg-violet-900 content-center md:invisible lg:invisible invisible flex  ... sm:visible" id="btn-menu" type="button">
+           <i class=" fa-solid fa-bars"></i>
+        </button type="button">
+        
+        <button class="h-9 p-2 bg-violet-900  md:invisible lg:invisible  invisible flex   " id="btn-close">
+       <i class="fa-solid fa-xmark"></i>
+        </button>
+
     </header>
     
     <!--Home-Balance-->

@@ -725,6 +725,20 @@ const initializeApp = () => {
     renderOperations(getData("operations"));
   });
 
+$("#btn-menu").addEventListener("click", (e) =>{
+$("#options-nav").classList.remove("sm:invisible")
+$("#btn-close").classList.remove("invisible")
+$("#btn-menu").classList.add("sm:invisible")
+
+})
+
+$("#btn-close").addEventListener("click", (e) =>{
+  $("#options-nav").classList.add("sm:invisible")
+  $("#btn-close").classList.add("invisible")
+  $("#btn-menu").classList.remove("sm:invisible")
+})
+
+
 };
 
 window.addEventListener("load", initializeApp);
