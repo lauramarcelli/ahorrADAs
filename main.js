@@ -64,8 +64,19 @@ const allCategories = getData("categories") || categoriesByDefault;
 
 const allOperations = getData("operations") || [];
 
+const validateNewCategory = () => {
+  const newCategoryForm = $("#categorieToEdit-input").value;
+  if (newCategoryForm == "") {
+    show("#complete-field-category");
+  }
+  return newCategoryForm !== "";
+};
+
 const renderCategoriesOptions = (categories) => {
   cleanContainer("#categories-filter");
+  $("#categories-filter").innerHTML = `
+<option value="">Todas</option>
+`;
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -89,8 +100,8 @@ const renderCategoriesTable = (categories) => {
   for (const { name, id } of categories) {
     tableHTML += `
             <tr class="w-full">
-                <td class="w-1/2 pt-4 pb-4 pl-6">${name}</td>
-                <td class="w-1/2 flex justify-end">
+                <td class="w-1/2 pt-4 pb-4 pl-5">${name}</td>
+                <td class="mr-4 flex justify-end">
                 <div id="btns-categorytable">
                 <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick="editcategory('${id}')" >Editar</button>
@@ -130,6 +141,7 @@ let categoryEdit = null;
 
 const editcategory = (id) => {
   const category = allCategories.find((cat) => cat.id === id);
+
   if (category) {
     categoryEdit = id;
     show("#editcategories-view");
@@ -137,6 +149,7 @@ const editcategory = (id) => {
     $("#categorieEdit-input").value = category.name;
     console.log(category);
   }
+
   return category;
 };
 
@@ -155,13 +168,24 @@ const confirmCategoryEdited = () => {
   }
 };
 
+///////////////
+
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  console.log(currentCategories);
+
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
+
+  //elimina operacion relacionada a la categoria eliminada//
+  const currentOperation = getData("operations").filter(
+    (operation) => operation.category !== id
+  );
+  saveData("operations", currentOperation);
+  renderOperations(currentOperation);
 };
+
+/////////////////////
 
 //CANCELANDO EDICION DE categories
 
@@ -207,7 +231,7 @@ const renderOperations = (operations) => {
         (cat) => cat.id === category
       );
       $("#table-operations").innerHTML += `
-      <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
+      <td class=" justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
         categorieSelected.name
       }</td>
@@ -267,6 +291,14 @@ const renderOperations = (operations) => {
   }
 };
 
+const description = $("#description-form");
+const validateDescriptionOperation = () => {
+  if (description.value == "") {
+    show("#complete-field");
+  }
+  return description.value !== "";
+};
+
 const addOperation = () => {
   const currentOperation = getData("operations");
   const newDataOperation = saveNewOperation();
@@ -313,13 +345,12 @@ const editOperationForm = (id) => {
   $("#date-form").value = operationSelected.date;
 };
 
-//------------Filtros de Operaciones---------------------//
+//------------FILTROS---------------------//
 
 const filterType = (operations, myType) => {
   let filteredOperations = operations.filter(
     (operation) => operation.type === myType
   );
-  console.log(filteredOperations);
   return filteredOperations;
 };
 
@@ -327,7 +358,6 @@ const filterCategory = (operations, typeCategory) => {
   let filterCategory = operations.filter(
     (operation) => operation.category === typeCategory
   );
-  console.log(filterCategory);
   return filterCategory;
 };
 
@@ -335,7 +365,6 @@ const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
     (operation) => new Date(operation.date) >= new Date(dateOperation)
   );
-  console.log(filterDate);
   return filterDate;
 };
 
@@ -360,49 +389,42 @@ const orderBy = (operation, orderOperation) => {
       return a.description < b.description ? 1 : -1;
     }
   });
-  console.log(filterOrder);
   return filterOrder;
 };
 
 //Aplicar filtros//
+
 const applyFilter = () => {
-  let filteredOperations = [...allOperations];
+  let filteredOperations = getData("operations");
   let myType = $("#type-filter").value;
   let typeCategory = $("#categories-filter").value;
   let dateOperation = $("#today-date").value;
   let orderOperation = $("#order-by").value;
 
   if (myType != "all") {
-    console.log(filterType(filteredOperations, myType));
     filteredOperations = filterType(filteredOperations, myType);
   }
-
-  if (typeCategory != "all-category") {
-    console.log(filterCategory(filteredOperations, typeCategory));
+  if (typeCategory != "") {
     filteredOperations = filterCategory(filteredOperations, typeCategory);
   }
 
-  if (dateOperation != "all") {
-    console.log(filterDate(filteredOperations, dateOperation));
-    filteredOperations = filterDate(filteredOperations, dateOperation);
-  }
+  filteredOperations = filterDate(filteredOperations, dateOperation);
 
-  filteredOperations = orderBy(allOperations, orderOperation);
+  filteredOperations = orderBy(filteredOperations, orderOperation);
 
-  console.log(filteredOperations);
+  console.log("operacionesordenadas", filteredOperations);
   renderOperations(filteredOperations);
 };
 
 //Eventos filtros//
+
 $("#type-filter").addEventListener("input", () => applyFilter());
 
 $("#categories-filter").addEventListener("change", () => applyFilter());
 
 $("#today-date").addEventListener("change", () => applyFilter());
 
-$("#order-by").addEventListener("input", () => {
-  applyFilter();
-});
+$("#order-by").addEventListener("change", () => applyFilter());
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -526,32 +548,65 @@ for (let { name, id } of allCategories) {
       highestSpendingMonth = dateYearMonth;
       largestAmountSpendt = totalSpents;
   }
-  //  console.log(highestSpendingMonth, largestAmountSpendt)
+ 
   $("#highest-spending-month").innerHTML = `
    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
    <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${largestAmountSpendt} </td>
   `
-  //--------------balance---------------//
-  //let balanceMes = totalEarnings - totalSpents
-  // $("#table-totalsbymonth").innerHTML += `
-  //  <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
-  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
-  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
-  //  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${balanceMes } </td>
-  // `
-  //--------------Totales por Mes---------------//
   
-  let monthBalance = totalEarnings - totalSpents
-  $("#table-totalsbymonth").innerHTML += `
-   <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth = dateYearMonth }</td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${largestAmountSpendt = totalEarnings} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalMonth = totalSpents} </td>
-   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${monthBalance } </td>
-  `
   }
 };
 resumenCategory(allOperations)
+
+
+//-----Totales por Mes-----------------//
+
+const resumenMonth = (operations) => {
+const totalsByMonth = {};
+
+operations.forEach((operation) => {
+  const date = operation.date.slice(0, 7);
+  const amounth = operation.amount;
+
+  if(!totalsByMonth[date]) {
+  totalsByMonth[date] = {
+    totalSpents: 0,
+    totalEarnings:0,
+  };
+}
+  
+if(operation.type === "spent"){
+  totalsByMonth[date].totalSpents += amounth;
+} else if(operation.type === "earnings"){
+  totalsByMonth[date].totalEarnings += amounth;
+}
+});
+const renderMonthTotals = Object.entries(totalsByMonth).map(
+  ([month, amount]) => ({
+    month,
+    totalSpents: amount.totalSpents,
+    totalEarnings: amount.totalEarnings,
+    total: amount.totalEarnings - amount.totalSpents,
+  })
+);
+
+return renderMonthTotals;
+}
+
+const totalsByMonth = resumenMonth(allOperations);
+
+totalsByMonth.forEach(({month, totalSpents, totalEarnings, total}) =>
+{
+  $("#table-totalsbymonth").innerHTML += `
+  <td class="pl-6 text-black-400 font-semibold "> ${month}</td>
+  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${totalEarnings} </td>
+  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${totalSpents} </td>
+  <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${total} </td>
+  `;
+})
+
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -601,6 +656,7 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
+    hide("#report-with-results");
   });
   $("#show-balance").addEventListener("click", () => {
     show("#home");
@@ -608,6 +664,7 @@ const initializeApp = () => {
     hide("#operation-view");
     hide("#report-view");
     hide("#editcategories-view");
+    hide("#report-with-results");
   });
 
   //vista con operaciones en reportes
