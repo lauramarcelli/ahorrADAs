@@ -167,13 +167,10 @@ const confirmCategoryEdited = () => {
       show("#categories-view");
       renderCategoriesOptions(allCategories);
       renderCategoriesTable(allCategories);
+      renderOperations(allOperations)
     }
   }
-  // const operationSelected = getData("operations").filter((operation) => operation.category === categoryEdit)
 
-  //  $("#categorieEdit-input").value= operationSelected.category
-  //  saveData("operations", operationSelected)
-  //  renderOperations(operationSelected)
 };
 
 
@@ -727,6 +724,7 @@ const initializeApp = () => {
     show("#home");
     renderOperations(getData("operations"));
   });
+
 };
 
 window.addEventListener("load", initializeApp);
