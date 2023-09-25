@@ -64,8 +64,19 @@ const allCategories = getData("categories") || categoriesByDefault;
 
 const allOperations = getData("operations") || [];
 
+const validateNewCategory = () => {
+  const newCategoryForm = $("#categorieToEdit-input").value;
+  if (newCategoryForm == "") {
+    show("#complete-field-category");
+  }
+  return newCategoryForm !== "";
+};
+
 const renderCategoriesOptions = (categories) => {
   cleanContainer("#categories-filter");
+  $("#categories-filter").innerHTML = `
+<option value="">Todas</option>
+`;
   for (const { name, id } of categories) {
     $("#categories-filter").innerHTML += `
             <option value="${id}">${name}</option>
@@ -89,8 +100,8 @@ const renderCategoriesTable = (categories) => {
   for (const { name, id } of categories) {
     tableHTML += `
             <tr class="w-full">
-                <td class="w-1/2 pt-4 pb-4 pl-6">${name}</td>
-                <td class="w-1/2 flex justify-end">
+                <td class="w-1/2 pt-4 pb-4 pl-5">${name}</td>
+                <td class="mr-4 flex justify-end">
                 <div id="btns-categorytable">
                 <button onclick="deleteCategory('${id}')" class="px-1 py-1 bg-[#facc15] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" data-id="${id}"> Eliminar </button>
                 <button class="px-1 py-1 bg-[#84cc16] text-white text-xs rounded ml-4 mb-2 mt-2 mr-2" id="edit-category-${id}" onclick="editcategory('${id}')" >Editar</button>
@@ -135,10 +146,10 @@ const editcategory = (id) => {
     show("#editcategories-view");
     hide("#categories-view");
     $("#categorieEdit-input").value = category.name;
-    console.log(category)
+    console.log(category);
   }
-  ;
-  return category
+
+  return category;
 };
 
 const confirmCategoryEdited = () => {
@@ -152,19 +163,30 @@ const confirmCategoryEdited = () => {
       show("#categories-view");
       renderCategoriesOptions(allCategories);
       renderCategoriesTable(allCategories);
+      renderOperations(allOperations)
     }
   }
+
 };
+
+///////////////
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
-  console.log(currentCategories)
+
   saveData("categories", currentCategories);
   renderCategoriesTable(currentCategories);
   renderCategoriesOptions(currentCategories);
-  
+
+  //elimina operacion relacionada a la categoria eliminada//
+  const currentOperation = getData("operations").filter(
+    (operation) => operation.category !== id
+  );
+  saveData("operations", currentOperation);
+  renderOperations(currentOperation);
 };
 
+/////////////////////
 
 
 //CANCELANDO EDICION DE categories
@@ -207,13 +229,13 @@ const renderOperations = (operations) => {
       category,
       date,
     } of operations) {
-      const categorieSelected = allCategories.find(
+      const categorieSelected = getData("categories").find(
         (cat) => cat.id === category
       );
       $("#table-operations").innerHTML += `
-      <td class="justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
+      <td class=" justify-self-auto font-medium pl-6 pb-3 pt-3">${description}</td>
       <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-2 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4">${
-      categorieSelected.name
+        categorieSelected.name
       }</td>
       <td class="justify-self-auto pl-[30px] pt-4 font-bold max-sm:pl-[5px]"${
         type === "earnings" ? accEarnings.push(amount) : accSpendt.push(amount)
@@ -271,6 +293,14 @@ const renderOperations = (operations) => {
   }
 };
 
+const description = $("#description-form");
+const validateDescriptionOperation = () => {
+  if (description.value == "") {
+    show("#complete-field");
+  }
+  return description.value !== "";
+};
+
 const addOperation = () => {
   const currentOperation = getData("operations");
   const newDataOperation = saveNewOperation();
@@ -317,91 +347,76 @@ const editOperationForm = (id) => {
   $("#date-form").value = operationSelected.date;
 };
 
-//------------Filtros de Operaciones---------------------//
+//------------FILTROS---------------------//
 
 const filterType = (operations, myType) => {
   let filteredOperations = operations.filter(
-  (operation) => operation.type === myType
+    (operation) => operation.type === myType
   );
-  console.log(filteredOperations);
   return filteredOperations;
 };
 
 const filterCategory = (operations, typeCategory) => {
   let filterCategory = operations.filter(
-  (operation) => operation.category === typeCategory);
-  console.log(filterCategory);
+    (operation) => operation.category === typeCategory
+  );
   return filterCategory;
 };
 
-
 const filterDate = (operations, dateOperation) => {
   let filterDate = operations.filter(
-  (operation) => new Date(operation.date) >= new Date(dateOperation));
-  console.log(filterDate);
+    (operation) => new Date(operation.date) >= new Date(dateOperation)
+  );
   return filterDate;
 };
 
-
-const orderBy = (operation, orderOperation) =>{
-let filterOrder = operation.sort((a, b) => {
-      if (orderOperation === "more") {
-        return a.date < b.date ? 1 : -1;
-      }
-      if (orderOperation === "less") {
-        return a.date > b.date ? 1 : -1;
-      }
-      if (orderOperation === "lower-amount") {
-        
-        return a.amount > b.amount ? 1 : -1;
-      }
-      if (orderOperation === "greater-amount") {
-        return a.amount < b.amount ? 1 : -1;
-      }
-      if (orderOperation === "az") {
-    return a.description > b.description ? 1 : -1;
-      }
-      if (orderOperation === "za") {
+const orderBy = (operation, orderOperation) => {
+  let filterOrder = operation.sort((a, b) => {
+    if (orderOperation === "more") {
+      return a.date < b.date ? 1 : -1;
+    }
+    if (orderOperation === "less") {
+      return a.date > b.date ? 1 : -1;
+    }
+    if (orderOperation === "lower-amount") {
+      return a.amount > b.amount ? 1 : -1;
+    }
+    if (orderOperation === "greater-amount") {
+      return a.amount < b.amount ? 1 : -1;
+    }
+    if (orderOperation === "az") {
+      return a.description > b.description ? 1 : -1;
+    }
+    if (orderOperation === "za") {
       return a.description < b.description ? 1 : -1;
-      }
-    
-    });
-    console.log(filterOrder)
-    return filterOrder
-}
+    }
+  });
+  return filterOrder;
+};
 
 //Aplicar filtros//
 
 const applyFilter = () => {
-  let filteredOperations = [...allOperations];
+  let filteredOperations = getData("operations");
   let myType = $("#type-filter").value;
   let typeCategory = $("#categories-filter").value;
   let dateOperation = $("#today-date").value;
   let orderOperation = $("#order-by").value;
 
   if (myType != "all") {
-    console.log(filterType(filteredOperations, myType));
     filteredOperations = filterType(filteredOperations, myType);
   }
-
-  if (typeCategory != "all-category") {
-    console.log(filterCategory(filteredOperations, typeCategory));
+  if (typeCategory != "") {
     filteredOperations = filterCategory(filteredOperations, typeCategory);
   }
 
-  if (dateOperation != "all") {
-    console.log(filterDate(filteredOperations, dateOperation));
-    filteredOperations = filterDate(filteredOperations, dateOperation);
-  }
+  filteredOperations = filterDate(filteredOperations, dateOperation);
 
-  
-  filteredOperations = orderBy(allOperations, orderOperation)
+  filteredOperations = orderBy(filteredOperations, orderOperation);
 
-  console.log(filteredOperations);
+  console.log("operacionesordenadas", filteredOperations);
   renderOperations(filteredOperations);
 };
-
-
 
 //Eventos filtros//
 
@@ -413,7 +428,149 @@ $("#today-date").addEventListener("change", () => applyFilter());
 
 $("#order-by").addEventListener("change", () => applyFilter());
 
+////////////////////////////////////////////////////////////////////////
 
+/* SECCION reportes*/
+
+///////////////////////////////////////////////////////////////////////
+
+const resumenCategory = (allOperations) => {
+  //------categoria mayor ganancia ---------//
+
+  let profitCategory = "";
+  let highestProfitAmount = 0;
+  //mayor gasto//
+  let higherExpenseCategory = "";
+  let amountExpenseCategory = 0;
+
+  for (let { name, id } of allCategories) {
+    let operationCategories = allOperations.filter(
+      (operation) => operation.category === id
+    );
+    const highestProfitCategory = operationCategories.filter(
+      (operation) => operation.type === "earnings"
+    );
+    let totalProfit = highestProfitCategory.reduce(
+      (acc, monto) => acc + monto.amount,
+      0
+    );
+    if (profitCategory === "" && highestProfitAmount === 0) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    } else if (highestProfitAmount < totalProfit) {
+      profitCategory = name;
+      highestProfitAmount = totalProfit;
+    }
+
+    let opeCategory = allOperations.filter(
+      (operation) => operation.category === id
+    );
+    const largestExpenseCategory = opeCategory.filter(
+      (operation) => operation.type === "spent"
+    );
+    let totalAmountExpense = largestExpenseCategory.reduce(
+      (accSpent, amountSpent) => accSpent + amountSpent.amount,
+      0
+    );
+    if (higherExpenseCategory === "" && amountExpenseCategory === 0) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    } else if (amountExpenseCategory < totalAmountExpense) {
+      higherExpenseCategory = name;
+      amountExpenseCategory = totalAmountExpense;
+    }
+    //MONTOS BALANCE POR CATEGORIA//
+    let balance = totalProfit - totalAmountExpense;
+    console.log(name, balance);
+
+    $("#table-totals").innerHTML += `
+    <tr>
+    <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${name}</td>
+    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${totalProfit}</td>
+    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> $${totalAmountExpense}</td>
+    <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 "> $${balance}</td>
+   </tr>`;
+  }
+
+  $("#most-profitable-category").innerHTML = `
+   <td class="whitespace-nowrap px-6 py-4 font-medium">Categoria con mayor ganancia</td>
+   <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${profitCategory}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e]"> +$${highestProfitAmount}</td>
+  `;
+  $("#largest-expense-category").innerHTML += `
+   <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor gasto</td>
+   <td class="justify-self-auto text-xs font-semibold inline-block py-1 px-1 rounded text-purple-600 bg-purple-200 mt-4 ml-6 mr-4 mb-4"> ${higherExpenseCategory}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444]"> -$${amountExpenseCategory} </td>
+ `;
+  //---------mes con mayor ganancia-----------//
+  let highestProfitMonth = "";
+  let totalMonth = 0;
+
+  for (let { date, amount } of allOperations) {
+    let dateYearMonth = date.slice(0, 7);
+    let operEarnings = allOperations.filter(
+      (operations) => operations.type === "earnings"
+    );
+    let forMonth = operEarnings.filter(
+      (operations) => operations.date.slice(0, 7) === dateYearMonth
+    );
+    let totalEarnings = forMonth.reduce(
+      (acc, amountMonth) => acc + amountMonth.amount,
+      0
+    );
+    if (highestProfitMonth === "" && totalMonth === 0) {
+      highestProfitMonth = dateYearMonth;
+      totalMonth = totalEarnings;
+    } else if (totalMonth < totalEarnings) {
+      highestProfitMonth = dateYearMonth;
+      totalMonth = totalEarnings;
+    }
+    $("#highest-profit-month").innerHTML = `
+    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
+    <td class="pl-6 text-black-400 font-semibold "> ${highestProfitMonth}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] flex"> $${totalMonth} </td>
+  `;
+    //----------mes mayor gasto--------//
+    let highestSpendingMonth = "";
+    let largestAmountSpendt = 0;
+    let opeSpents = allOperations.filter(
+      (operations) => operations.type === "spent"
+    );
+    let opeMonth = opeSpents.filter(
+      (operations) => operations.date.slice(0, 7) === dateYearMonth
+    );
+    let totalSpents = opeMonth.reduce(
+      (accSpe, spentMonth) => accSpe + spentMonth.amount,
+      0
+    );
+    if (highestSpendingMonth === "" && largestAmountSpendt === 0) {
+      highestSpendingMonth = dateYearMonth;
+      largestAmountSpendt = totalSpents;
+    } else if (largestAmountSpendt < totalSpents) {
+      highestSpendingMonth = dateYearMonth;
+      largestAmountSpendt = totalSpents;
+    }
+    console.log(highestSpendingMonth, largestAmountSpendt);
+    $("#highest-spending-month").innerHTML = `
+   <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
+   <td class="pl-6 text-black-400 font-semibold "> ${highestSpendingMonth}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${largestAmountSpendt} </td>
+  `;
+    //--------------Totales por Mes---------------//
+
+    let monthBalance = totalEarnings - totalSpents;
+    $("#table-totalsbymonth").innerHTML += `
+   <td class="pl-6 text-black-400 font-semibold "> ${(highestSpendingMonth =
+     dateYearMonth)}</td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#22c55e] "> $${(largestAmountSpendt =
+     totalEarnings)} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3 text-[#ef4444] "> $${(totalMonth =
+     totalSpents)} </td>
+   <td class="justify-self-auto font-semibold pl-4 pb-3 pt-3"> $${monthBalance} </td>
+  `;
+  }
+};
+resumenCategory(allOperations);
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -421,7 +578,7 @@ $("#order-by").addEventListener("change", () => applyFilter());
 
 ///////////////////////////////////////////////////////////////////////
 
-const selecDate = () => {
+const selecDateFilter = () => {
   var fecha = new Date();
   var mes = fecha.getMonth() + 1;
   var dia = fecha.getDate();
@@ -429,11 +586,8 @@ const selecDate = () => {
   if (dia < 10) dia = "0" + dia;
   if (mes < 10) mes = "0" + mes;
   $("#today-date").value = ano + "-" + mes + "-" + dia;
-
+  $("#date-form").value = ano + "-" + mes + "-" + dia;
 };
-
-
-
 
 const initializeApp = () => {
 
@@ -442,8 +596,7 @@ const initializeApp = () => {
   renderCategoriesOptions(allCategories);
   renderCategoriesTable(allCategories);
   renderOperations(allOperations);
-  selecDate()
-
+  selecDateFilter();
 
   const currentDay = () => {
     $$(".today").forEach((input) => {
@@ -452,7 +605,6 @@ const initializeApp = () => {
     });
     console.log($$(".today"));
   };
-
 
   if (allOperations.length) {
     show("#operations-table-home");
@@ -469,6 +621,7 @@ const initializeApp = () => {
     hide("#report-view");
     hide("#operation-view");
     hide("#editcategories-view");
+    hide("#report-with-results");
   });
   $("#show-balance").addEventListener("click", () => {
     show("#home");
@@ -476,14 +629,27 @@ const initializeApp = () => {
     hide("#operation-view");
     hide("#report-view");
     hide("#editcategories-view");
+    hide("#report-with-results");
   });
+
+  //vista con operaciones en reportes
   $("#show-reports").addEventListener("click", () => {
-    show("#report-view");
+    show("#report-with-results");
     hide("#home");
     hide("#categories-view");
     hide("#operation-view");
     hide("#editcategories-view");
   });
+
+  //mostrar vista reportes sin operaciones
+  /*$("#show-reports").addEventListener("click", () => {
+    show("#report-view");
+    hide("#home");
+    hide("#categories-view");
+    hide("#operation-view");
+    hide("#editcategories-view");
+  });*/
+
   $("#title-ahorradas").addEventListener("click", () => {
     show("#home");
     hide("#categories-view");
@@ -565,7 +731,23 @@ const initializeApp = () => {
     hide("#operation-view");
     show("#home");
     renderOperations(getData("operations"));
-  })
+  });
+
+$("#btn-menu").addEventListener("click", (e) =>{
+$("#options-nav").classList.remove("lg:invisible")
+$("#options-nav").classList.remove("sm:invisible")
+$("#options-nav").classList.remove("invisible")
+$("#btn-close").classList.remove("invisible")
+$("#btn-menu").classList.add("sm:invisible")
+
+})
+
+$("#btn-close").addEventListener("click", (e) =>{
+  $("#options-nav").classList.add("sm:invisible")
+  $("#btn-close").classList.add("invisible")
+  $("#btn-menu").classList.remove("sm:invisible")
+})
+
 
 };
 

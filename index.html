@@ -14,14 +14,19 @@
 </head>
 
 <body class="font-['Montserrat'] bg-slate-200">
-    <header class="w-full bg-[#7e22ce] text-white p-7">
-        <nav id="navbar" class="flex justify-between items-center w-full">
-            <div class="flex items-center">
+    <header class="w-full bg-[#7e22ce] text-white p-7 sm:flex justify-end ... ">
+
+        <nav id="navbar" class="sm:flex lg:flex-none justify-between items-center w-full  ">
+            <div class="sm:flex items-center  lg:flex-none">
                 <a href="#" id="title-ahorradas">               
+<<<<<<< HEAD
                 <h2 class="text-3xl sm:text-2x1 font-semibold text-white"><i class="m-auto fa-regular fa-face-grin-wink mr-2"></i>AhorrADAs - Tu Herramienta Financiera</h2>
+=======
+                <h2 class="text-3xl sm:text-2x1  font-semibold text-white"><i class="m-auto fa-regular fa-face-grin-wink mr-2"></i>AhorrADAs - Tu Herramienta Financiera</h2>
+>>>>>>> operaciones
                 </a>               
             </div>    
-            <div>
+            <div class="options invisible sm:invisible  lg:visible sm:flex flex-colum " id="options-nav">
                 <a href="#" id="show-balance" class="m-2 hover:text-[#2e1065]">
                     <i class="fas fa-home mr-2"></i>Balance</a>
                 <a href="#" id="show-categories" class="m-2 hover:text-[#2e1065]">
@@ -29,12 +34,26 @@
                 <a href="#" id="show-reports" class="m-2 hover:text-[#2e1065]">
                     <i class="fa-solid fa-share-from-square mr-2"></i>Reportes</a>
             </div> 
+                  
         </nav>
+     <button class=" h-9 p-2 bg-violet-900 content-center lg:invisible invisible flex  ... sm:visible" id="btn-menu" type="button">
+           <i class=" fa-solid fa-bars"></i>
+        </button type="button">
+        
+        <button class="h-9 p-2 bg-violet-900   lg:invisible  invisible flex   " id="btn-close">
+       <i class="fa-solid fa-xmark"></i>
+        </button>
+
     </header>
     
     <!--Home-Balance-->
+<<<<<<< HEAD
         <section id="home" class="bg-slate-200 py-16 flex lg:flex-row flex-col justify-center lg:items-start items-center w-full space-x-8  ">
             <div class="lg:w-1/5  sm:w-[90%] ">
+=======
+        <section id="home" class="bg-slate-200 py-16 flex lg:flex-row flex-col justify-center lg:items-start sm:items-center w-full space-x-8  ">
+            <div class="lg:w-1/5 m-4 sm:w-[80%]  ">
+>>>>>>> operaciones
                 <section class="mb-6  p-5 bg-white drop-shadow-lg rounded-md ">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16">Balance<h2>
                     <div class="gap-2 columns-2">
@@ -79,7 +98,11 @@
                     <div id="menu-categories">
                         <p class="text-lg font-medium text-[#4a4a4a7] mt-6">Categoría</p>
                         <select class="w-full mt-2 border-solid border-2 border-[#4a4a4a7]" name="Category" id="categories-filter">                 
+<<<<<<< HEAD
                             <option value="all-category" selected="true">Todas</option>
+=======
+                            
+>>>>>>> operaciones
                         </select>
                     </div>
                     <div id="menu-from">
@@ -101,7 +124,11 @@
                 </section>
 
             </div>
+<<<<<<< HEAD
             <div class=" sm:w-[90%]  lg:w-3/6 bg-white rounded-md">
+=======
+            <div class=" m-4 sm:w-[90%]  lg:w-3/6 bg-white rounded-md">
+>>>>>>> operaciones
                     <div class="flex justify-between md:flex-row flex-col">
                         <h3 class="m-4 text-2xl font-bold text-[#4a4a4a]">Operaciones</h3>
                         <button id="btn-new-operation" class="bg-[#7e22ce] m-4 rounded-full text-white py-2 px-4 hover:text-[#2e1065] ">+ Nueva Operacion</button>
@@ -120,7 +147,7 @@
                         </div>
                         <!--Seccion Operaciones-->
 
-                    <section id="operations-table-home" class="hidden lg:w-5/6 bg-white rounded-md pl-8">
+                    <section id="operations-table-home" class="hidden lg:w-5/6 bg-white rounded-md ">
                 
                 <div>
                     <div class="min-w-full ">
@@ -148,35 +175,48 @@
 
             <!--Boton Nueva Operacion-->
 
+<<<<<<< HEAD
             <section id="operation-view"class="hidden bg-slate-200 py-16 items-center w-full space-x-8 drop-shadow-lg rounded-md">
                 <div class="lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
+=======
+            <section id="operation-view"class="hidden bg-slate-200 py-16 items-center w-full space-x-8  rounded-md">
+                <main class="">
+                    <div class=" bg-slate-200 lg:[90%] flex justify-center sm:flex-none ">
+                <div class=" m-4 p-5 sm:w-[60%]  bg-white rounded-md">
+>>>>>>> operaciones
                     <h2 id="new-operation-title" class="text-4xl text-[#4a4a4a7] font-bold mb-16 m-4 pt-8 pl-2">Nueva Operación</h2>
                     <h2 id="title-edit" class=" hidden text-4xl text-[#4a4a4a7] font-bold mb-16 m-4 pt-8 pl-2">Editar Operación</h2>
                     <form id="operation-form">
                         <div>
-                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Descripción</p>
-                            <input type="text" id="description-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="category" id="description-form" cols="1" rows="1"></input><br>
+                            <p class="text-lg font-semibold text-[#4a4a4a7] ">Descripción</p>
+                            <input type="text" id="description-form" class="min-w-full mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] " name="category" id="description-form" cols="1" rows="1"></input><br>
                         </div>
                         <div>
-                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Monto</p>
-                            <input type="number" id="amount-form" class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
+                            <p class="text-lg font-semibold text-[#4a4a4a7] ">Monto</p>
+                            <input type="number" id="amount-form" class="min-w-full  mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" min=""value="0">
                         </div>
                         <div>
+<<<<<<< HEAD
                             <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Tipo</p>
                             <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
                                 <option  value="spent">Gasto</option>
+=======
+                            <p class="text-lg font-semibold text-[#4a4a4a7] ">Tipo</p>
+                            <select class="min-w-full  mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="" id="type-form">
+                                <option  value="spent" selected="true" >Gasto</option>
+>>>>>>> operaciones
                                 <option value="earnings">Ganancia</option>
                             </select>
                         </div>
                         <div>
-                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Categoría</p>
-                            <select class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="category" id="category-form">
+                            <p class="text-lg font-semibold text-[#4a4a4a7] ">Categoría</p>
+                            <select class="min-w-full  mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7]" name="category" id="category-form">
                                 
                             </select>
                         </div>
                         <div>
-                            <p class="text-lg font-semibold text-[#4a4a4a7] m-6">Fecha</p>
-                            <input class="w-[52rem] ml-6 mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="date-form">
+                            <p class="text-lg font-semibold text-[#4a4a4a7] ">Fecha</p>
+                            <input class="min-w-full mr-0.5 mb-6 mt-2 border-solid border-2 border-[#4a4a4a7] input" type="date" name="" id="date-form">
                         </div>
                         <div class="text-right">
                             <button id="btn-delete-operation" class="bg-white border-2 border-purple-700 border-solid m-4 rounded-full text-[#7e22ce] py-2 px-4 hover:text-[#2e1065]"> Cancelar</button>
@@ -185,7 +225,8 @@
                         </div>
                     </form>
                 </div>
-                
+                </div>
+                </main>
             </section>
 
             <!--Boton Editar Operacion-->
@@ -237,7 +278,9 @@
             <!--Seccion Categorias-->
 
             <section id="categories-view" class="hidden bg-slate-200 py-16  w-full space-x-8">
-                <div class="flex-col lg:w-auto ml-80 mr-80 bg-white rounded-md">
+                <main class="">
+               <div class="w-full bg-slate-200 flex justify-center ">
+                <div class="flex-col  sm:w-[90%]  lg:w-3/6  bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Categorías</h2>
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
@@ -248,6 +291,8 @@
                         <section id="categories-table"></section>
                     </div>                                       
                 </div>
+               </div> 
+                 </main>
             </section>
             
             
@@ -255,7 +300,13 @@
             <!--Seccion Editar Categorias-->
 
             <section id="editcategories-view" class="hidden bg-slate-200 py-16  w-full space-x-8">
+<<<<<<< HEAD
                 <div class="flex-col lg:w-auto ml-80 mr-80 bg-white rounded-md">
+=======
+                <main class="">
+                    <div class="w-full bg-slate-200 flex justify-center ">
+                <div class="flex-col m-4 sm:w-[90%]  lg:w-3/6  bg-white rounded-md">
+>>>>>>> operaciones
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Editar categoría</h2>
                     <p class="text-[#4a4a4a] font-bold text-base pl-6">Nombre</p>
                     <div class="flex justify-between md:flex-row">
@@ -264,6 +315,8 @@
                             <button id="cancelcategorie-btn" class="bg-[#facc15] m-6 rounded-full text-white py-1 px-4 hover:text-[#2e1065]">Cancelar</button>
                     </div>                                                          
                 </div>
+            </div>
+        </main>
             </section>
 
 
@@ -271,7 +324,9 @@
             <!--Seccion Reportes-->
 
             <section id="report-view" class="hidden bg-slate-200 py-16 w-full space-x-8">
-                <div class="flex-col lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
+                <main class="">
+                    <div class="w-full bg-slate-200 flex justify-center ">
+                <div class="flex-col sm:w-[90%]  lg:w-3/6 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Reportes</h2>
                     <div>
                         <div>
@@ -285,17 +340,23 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                </main>
             </section>
             
 
             <!--Reportes Tablas-->
 
-            <section class="hidden bg-slate-200 py-16 w-full space-x-8">
-                <div class="flex-col lg:w-auto ml-80 mr-80 mb-20 bg-white rounded-md">
+            <section id="report-with-results" class="hidden bg-slate-200 py-16 w-full space-x-8">
+
+                <main class="flex justify-center">
+                    <div class="sm:w-[80%] lg:w-[60%] bg-slate-200 flex justify-center ">
+                       
+                <div class="sm:p-4 ml-2 mr-2 sm:w-[90%]     flex-col lg:[80%] mb-20 bg-white rounded-md">
                     <h2 class="text-4xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Reportes</h2>
                     <div>
-                        <h3 class="text-2xl text-[#4a4a4a] font-bold mb-16 ml-6 pt-8 pl-2">Resumen</h3>
-                        <table class="ml-4 min-w-full text-left text-sm font-light">
+                        <h3 class="text-2xl text-[#4a4a4a] font-bold mb-1 ml-7 pt-8 pl-2">Resumen</h3>
+                        <table class="sm:ml-1 ml-4 min-w-full text-left text-sm font-light">
                             <thead class="">
                             <tr>
                                 <th class="px-6 py-4"></th>
@@ -304,28 +365,26 @@
                             </tr>
                             </thead>
                             <tbody id="table-reports">
-                                <tr class="">
+                                <tr class="" id="most-profitable-category">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium ">Categoría con mayor ganancia</td>
                                 </tr>
-                                <tr class="">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor gasto</td>
+                                <tr class="" id="largest-expense-category">
                                 </tr> 
-                                <tr class="">
+                                <tr class="" id="highest-balance-category">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">Categoría con mayor balance</td>
                                 </tr>
-                                <tr class="">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor ganancia</td>
+                                <tr class="" id="highest-profit-month">
                                 </tr>   
-                                <tr class="">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Mes con mayor gasto</td>
+                                <tr class="" id="highest-spending-month">
                                 </tr>       
-                            </tbody>
+                            </tbody id="table-reports">
                         </table>
                     
                     </div>
+
+
                     <div class="mt-16 ml-4">
-                        <div>
-                            <h3 class="text-2xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Totales por Categoría</h3>
+                        <h3 class="text-2xl text-[#4a4a4a] font-bold mb-6 m-4 pt-8 pl-2">Totales por Categoría</h3>
                             <table class="min-w-full text-left text-sm font-light">
                                 <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr>
@@ -335,29 +394,33 @@
                                     <th class="px-6 py-4">Balance</th>
                                 </tr>
                                 </thead>
-                                <tbody id="table-totals">
-                                </tbody>
+                                <tbody id="table-totals"></tbody>
                             </table>
-                            
-                        </div>
+                            </div>
+
+                            <div class="mt-16 ml-4">
+                                <h3 class="text-2xl text-[#4a4a4a] font-bold mb-6 m-4 pt-8 pl-2">Totales por Mes</h3>
+                                <table class="min-w-full text-left text-sm font-light">
+                                    <thead class="border-b font-medium dark:border-neutral-500">
+                                    <tr>
+                                        <th class="px-6 py-4">Mes</th>
+                                        <th class="px-6 py-4">Ganancia</th>
+                                        <th class="px-6 py-4">Gastos</th>
+                                        <th class="px-6 py-4">Balance</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table-totalsbymonth">
+                                    </tbody>
+                                </table>
+                                
+                            </div> 
     
+
+                            
                 </div>
-                <div class="mt-16 ml-4">
-                    <h3 class="text-2xl text-[#4a4a4a] font-bold mb-16 m-4 pt-8 pl-2">Totales por Mes</h3>
-                    <table class="min-w-full text-left text-sm font-light">
-                        <thead class="border-b font-medium dark:border-neutral-500">
-                        <tr>
-                            <th class="px-6 py-4">Mes</th>
-                            <th class="px-6 py-4">Ganancia</th>
-                            <th class="px-6 py-4">Gastos</th>
-                            <th class="px-6 py-4">Balance</th>
-                        </tr>
-                        </thead>
-                        <tbody id="table-totalsbymonth">
-                        </tbody>
-                    </table>
-                    
-                </div>
+
+            </div>
+            </main>    
             </section>
         
 
