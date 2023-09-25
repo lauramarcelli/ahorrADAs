@@ -22,6 +22,7 @@ const randomId = () => self.crypto.randomUUID();
 const getData = (key) => JSON.parse(localStorage.getItem(key));
 const saveData = (key, array) =>
   localStorage.setItem(key, JSON.stringify(array));
+  
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -170,7 +171,6 @@ const confirmCategoryEdited = () => {
 
 };
 
-///////////////
 
 const deleteCategory = (id) => {
   currentCategories = getData("categories").filter((cat) => cat.id !== id);
@@ -187,7 +187,6 @@ const deleteCategory = (id) => {
   renderOperations(currentOperation);
 };
 
-/////////////////////
 
 //CANCELANDO EDICION DE categories
 
@@ -428,6 +427,7 @@ $("#today-date").addEventListener("change", () => applyFilter());
 
 $("#order-by").addEventListener("change", () => applyFilter());
 
+
 ////////////////////////////////////////////////////////////////////////
 
 /* SECCION reportes*/
@@ -558,6 +558,7 @@ for (let { name, id } of allCategories) {
   `
   
   }
+  
 };
 resumenCategory(allOperations)
 
@@ -608,6 +609,8 @@ totalsByMonth.forEach(({month, totalSpents, totalEarnings, total}) =>
   `;
 })
 
+
+
 ////////////////////////////////////////////////////////////////////////
 
 /*MANEJO DEL DOM*/
@@ -644,11 +647,12 @@ const initializeApp = () => {
   if (allOperations.length) {
     show("#operations-table-home");
     hide("#no-results");
-  } else {
+    } else {
     hide("#operations-table-home");
     show("#no-results");
-  }
-
+    }  
+    
+    
   $("#show-categories").addEventListener("click", () => {
     show("#categories-view");
     show("#categories-table");
@@ -666,24 +670,24 @@ const initializeApp = () => {
     hide("#editcategories-view");
     hide("#report-with-results");
   });
-
-  //vista con operaciones en reportes
+  
   $("#show-reports").addEventListener("click", () => {
-    show("#report-with-results");
-    hide("#home");
-    hide("#categories-view");
-    hide("#operation-view");
-    hide("#editcategories-view");
+    if (allOperations.length > 0) {
+      show("#report-with-results");
+      hide("#report-view");  
+      hide("#home");
+      hide("#categories-view");
+      hide("#operation-view");
+      hide("#editcategories-view");
+    } else {
+      show("#report-view");
+      hide("#report-with-results");
+      hide("#home");
+      hide("#categories-view");
+      hide("#operation-view");
+      hide("#editcategories-view");
+    }
   });
-
-  //mostrar vista reportes sin operaciones
-  /*$("#show-reports").addEventListener("click", () => {
-    show("#report-view");
-    hide("#home");
-    hide("#categories-view");
-    hide("#operation-view");
-    hide("#editcategories-view");
-  });*/
 
   $("#title-ahorradas").addEventListener("click", () => {
     show("#home");
