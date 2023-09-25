@@ -606,8 +606,6 @@ totalsByMonth.forEach(({month, totalSpents, totalEarnings, total}) =>
   `;
 })
 
-
-
 ////////////////////////////////////////////////////////////////////////
 
 /*MANEJO DEL DOM*/
