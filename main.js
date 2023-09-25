@@ -726,7 +726,9 @@ const initializeApp = () => {
   });
 
 $("#btn-menu").addEventListener("click", (e) =>{
+$("#options-nav").classList.remove("lg:invisible")
 $("#options-nav").classList.remove("sm:invisible")
+$("#options-nav").classList.remove("invisible")
 $("#btn-close").classList.remove("invisible")
 $("#btn-menu").classList.add("sm:invisible")
 
